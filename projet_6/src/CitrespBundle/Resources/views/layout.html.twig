@@ -1,0 +1,85 @@
+{# src/CitrespBundle/Resources/views/layout.html.twig #}
+
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="citresp site citoyen, pour vous permettre de signaler un problème sur la voirie, élagage, éclairage, etc.">
+    <meta name="author" content="François Perreau">
+
+    <title>
+      {% block title %}citresp{% endblock %}
+    </title>
+
+    {% block stylesheets %}
+      <!-- Bootstrap core CSS -->
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+      <!-- Custom styles for this template -->
+      <link href=" {{ asset('theme/css/style.css') }}" rel="stylesheet">
+    {% endblock %}
+  </head>
+  <body style="background-image:url('{{ asset('theme/img/bg-default.jpg') }}')">
+    <header class="container">
+      <nav class="navbar navbar-expand-md navbar-dark bg-dark" len="1323">
+        <a class="navbar-brand" href="#" len="12" lang="fr">CITRESP</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation" len="49">
+          <span class="navbar-toggler-icon" len="0"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarsExample04">
+          <ul class="navbar-nav ">
+            <li class="nav-item active">
+              <a class="nav-link" href="#">
+                <font lang="fr">Home
+                </font>
+                <span class="sr-only" lang="fr">(current)</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#" lang="fr" style="">Link</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link disabled" href="#" lang="fr">Disabled</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" len="8" lang="fr">Dropdown</a>
+              <div class="dropdown-menu" aria-labelledby="dropdown04" len="195">
+                <a class="dropdown-item" href="#" lang="fr">Action</a>
+                <a class="dropdown-item" href="#" lang="fr">Another action</a>
+                <a class="dropdown-item" href="#" lang="fr">Something else here</a>
+              </div>
+            </li>
+          </ul>
+          <!-- <form class="form-inline my-2 my-md-0"> <input class="form-control" type="text" placeholder="Search" len="0"> </form> -->
+        </div>
+      </nav>
+      {% block header %}
+        <div class="container header-block">
+          <h1>
+            Améliorons ensemble la qualité de vie dans notre ville
+          </h1>
+          <p>
+            <strong>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut ero labore et dolore magna aliqua. Duis aute irure. dolor in reprehenderit in uienply voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur
+              sint occaecat cupidatat norin proident.
+            </strong>
+          </p>
+        </div>
+      {% endblock %}
+    </header>
+
+    <main class="container ">
+      {% block body %}{% endblock %}
+    </main>
+
+    <footer></footer>
+
+    {% block javascripts %}
+      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    {% endblock %}
+  </body>
+</html>
