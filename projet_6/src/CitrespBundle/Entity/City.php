@@ -3,6 +3,7 @@
 namespace CitrespBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * City
@@ -34,6 +35,12 @@ class City
      * @ORM\Column(name="zipcode", type="integer")
      */
     private $zipcode;
+
+    /**
+     * @Gedmo\Slug(fields={"name", "zipcode"})
+     * @ORM\Column(length=255, unique=true)
+     */
+    private $slug;
 
 
     /**
@@ -93,4 +100,17 @@ class City
     {
         return $this->zipcode;
     }
+
+
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+
+    public function getCityLabel()
+    {
+      return $this->name . ' (' . $this->zipcode . ')';
+    }
+    
 }

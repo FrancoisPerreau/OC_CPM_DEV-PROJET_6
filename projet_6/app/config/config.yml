@@ -7,7 +7,7 @@ imports:
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-    locale: en
+    locale: fr
 
 framework:
     #esi: ~
@@ -58,7 +58,7 @@ doctrine:
         auto_generate_proxy_classes: '%kernel.debug%'
         naming_strategy: doctrine.orm.naming_strategy.underscore
         auto_mapping: true
-
+        
 # Swiftmailer Configuration
 swiftmailer:
     transport: '%mailer_transport%'
@@ -70,3 +70,10 @@ swiftmailer:
 sensio_framework_extra:
    router:
         annotations: false
+
+
+# Stof\DoctrineExtensionsBundle configuration
+stof_doctrine_extensions:
+   orm:
+        default:
+            sluggable: true

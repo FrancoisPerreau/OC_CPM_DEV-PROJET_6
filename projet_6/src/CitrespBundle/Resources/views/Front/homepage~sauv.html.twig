@@ -1,0 +1,42 @@
+{# src/CitrespBundle/Resources/views/Front/homepage.html.twig #}
+
+{% extends '@Citresp/layout.html.twig' %}
+
+{% block stylesheets %}
+  {{ parent() }}
+  <link rel="stylesheet" href="{{ asset('theme/css/sign-in.css') }}">
+{% endblock %}
+
+{% block body %}
+
+
+    <div class="contaner-sign-in text-center">
+      <form class="form-signin" action="{{ path('homepage') }}" method="post">
+        <h3>Liste des villes</h3>
+        <label for="yourcity">Sélectionnez votre ville</label>
+        <select name="yourcity" class="form-control" id="yourcity">
+          {% for city in cities %}
+            <option value="{{ city.id }}">{{ city.name }}
+              ({{ city.zipcode }})</option>
+          {% endfor %}
+        </select>
+
+        <br/>
+        <input class="btn btn-lg btn-info btn-block" type="submit" value="Validez"/>
+      </form>
+
+    </div>
+
+  <div class="container container-pading-t-b bg-light text-center">
+    <h3>Créez un compte pour votre ville</h3>
+    <p>Si aucun compte n'existe pour votre ville, vous pouvez en créer un.
+      <br/>
+      <strong>Vous serez alors l'administrateur principal de ce compte.</strong>
+    </p>
+    <div class="form-signin text-center">
+      <p><a class="btn btn-lg btn-info btn-block" href="{{path('register_city')}}">Créez</a></p>
+    </div>
+    
+  </div>
+
+{% endblock %}

@@ -1,0 +1,25 @@
+{# src/CitrespBundle/Resources/views/Security/registerCity.html.twig #}
+{% extends '@Citresp/layout.html.twig' %}
+
+{% block stylesheets %}
+  {{ parent() }}
+  <link rel="stylesheet" href="{{ asset('theme/css/sign-in.css') }}">
+{% endblock %}
+
+{% block body %}
+  <div class="contaner-sign-in text-center">
+
+    {# Le formulaire, avec URL de soumission vers la route « login_check » comme on l'a vu #}
+
+      <h1>{{ searchCityZipcode }}</h1>
+      {% embed "@Citresp/FormViews/cityChoice.html.twig" %}{% endembed %}
+
+
+
+      <!-- <input class="btn btn-lg btn-info btn-block" type="submit" value="Connexion"/> -->
+
+
+
+
+  </div>
+{% endblock %}

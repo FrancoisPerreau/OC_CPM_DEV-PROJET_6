@@ -1,0 +1,11 @@
+{{ form_start(form, {'attr': {'class': 'form-signin'}}) }}
+
+  {{ form_errors(form) }}
+
+  {{ form_label(form.selectedCity) }}
+  {{ form_widget(form.selectedCity, {'attr': {'class': 'form-control'}}) }}
+
+  <button class="btn btn-lg btn-info btn-block" type="submit">Validez</button>
+
+  {{ form_rest(form) }}
+{{ form_end(form) }}

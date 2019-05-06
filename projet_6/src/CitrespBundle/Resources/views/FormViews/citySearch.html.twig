@@ -1,0 +1,13 @@
+{{ form_start(formSearch, {'attr': {'class': 'form-signin'}}) }}
+
+  {{ form_errors(formSearch) }}
+
+  {{ form_label(formSearch.searchedCity) }}
+  {{ form_widget(formSearch.searchedCity, {'attr': {'class': 'form-control'}}) }}
+
+  <br/>
+
+  <button class="btn btn-lg btn-info btn-block" type="submit">Validez</button>
+
+  {{ form_rest(formSearch) }}
+{{ form_end(formSearch) }}

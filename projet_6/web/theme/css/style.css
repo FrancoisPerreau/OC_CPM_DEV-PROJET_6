@@ -1,6 +1,7 @@
 :root {
   --primary-color: #db35ea;
   --secondary-color: green;
+  --light : #e2abff
 }
 
 html,
@@ -29,7 +30,7 @@ header {
 }
 
 main {
-  padding-top: 2rem;
+  padding: 2rem 0!important;
 }
 
 /* ========== NAVBAR =========== */
@@ -85,4 +86,15 @@ h1 {
   font-size: 1.125rem;
   line-height: 1.5em;
   color: inherit;
+}
+
+
+/* HOME ***************** */
+.bg-light {
+  background-color: var(--light)!important;
+}
+
+.container-pading-t-b {
+  padding-top: 80px;
+  padding-bottom: 80px;
 }

@@ -1,24 +1,45 @@
-# To get started with security, check out the documentation:
-# https://symfony.com/doc/current/security.html
+# app/config/security.yml
 security:
+    encoders:
+        # CitrespBundle\Entity\User:
+            # algorithm: bcrypt
+        Symfony\Component\Security\Core\User\User: plaintext
 
-    # https://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
+
+    role_hierarchy:
+        ROLE_MODERATOR: ROLE_USER
+        ROLE_ADMIN: [ROLE_USER, ROLE_MODERATOR, ROLE_CYTI]
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+
+
     providers:
         in_memory:
-            memory: ~
+            memory:
+                users:
+                    user: { password: userpass, roles: ['ROLE_USER'] }
+                    moderator: { password: moderatorpass, roles: ['ROLE_MODERATOR'] }
+                    city: { password: citypass, roles: ['ROLE_CYTI'] }
+                    admin: { password: adminpass, roles: ['ROLE_ADMIN'] }
+
+
+    provider: in_memory
+
 
     firewalls:
-        # disables authentication for assets and the profiler, adapt it according to your needs
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
         main:
-            anonymous: ~
-            # activate different ways to authenticate
+            pattern: ^/
+            anonymous: true
+            form_login:
+                login_path: login
+                check_path: login_check
+            logout:
+                path: logout
+                target: /
 
-            # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
-            #http_basic: ~
 
-            # https://symfony.com/doc/current/security/form_login_setup.html
-            #form_login: ~
+    access_control:
+          #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }

@@ -3,6 +3,16 @@ citresp:
     type:     annotation
     prefix:   /
 
+
+login:
+    path: /login
+
+login_check:
+    path: /login_check
+
+logout:
+    path: /logout
+
 # app:
 #     resource: '@AppBundle/Controller/'
 #     type: annotation

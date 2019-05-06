@@ -2,6 +2,29 @@
 
 {% extends '@Citresp/layout.html.twig' %}
 
+{% block stylesheets %}
+  {{ parent() }}
+  <link rel="stylesheet" href="{{ asset('theme/css/sign-in.css') }}">
+{% endblock %}
+
 {% block body %}
-<h1>Homepage</h1>
+
+
+    <div class="contaner-sign-in text-center">
+      {% embed "@Citresp/FormViews/citySelect.html.twig" %}{% endembed %}
+    </div>
+
+  <div class="container container-pading-t-b bg-light text-center">
+    <h3>Créez un compte pour votre ville</h3>
+    <p>Si aucun compte n'existe pour votre ville, vous pouvez en créer un.
+      <br/>
+      <strong>Vous serez alors l'administrateur principal de ce compte.</strong>
+    </p>
+  
+    <div class="contaner-sign-in text-center">
+      {% embed "@Citresp/FormViews/citySearch.html.twig" %}{% endembed %}
+    </div>
+
+  </div>
+
 {% endblock %}
