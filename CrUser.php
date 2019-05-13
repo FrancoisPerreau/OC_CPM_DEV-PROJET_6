@@ -22,15 +22,10 @@ class User extends FosUser
      */
     protected $id;
 
-
-
-
-    public function __construct()
+    public function _construct()
     {
-        parent::__construct();
-
-        // Add USER_ROLE
-        $this->addRole("ROLE_USER");
+      parent::__construct();
     }
+
 
 }

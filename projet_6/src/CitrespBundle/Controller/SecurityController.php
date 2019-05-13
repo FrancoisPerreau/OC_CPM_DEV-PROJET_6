@@ -19,25 +19,25 @@ use CitrespBundle\Repository;
 
 class SecurityController extends Controller
 {
-    /**
-     * @Route("/login", name="security_login")
-     */
-    public function loginAction(Request $request)
-    {
-
-        if ($this->get('security.authorization_checker')
-                 ->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-            return $this->redirectToRoute('homepage');
-        }
-
-        $authenticationUtils = $this->get('security.authentication_utils');
-
-        return $this->render('@Citresp/Security/login.html.twig',
-        [
-            'last_username' => $authenticationUtils->getLastUsername(),
-            'error' => $authenticationUtils->getLastAuthenticationError(),
-        ]);
-    }
+    // /**
+    //  * @Route("/login", name="security_login")
+    //  */
+    // public function loginAction(Request $request)
+    // {
+    //
+    //     if ($this->get('security.authorization_checker')
+    //              ->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+    //         return $this->redirectToRoute('homepage');
+    //     }
+    //
+    //     $authenticationUtils = $this->get('security.authentication_utils');
+    //
+    //     return $this->render('@Citresp/Security/login.html.twig',
+    //     [
+    //         'last_username' => $authenticationUtils->getLastUsername(),
+    //         'error' => $authenticationUtils->getLastAuthenticationError(),
+    //     ]);
+    // }
 
 
 
@@ -62,7 +62,7 @@ class SecurityController extends Controller
             $selectedCityName = $data['selectedCity']->getNomCommune();
             $selectedCityZipCode = $data['selectedCity']->getCodePostal();
             $selectedCityID = $data['selectedCity']->getId();
-            
+
             dump($selectedCityName);
             dump($selectedCityZipCode);
             dump($selectedCityID);

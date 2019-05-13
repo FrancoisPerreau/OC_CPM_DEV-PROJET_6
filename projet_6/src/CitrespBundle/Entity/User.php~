@@ -22,15 +22,40 @@ class User extends FosUser
      */
     protected $id;
 
+    
+
 
 
 
     public function __construct()
     {
         parent::__construct();
-
-        // Add USER_ROLE
-        $this->addRole("ROLE_USER");
     }
 
+
+
+
+    /**
+     * Set remember.
+     *
+     * @param bool $remember
+     *
+     * @return User
+     */
+    public function setRemember($remember)
+    {
+        $this->remember = $remember;
+
+        return $this;
+    }
+
+    /**
+     * Get remember.
+     *
+     * @return bool
+     */
+    public function getRemember()
+    {
+        return $this->remember;
+    }
 }

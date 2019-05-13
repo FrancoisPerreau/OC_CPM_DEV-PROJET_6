@@ -4,15 +4,15 @@ citresp:
     prefix:   /
 
 
-login:
-    path: /login
+# login:
+#     path: /login
+#
+# login_check:
+#     path: /login_check
+#
+# logout:
+#     path: /logout
 
-login_check:
-    path: /login_check
 
-logout:
-    path: /logout
-
-# app:
-#     resource: '@AppBundle/Controller/'
-#     type: annotation
+fos_user:
+    resource: "@FOSUserBundle/Resources/config/routing/all.xml"
