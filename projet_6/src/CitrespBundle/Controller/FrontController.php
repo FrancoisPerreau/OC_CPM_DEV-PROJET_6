@@ -3,7 +3,7 @@
 namespace CitrespBundle\Controller;
 
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,7 +39,7 @@ class FrontController extends Controller
         $formSelect = $this->createForm(CitySelectType::class);
         $formSelect->handleRequest($request);
 
-        if ($formSelect->isValid() && $formSelect->isSubmitted())
+        if ($formSelect->isSubmitted() && $formSelect->isValid())
         {
           $data = $formSelect->getData();
 
@@ -56,7 +56,7 @@ class FrontController extends Controller
         $formSearch = $this->createForm(BaseCitiesSearchType::class);
         $formSearch->handleRequest($request);
 
-        if ($formSearch->isValid() && $formSearch->isSubmitted())
+        if ($formSelect->isSubmitted() && $formSelect->isValid())
         {
           $data = $formSearch->getData();
           $searchCityZipcode = $data['searchedCity'];

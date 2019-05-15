@@ -1,0 +1,52 @@
+{# app/Resources/FOSUserBundle/views/Security/login.html.twig #}
+
+{% trans_default_domain 'FOSUserBundle' %}
+{% extends '@Citresp/layout.html.twig' %}
+
+
+
+
+{% block stylesheets %}
+  {{ parent() }}
+  <link rel="stylesheet" href="{{ asset('theme/css/sign-in.css') }}">
+{% endblock %}
+
+{% block fos_user_content %}
+  <div class="contaner-sign-in text-center">
+
+    <form class="form-signin" action="{{ path("fos_user_security_check") }}" method="post">
+
+      <h1 class="h3 mb-3 font-weight-normal">Se connecter</h1>
+
+      {% if error %}
+        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+      {% endif %}
+
+      {% if csrf_token %}
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token }}"/>
+      {% endif %}
+
+      <label class="sr-only" for="username">{{ 'security.login.username'|trans }}</label>
+      <input class="form-control" type="text" id="username" name="_username" value="{{ last_username }}" required="required" autocomplete="username" placeholder="{{ 'security.login.username'|trans }}"/>
+
+      <label class="sr-only" for="password">{{ 'security.login.password'|trans }}</label>
+      <input class="form-control" type="password" id="password" name="_password" required="required" autocomplete="current-password" placeholder="{{ 'security.login.password'|trans }}"/>
+
+      <div class="checkbox mb-3">
+        <label>
+        <input type="checkbox" id="remember_me" name="_remember_me" value="on"/>
+        {{ 'security.login.remember_me'|trans }}
+        </label>
+      </div>
+
+
+
+      <input class="btn btn-lg btn-info btn-block" type="submit" id="_submit" name="_submit" value="{{ 'security.login.submit'|trans }}"/>
+
+      <div class="link_to_change">
+        <a href="{{ path('fos_user_resetting_request') }}">Mot de passe oublié</a>
+      </div>
+    </form>
+
+  </div>
+{% endblock %}

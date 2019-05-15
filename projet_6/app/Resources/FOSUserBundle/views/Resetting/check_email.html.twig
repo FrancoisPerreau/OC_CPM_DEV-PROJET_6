@@ -1,0 +1,13 @@
+{# app/Resources/FOSUserBundle/views/Resetting/check_email.html.twig #}
+
+{% extends "@Citresp/layout.html.twig" %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block fos_user_content %}
+  <div class="contaner-sign-in text-center">
+    <p>
+      {{ 'resetting.check_email'|trans({'%tokenLifetime%': tokenLifetime})|nl2br }}
+    </p>
+  </div>
+{% endblock %}

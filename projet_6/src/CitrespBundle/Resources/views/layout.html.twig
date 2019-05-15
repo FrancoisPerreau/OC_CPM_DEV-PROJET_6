@@ -30,27 +30,43 @@
 
         <div class="collapse navbar-collapse" id="navbarsExample04">
           <ul class="navbar-nav ">
-            <li class="nav-item active">
-              <a class="nav-link" href="#">
-                <font lang="fr">Home
+            <li class="nav-item
+            {% if app.request.attributes.get('_route') == 'homepage' %}
+              active
+            {% endif %}
+            ">
+              <a class="nav-link" href="{{ path('homepage') }}">
+                <font lang="fr">Accueil
                 </font>
                 <span class="sr-only" lang="fr">(current)</span>
               </a>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
               <a class="nav-link" href="#" lang="fr" style="">Link</a>
             </li>
             <li class="nav-item">
               <a class="nav-link disabled" href="#" lang="fr">Disabled</a>
+            </li> -->
+            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" len="8" lang="fr">{{ app.user.username }}</a>
+                <div class="dropdown-menu" aria-labelledby="dropdown04" len="195">
+                  <a class="dropdown-item" href="{{ path('fos_user_profile_show') }}" lang="fr">Mon profile</a>
+                  <a class="dropdown-item" href="#" lang="fr">Ma ville</a>
+                  <a class="dropdown-item" href="{{ path('fos_user_security_logout') }}" lang="fr">Déconnexion</a>
+                </div>
+              </li>
+            {% else %}
+            <li class="nav-item ">
+              <a class="nav-link
+              {% if app.request.attributes.get('_route') == 'fos_user_security_login' %}
+                active
+              {% endif %}
+              " href="{{ path('fos_user_security_login') }}" lang="fr">Connexion</a>
+
             </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" len="8" lang="fr">Dropdown</a>
-              <div class="dropdown-menu" aria-labelledby="dropdown04" len="195">
-                <a class="dropdown-item" href="#" lang="fr">Action</a>
-                <a class="dropdown-item" href="#" lang="fr">Another action</a>
-                <a class="dropdown-item" href="#" lang="fr">Something else here</a>
-              </div>
-            </li>
+            {% endif %}
+
           </ul>
           <!-- <form class="form-inline my-2 my-md-0"> <input class="form-control" type="text" placeholder="Search" len="0"> </form> -->
         </div>
@@ -72,6 +88,7 @@
 
     <main class="container ">
       {% block body %}{% endblock %}
+      {% block fos_user_content %}{% endblock %}
     </main>
 
     <footer></footer>

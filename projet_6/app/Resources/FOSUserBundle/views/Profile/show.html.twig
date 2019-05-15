@@ -1,0 +1,16 @@
+{# app/Resources/FOSUserBundle/views/Profile/show.html.twig #}
+
+{% trans_default_domain 'FOSUserBundle' %}
+{% extends '@Citresp/layout.html.twig' %}
+
+{% block stylesheets %}
+  {{ parent() }}
+  <link rel="stylesheet" href="{{ asset('theme/css/sign-in.css') }}">
+{% endblock %}
+
+{% block fos_user_content %}
+  <div class="container container-pading-t-b text-center">
+    <p><strong>{{ 'profile.show.username'|trans }}:</strong> {{ user.username }}</p>
+    <p><strong>{{ 'profile.show.email'|trans }}:</strong> {{ user.email }}</p>
+  </div>
+{% endblock %}

@@ -1,0 +1,35 @@
+{# app/Resources/FOSUserBundle/views/Resetting/reset.html.twig #}
+{% trans_default_domain 'FOSUserBundle' %}
+{% extends '@Citresp/layout.html.twig' %}
+
+{% block stylesheets %}
+  {{ parent() }}
+  <link rel="stylesheet" href="{{ asset('theme/css/sign-in.css') }}">
+{% endblock %}
+
+{% block fos_user_content %}
+  <div class="contaner-sign-in text-center">
+    {{ form_start(form, {'method': 'post', 'action': path('fos_user_resetting_reset', {'token': token}), 'attr': {'class': 'form-signin'}}) }}
+
+    {{ form_errors(form.plainPassword.first) }}
+    {{ form_label(form.plainPassword.first, null, {'label_attr': {'class': 'sr-only'}}) }}
+    {{ form_widget(form.plainPassword.first, {'attr': {'class': 'form-control',
+      'placeholder': 'form.password'|trans}}) }}
+
+    {{ form_errors(form.plainPassword.second) }}
+    {{ form_label(form.plainPassword.second, null, {'label_attr': {'class': 'sr-only'}}) }}
+    {{ form_widget(form.plainPassword.second, {'attr': {'class': 'form-control',
+      'placeholder': 'form.password_confirmation'|trans}}) }}
+
+    <br>
+
+    <input class="btn btn-lg btn-info btn-block" type="submit" value="{{ 'resetting.reset.submit'|trans }}"/>
+
+
+    {{ form_rest(form) }}
+    {{ form_end(form) }}
+  </div>
+
+
+  
+{% endblock %}

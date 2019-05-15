@@ -89,6 +89,14 @@ h1 {
 }
 
 
+/* FORM ***************** */
+.invalid-feedback {
+  margin: 3px 0;
+  text-align: left!important;
+}
+
+
+
 /* HOME ***************** */
 .bg-light {
   background-color: var(--light)!important;
