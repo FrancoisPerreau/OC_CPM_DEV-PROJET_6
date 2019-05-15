@@ -1,0 +1,44 @@
+{# src/CitrespBundle/Resources/views/nav.html.twig #}
+
+<nav class="navbar navbar-expand-md navbar-dark bg-dark" len="1323">
+  <a class="navbar-brand" href="#" len="12" lang="fr">CITRESP</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation" len="49">
+    <span class="navbar-toggler-icon" len="0"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarsExample04">
+    <ul class="navbar-nav ">
+      <li class="nav-item
+      {% if app.request.attributes.get('_route') == 'homepage' %}
+        active
+      {% endif %}
+      ">
+        <a class="nav-link" href="{{ path('homepage') }}">
+          <font lang="fr">Accueil
+          </font>
+          <span class="sr-only" lang="fr">(current)</span>
+        </a>
+      </li>
+
+      {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" len="8" lang="fr">{{ app.user.username }}</a>
+          <div class="dropdown-menu" aria-labelledby="dropdown04" len="195">
+            <a class="dropdown-item" href="{{ path('fos_user_profile_show') }}" lang="fr">Mon profile</a>
+            <a class="dropdown-item" href="{{ path('city',{'slug': app.user.city.slug}) }}" lang="fr">Ma ville</a>
+            <a class="dropdown-item" href="{{ path('fos_user_security_logout') }}" lang="fr">Déconnexion</a>
+          </div>
+        </li>
+      {% else %}
+        <li class="nav-item ">
+          <a class="nav-link
+        {% if app.request.attributes.get('_route') == 'fos_user_security_login' %}active{% endif %}"
+           href="{{ path('fos_user_security_login') }}" lang="fr">Connexion</a>
+
+        </li>
+      {% endif %}
+
+    </ul>
+    <!-- <form class="form-inline my-2 my-md-0"> <input class="form-control" type="text" placeholder="Search" len="0"> </form> -->
+  </div>
+</nav>

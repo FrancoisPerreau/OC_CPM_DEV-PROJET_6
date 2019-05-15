@@ -24,17 +24,7 @@ class FrontController extends Controller
      */
     public function indexAction(Request $request)
     {
-
-        // // Test slug
-        // $city = new City();
-        // $city->setName('Rambouillet');
-        // $city->setZipcode('78120');
-        //
-        // $em = $this->getDoctrine()->getManager();
-        // $em->persist($city);
-        // $em->flush();
-        //
-
+        
         // Formulaire CitySelect
         $formSelect = $this->createForm(CitySelectType::class);
         $formSelect->handleRequest($request);
