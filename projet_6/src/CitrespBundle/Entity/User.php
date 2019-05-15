@@ -23,6 +23,13 @@ class User extends FosUser
     protected $id;
 
 
+    /**
+     * @ORM\ManyToOne(targetEntity="CitrespBundle\Entity\City")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $city;
+
+
 
 
     public function __construct()
@@ -33,4 +40,30 @@ class User extends FosUser
         $this->addRole("ROLE_USER");
     }
 
+
+    
+
+    /**
+     * Set city.
+     *
+     * @param \CitrespBundle\Entity\City $city
+     *
+     * @return User
+     */
+    public function setCity(\CitrespBundle\Entity\City $city)
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    /**
+     * Get city.
+     *
+     * @return \CitrespBundle\Entity\City
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }
 }

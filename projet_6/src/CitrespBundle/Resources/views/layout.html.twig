@@ -52,7 +52,7 @@
                 <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" len="8" lang="fr">{{ app.user.username }}</a>
                 <div class="dropdown-menu" aria-labelledby="dropdown04" len="195">
                   <a class="dropdown-item" href="{{ path('fos_user_profile_show') }}" lang="fr">Mon profile</a>
-                  <a class="dropdown-item" href="#" lang="fr">Ma ville</a>
+                  <a class="dropdown-item" href="{{ path('city',{'slug': app.user.city.slug}) }}" lang="fr">Ma ville</a>
                   <a class="dropdown-item" href="{{ path('fos_user_security_logout') }}" lang="fr">Déconnexion</a>
                 </div>
               </li>
