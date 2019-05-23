@@ -11,9 +11,8 @@ use Symfony\Component\HttpFoundation\Response;
 use CitrespBundle\Entity\BaseCities;
 use CitrespBundle\Entity\City;
 
-// use CitrespBundle\Form\BaseCitiesType;
-// use CitrespBundle\Form\CityType;
-use CitrespBundle\Form\CityChoiceType;
+
+use CitrespBundle\Form\BaseCitiesChoiceType;
 use CitrespBundle\Form\Security\RegistrationByCityType;
 
 
@@ -30,9 +29,7 @@ class SecurityController extends Controller
         $repository = $this->getDoctrine()->getRepository(BaseCities::class);
         $selectedBaseCities= $repository->getCitiesBaseByCodePostal($searchCityZipcode);
 
-
-        $baseCities = new BaseCities;
-        $form = $this->createForm(CityChoiceType::class, null , ['allow_extra_fields' => $selectedBaseCities] );
+        $form = $this->createForm(BaseCitiesChoiceType::class, null , ['allow_extra_fields' => $selectedBaseCities] );
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
@@ -71,8 +68,6 @@ class SecurityController extends Controller
         $selectedCity = $session->get('SelectedCity');
 
         $cityName = $selectedCity->getName();
-        // dump($selectedCity);
-        // die;
 
         $form = $this->createForm(RegistrationByCityType::class);
 
@@ -86,21 +81,6 @@ class SecurityController extends Controller
             $user->addRole("ROLE_ADMIN");
             $user->setEnabled(true);
 
-            // dump($selectedCity);
-            // dump($user);
-            // die;
-
-            // $selectedCityName = $data['selectedCity']->getNomCommune();
-            // $selectedCityZipCode = $data['selectedCity']->getCodePostal();
-            // $selectedCityID = $data['selectedCity']->getId();
-
-            // dump($selectedCityName);
-            // dump($selectedCityZipCode);
-            // dump($selectedCityID);
-            // dump($city);
-            // dump($getCitySession);
-            // die;
-
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
             $em->flush();
@@ -109,12 +89,10 @@ class SecurityController extends Controller
         }
 
 
-        return $this->render('@Citresp/Security/register_city_admin.html.twig',
+        return $this->render('@Citresp/Security/registerCityAdmin.html.twig',
         [
             'form' => $form->createView(),
             'cityName' => $cityName
-            // 'last_username' => $authenticationUtils->getLastUsername(),
-            // 'error' => $authenticationUtils->getLastAuthenticationError(),
         ]);
     }
 

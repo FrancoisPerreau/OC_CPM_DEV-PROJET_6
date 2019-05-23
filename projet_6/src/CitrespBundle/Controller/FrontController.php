@@ -93,14 +93,9 @@ class FrontController extends Controller
             ->getRepository(Reporting::class)
             ->findBy(['city' => $city]);
 
-        // dump($reportings);
-        // die;
-
-
 
         // MARKER
-        $markers ;
-
+        $markers = null ;
 
 
         foreach ($reportings as $reporting) {
@@ -111,8 +106,7 @@ class FrontController extends Controller
             $markers[] = ['markerLat' => $coordinates[0], 'markerLng' => $coordinates[1]];
         }
 
-        // dump($markers);
-        // die;
+
 
 
 
@@ -140,9 +134,6 @@ class FrontController extends Controller
      */
     public function showReportingAction(City $city, Reporting $reporting)
     {
-        // dump($reporting);
-        // dump($city);
-        // die;
         $em = $this->getDoctrine()->getManager();
 
         // $user = $this->getUser();

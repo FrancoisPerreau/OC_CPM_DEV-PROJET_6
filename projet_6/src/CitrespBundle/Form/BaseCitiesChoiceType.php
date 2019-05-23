@@ -1,4 +1,5 @@
 <?php
+// src/CitrespBundle/Form/BaseCitiesChoiceType.php
 
 namespace CitrespBundle\Form;
 
@@ -11,7 +12,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 
-class CityChoiceType extends AbstractType
+class BaseCitiesChoiceType extends AbstractType
 {
     /**
      * {@inheritdoc}
