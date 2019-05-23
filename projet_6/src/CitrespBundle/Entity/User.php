@@ -5,11 +5,16 @@ namespace CitrespBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as FosUser;
 
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 /**
  * User
  *
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="CitrespBundle\Repository\UserRepository")
+ * @UniqueEntity("username", message="Ce nom est déjà utilisé")
+ * @UniqueEntity("email", message="Cet e-mail est déjà utilisé")
+ *
  */
 class User extends FosUser
 {
@@ -24,14 +29,13 @@ class User extends FosUser
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="CitrespBundle\Entity\City")
+     * @ORM\ManyToOne(targetEntity="CitrespBundle\Entity\City", cascade={"persist"}))
      * @ORM\JoinColumn(nullable=false)
      */
     private $city;
 
 
-
-
+    
     public function __construct()
     {
         parent::__construct();
@@ -41,7 +45,7 @@ class User extends FosUser
     }
 
 
-    
+
 
     /**
      * Set city.

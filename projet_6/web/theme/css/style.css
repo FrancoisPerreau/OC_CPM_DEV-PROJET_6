@@ -47,8 +47,12 @@ main {
 
 }
 
+.nav-item:first-child {
+  flex: 2;
+  color: red;
+}
 .dropdown {
-flex: 2;
+/* flex: 2; */
 text-align: right;
 }
 

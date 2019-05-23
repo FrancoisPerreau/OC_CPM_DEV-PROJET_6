@@ -1,0 +1,20 @@
+{# src/CitrespBundle/Resources/views/Security/register_city_admin.html.twig #}
+
+{% extends '@Citresp/layout.html.twig' %}
+
+
+{% block stylesheets %}
+  {{ parent() }}
+  <link rel="stylesheet" href="{{ asset('theme/css/sign-in.css') }}">
+{% endblock %}
+
+
+{% block body %}
+  <div class="contaner-sign-in text-center">
+
+
+    {% embed "@Citresp/FormViews/register_city_admin.html.twig" %}{% endembed %}
+
+
+  </div>
+{% endblock %}

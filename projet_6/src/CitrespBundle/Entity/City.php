@@ -37,6 +37,13 @@ class City
     private $zipcode;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="gps_coordinates", type="string", length=150)
+     */
+    private $GpsCoordinates;
+
+    /**
      * @Gedmo\Slug(fields={"name", "zipcode"})
      * @ORM\Column(length=255, unique=true)
      */
@@ -44,7 +51,7 @@ class City
 
 
 
-    
+
     /**
      * Get id.
      *
@@ -101,6 +108,30 @@ class City
     public function getZipcode()
     {
         return $this->zipcode;
+    }
+
+    /**
+     * Set gpsCoordinates.
+     *
+     * @param string $gpsCoordinates
+     *
+     * @return City
+     */
+    public function setGpsCoordinates($gpsCoordinates)
+    {
+        $this->GpsCoordinates = $gpsCoordinates;
+
+        return $this;
+    }
+
+    /**
+     * Get gpsCoordinates.
+     *
+     * @return string
+     */
+    public function getGpsCoordinates()
+    {
+        return $this->GpsCoordinates;
     }
 
 

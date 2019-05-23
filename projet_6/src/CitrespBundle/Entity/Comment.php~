@@ -161,28 +161,4 @@ class Comment
     {
         return $this->moderate;
     }
-
-    /**
-     * Set reporting.
-     *
-     * @param \CitrespBundle\Entity\Reporting $reporting
-     *
-     * @return Comment
-     */
-    public function setReporting(\CitrespBundle\Entity\Reporting $reporting)
-    {
-        $this->reporting = $reporting;
-
-        return $this;
-    }
-
-    /**
-     * Get reporting.
-     *
-     * @return \CitrespBundle\Entity\Reporting
-     */
-    public function getReporting()
-    {
-        return $this->reporting;
-    }
 }

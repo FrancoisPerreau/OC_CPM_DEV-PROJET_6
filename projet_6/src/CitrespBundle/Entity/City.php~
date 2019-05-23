@@ -37,15 +37,19 @@ class City
     private $zipcode;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="gps_coordinates", type="string", length=150)
+     */
+    private $GpsCoordinates;
+
+    /**
      * @Gedmo\Slug(fields={"name", "zipcode"})
      * @ORM\Column(length=255, unique=true)
      */
     private $slug;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="CitrespBundle\Entity\User")
-     */
-    private $user;
+
 
 
     /**
@@ -133,28 +137,4 @@ class City
         return $this;
     }
 
-    
-    /**
-     * Set user.
-     *
-     * @param \CitrespBundle\Entity\User|null $user
-     *
-     * @return City
-     */
-    public function setUser(\CitrespBundle\Entity\User $user = null)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
-     * Get user.
-     *
-     * @return \CitrespBundle\Entity\User|null
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
 }

@@ -37,6 +37,12 @@
       'placeholder': 'form.password_confirmation'|trans}}) }}
 
     <br>
+    {{ form_errors(form.city) }}
+    {{ form_label(form.city, null, {'label_attr': {'class': 'text-left'}}) }}
+    {{ form_widget(form.city, {'attr': {'class': 'form-control',
+    'placeholder': 'form.city'|trans}}) }}
+
+    <br>
 
     <input class="btn btn-lg btn-info btn-block" type="submit" value="{{ 'registration.submit'|trans }}"/>
 

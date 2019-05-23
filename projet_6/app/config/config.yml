@@ -84,8 +84,12 @@ fos_user:
    db_driver: orm
    firewall_name: main
    user_class: CitrespBundle\Entity\User
-   service:                               # this lines
+   service:
       mailer: fos_user.mailer.twig_swift
    from_email:
       address: "%mailer_user%"
       sender_name: "%mailer_user%"
+
+   registration:
+      form:
+        type: CitrespBundle\Form\Security\RegistrationType

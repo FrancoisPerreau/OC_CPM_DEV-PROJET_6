@@ -1,4 +1,16 @@
 services:
-#    citresp.example:
-#        class: CitrespBundle\Example
-#        arguments: ["@service_id", "plain_value", "%parameter%"]
+   # citresp.example:
+   #     class: CitrespBundle\Example
+   #     arguments: ["@service_id", "plain_value", "%parameter%"]
+
+   app.form.registration:
+       class: CitrespBundle\Form\Security\RegistrationType
+       tags:
+         - { name: form.type, alias: app_user_registration }
+
+   twig.extension.intl:
+       class: Twig_Extensions_Extension_Intl
+       tags:
+          - { name: twig.extension }
+
+       debug: true

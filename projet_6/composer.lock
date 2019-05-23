@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c93d76d0905fb3a0856c974bf199465a",
+    "content-hash": "d6352cda3b7f3a5040bba94dc481fc7e",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -484,16 +484,16 @@
         },
         {
             "name": "doctrine/doctrine-bundle",
-            "version": "1.11.0",
+            "version": "1.11.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/DoctrineBundle.git",
-                "reference": "6e15d2d9a8f90c0f9b5664b0db92686ff14fcd7d"
+                "reference": "09a38417339dc93849d051b914aae3947eb231a7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/DoctrineBundle/zipball/6e15d2d9a8f90c0f9b5664b0db92686ff14fcd7d",
-                "reference": "6e15d2d9a8f90c0f9b5664b0db92686ff14fcd7d",
+                "url": "https://api.github.com/repos/doctrine/DoctrineBundle/zipball/09a38417339dc93849d051b914aae3947eb231a7",
+                "reference": "09a38417339dc93849d051b914aae3947eb231a7",
                 "shasum": ""
             },
             "require": {
@@ -569,7 +569,7 @@
                 "orm",
                 "persistence"
             ],
-            "time": "2019-05-10T13:27:28+00:00"
+            "time": "2019-05-13T14:30:38+00:00"
         },
         {
             "name": "doctrine/doctrine-cache-bundle",
@@ -2796,17 +2796,72 @@
             "time": "2019-05-01T13:04:01+00:00"
         },
         {
-            "name": "twig/twig",
-            "version": "v2.9.0",
+            "name": "twig/extensions",
+            "version": "v1.5.4",
             "source": {
                 "type": "git",
-                "url": "https://github.com/twigphp/Twig.git",
-                "reference": "82a1c055c8ed4c4705023bfd0405f3c74db6e3ae"
+                "url": "https://github.com/twigphp/Twig-extensions.git",
+                "reference": "57873c8b0c1be51caa47df2cdb824490beb16202"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/82a1c055c8ed4c4705023bfd0405f3c74db6e3ae",
-                "reference": "82a1c055c8ed4c4705023bfd0405f3c74db6e3ae",
+                "url": "https://api.github.com/repos/twigphp/Twig-extensions/zipball/57873c8b0c1be51caa47df2cdb824490beb16202",
+                "reference": "57873c8b0c1be51caa47df2cdb824490beb16202",
+                "shasum": ""
+            },
+            "require": {
+                "twig/twig": "^1.27|^2.0"
+            },
+            "require-dev": {
+                "symfony/phpunit-bridge": "^3.4",
+                "symfony/translation": "^2.7|^3.4"
+            },
+            "suggest": {
+                "symfony/translation": "Allow the time_diff output to be translated"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.5-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Twig_Extensions_": "lib/"
+                },
+                "psr-4": {
+                    "Twig\\Extensions\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                }
+            ],
+            "description": "Common additional features for Twig that do not directly belong in core",
+            "keywords": [
+                "i18n",
+                "text"
+            ],
+            "time": "2018-12-05T18:34:18+00:00"
+        },
+        {
+            "name": "twig/twig",
+            "version": "v2.10.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/twigphp/Twig.git",
+                "reference": "5240e21982885b76629552d83b4ebb6d41ccde6b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/5240e21982885b76629552d83b4ebb6d41ccde6b",
+                "reference": "5240e21982885b76629552d83b4ebb6d41ccde6b",
                 "shasum": ""
             },
             "require": {
@@ -2822,7 +2877,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.9-dev"
+                    "dev-master": "2.10-dev"
                 }
             },
             "autoload": {
@@ -2860,7 +2915,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2019-04-28T06:57:38+00:00"
+            "time": "2019-05-14T12:03:52+00:00"
         }
     ],
     "packages-dev": [
