@@ -10,6 +10,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
+// use Symfony\Component\Validator\Constraints as Assert;
+use CitrespBundle\Validator\IsZipcode;
+
 class BaseCitiesSearchType extends AbstractType
 {
     /**
@@ -21,6 +24,7 @@ class BaseCitiesSearchType extends AbstractType
         ->add('searchedCity', TextType::class, [
             'label' => 'Code postal de votre ville',
             'required' => true,
+            'constraints' => new IsZipcode()
           ]);
     }
 

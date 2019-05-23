@@ -55,7 +55,7 @@ class FrontController extends Controller
         if ($formSearch->isSubmitted() && $formSearch->isValid())
         {
           $data = $formSearch->getData();
-          $searchCityZipcode = $data['searchedCity'];
+          $searchCityZipcode = $data['searchedCity'];         
 
           return $this->redirectToRoute('register_city',[
               'searchCityZipcode' => $searchCityZipcode

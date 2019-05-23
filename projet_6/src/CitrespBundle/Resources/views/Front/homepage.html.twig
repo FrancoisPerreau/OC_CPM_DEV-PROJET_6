@@ -8,10 +8,18 @@
 {% endblock %}
 
 {% block body %}
+<div class="container">
+
+{% for msg in app.session.flashBag.get('errorSelectedBaseCities') %}
+  <div class="flashBag">
+    <p class="alert alert-danger" role="alert">{{ msg }}</p>
+  </div>
+{% endfor %}
 
   <div class="contaner-sign-in text-center">
     {% embed "@Citresp/FormViews/citySelectForm.html.twig" %}{% endembed %}
   </div>
+    </div>
 
   <div class="container container-pading-t-b bg-light text-center">
     <h3>Créez un compte pour votre ville</h3>
@@ -25,5 +33,6 @@
     </div>
 
   </div>
+
 
 {% endblock %}

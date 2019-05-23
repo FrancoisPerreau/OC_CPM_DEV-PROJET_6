@@ -11,6 +11,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
+use Symfony\Component\Validator\Constraints\NotBlank;
+
 
 class BaseCitiesChoiceType extends AbstractType
 {
@@ -27,7 +29,8 @@ class BaseCitiesChoiceType extends AbstractType
               'choices' => $selectedBaseCities,
               'choice_label' => 'nomCommune',
               'required' => true,
-              'label' => 'Sélectionnez votre ville'
+              'label' => 'Sélectionnez votre ville',
+              'constraints' => new NotBlank()
           ]);
     }
 

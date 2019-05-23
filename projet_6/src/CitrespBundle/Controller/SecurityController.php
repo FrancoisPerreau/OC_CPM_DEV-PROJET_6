@@ -29,6 +29,13 @@ class SecurityController extends Controller
         $repository = $this->getDoctrine()->getRepository(BaseCities::class);
         $selectedBaseCities= $repository->getCitiesBaseByCodePostal($searchCityZipcode);
 
+        if (count($selectedBaseCities) < 1) {
+            $this->addFlash('errorSelectedBaseCities', 'Ce code postal ne correspond à aucune ville');
+
+            return $this->redirectToRoute('homepage');
+        }
+
+
         $form = $this->createForm(BaseCitiesChoiceType::class, null , ['allow_extra_fields' => $selectedBaseCities] );
         $form->handleRequest($request);
 
