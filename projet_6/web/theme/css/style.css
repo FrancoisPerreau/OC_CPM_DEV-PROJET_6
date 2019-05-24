@@ -127,12 +127,10 @@ h1 {
 
 /* CITY ***************** */
 .title-city {
-  margin-top: -32px;
-  margin-bottom: 32px;
   padding: 5px 15px;
   background-color: #343a40;
 }
 
-.title-city>h1 {
+.title-city h1 {
   color: #fff;
 }

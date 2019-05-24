@@ -15,14 +15,10 @@
 {% endblock %}
 
 {% block header %}
-  <div id="map"></div>
+  {% embed "@Citresp/cityMapHeader.html.twig" %}{% endembed %}
 {% endblock %}
 
 {% block body %}
-  <!-- Titre ville -->
-  {% embed "@Citresp/cityTitle.html.twig" %}{% endembed %}
-
-
   <!-- Liste des signalements -->
   <div class="container text-center">
     {% for reporting in reportings %}
