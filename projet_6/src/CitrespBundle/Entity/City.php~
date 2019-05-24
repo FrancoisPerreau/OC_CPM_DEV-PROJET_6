@@ -49,6 +49,19 @@ class City
      */
     private $slug;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="gps_lar", type="string", length=150)
+     */
+    private $gpsLat;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="gps_lng", type="string", length=150)
+     */
+    private $gpsLng;
 
 
 
@@ -108,6 +121,30 @@ class City
     public function getZipcode()
     {
         return $this->zipcode;
+    }
+
+    /**
+     * Set gpsCoordinates.
+     *
+     * @param string $gpsCoordinates
+     *
+     * @return City
+     */
+    public function setGpsCoordinates($gpsCoordinates)
+    {
+        $this->GpsCoordinates = $gpsCoordinates;
+
+        return $this;
+    }
+
+    /**
+     * Get gpsCoordinates.
+     *
+     * @return string
+     */
+    public function getGpsCoordinates()
+    {
+        return $this->GpsCoordinates;
     }
 
 

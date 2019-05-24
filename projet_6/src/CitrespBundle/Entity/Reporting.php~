@@ -71,6 +71,20 @@ class Reporting
     private $GpsCoordinates;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="gps_lar", type="string", length=150)
+     */
+    private $gpsLat;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="gps_lng", type="string", length=150)
+     */
+    private $gpsLng;
+
+    /**
      * @ORM\ManyToOne(targetEntity="CitrespBundle\Entity\City", cascade={"persist"}))
      * @ORM\JoinColumn(nullable=false)
      */
@@ -214,6 +228,30 @@ class Reporting
     }
 
     /**
+     * Set address.
+     *
+     * @param string $address
+     *
+     * @return Reporting
+     */
+    public function setAddress($address)
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    /**
+     * Get address.
+     *
+     * @return string
+     */
+    public function getAddress()
+    {
+        return $this->address;
+    }
+
+    /**
      * Set gpsCoordinates.
      *
      * @param string $gpsCoordinates
@@ -284,4 +322,5 @@ class Reporting
     {
         return $this->user;
     }
+
 }

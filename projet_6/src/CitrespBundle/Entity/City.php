@@ -37,18 +37,24 @@ class City
     private $zipcode;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="gps_coordinates", type="string", length=150)
-     */
-    private $GpsCoordinates;
-
-    /**
      * @Gedmo\Slug(fields={"name", "zipcode"})
      * @ORM\Column(length=255, unique=true)
      */
     private $slug;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="gps_lat", type="string", length=150)
+     */
+    private $gpsLat;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="gps_lng", type="string", length=150)
+     */
+    private $gpsLng;
 
 
 
@@ -110,31 +116,7 @@ class City
         return $this->zipcode;
     }
 
-    /**
-     * Set gpsCoordinates.
-     *
-     * @param string $gpsCoordinates
-     *
-     * @return City
-     */
-    public function setGpsCoordinates($gpsCoordinates)
-    {
-        $this->GpsCoordinates = $gpsCoordinates;
-
-        return $this;
-    }
-
-    /**
-     * Get gpsCoordinates.
-     *
-     * @return string
-     */
-    public function getGpsCoordinates()
-    {
-        return $this->GpsCoordinates;
-    }
-
-
+    
     public function getSlug()
     {
         return $this->slug;
@@ -161,4 +143,52 @@ class City
         return $this;
     }
 
+
+    /**
+     * Set gpsLat.
+     *
+     * @param string $gpsLat
+     *
+     * @return City
+     */
+    public function setGpsLat($gpsLat)
+    {
+        $this->gpsLat = $gpsLat;
+
+        return $this;
+    }
+
+    /**
+     * Get gpsLat.
+     *
+     * @return string
+     */
+    public function getGpsLat()
+    {
+        return $this->gpsLat;
+    }
+
+    /**
+     * Set gpsLng.
+     *
+     * @param string $gpsLng
+     *
+     * @return City
+     */
+    public function setGpsLng($gpsLng)
+    {
+        $this->gpsLng = $gpsLng;
+
+        return $this;
+    }
+
+    /**
+     * Get gpsLng.
+     *
+     * @return string
+     */
+    public function getGpsLng()
+    {
+        return $this->gpsLng;
+    }
 }

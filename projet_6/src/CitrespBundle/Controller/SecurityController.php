@@ -46,7 +46,17 @@ class SecurityController extends Controller
             $city = new City;
             $city->setName($data['selectedCity']->getNomCommune());
             $city->setZipcode($data['selectedCity']->getCodePostal());
-            $city->setGpsCoordinates($data['selectedCity']->getCoordonneesGps());
+
+            // Coordonnées GPS de la ville pour google map
+            $coordinates = explode(', ', $data['selectedCity']->getCoordonneesGps());
+            $cityLat = $coordinates[0];
+            $cityLng = $coordinates[1];
+
+            $city->setGpsLat($cityLat);
+            $city->setGpsLng($cityLng);
+
+
+            // $city->setGpsCoordinates($data['selectedCity']->getCoordonneesGps());
 
             $session = $this->get('session');
             $session->start();

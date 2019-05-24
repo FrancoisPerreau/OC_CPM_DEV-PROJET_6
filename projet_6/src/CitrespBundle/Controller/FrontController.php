@@ -80,36 +80,15 @@ class FrontController extends Controller
     public function cityAction(City $city)
     {
         $em = $this->getDoctrine()->getManager();
+
+        // Google map
         $googleApi = $this->container->getParameter('google_api');
+        $markers = null ;
 
-        // $user = $this->getUser();
-        $cityGps = $city->getGpsCoordinates();
-
-        // Coordonnées GPS de la ville pour google map
-        $coordinates = explode(', ', $cityGps);
-        $cityLat = $coordinates[0];
-        $cityLng = $coordinates[1];
-
+        // Reportings
         $reportings = $em
             ->getRepository(Reporting::class)
             ->findBy(['city' => $city]);
-
-
-        // MARKER
-        $markers = null ;
-
-
-        foreach ($reportings as $reporting) {
-
-            $reportingGPS = $reporting->getGpsCoordinates();
-            $coordinates = explode(', ', $reportingGPS);
-
-            $markers[] = ['markerLat' => $coordinates[0], 'markerLng' => $coordinates[1]];
-        }
-
-
-
-
 
         // // Si les slug sont différents on redirige vers la homepage
         // if ($user->getCity()->getSlug() != $city->getSlug())
@@ -120,9 +99,6 @@ class FrontController extends Controller
         return $this->render('@Citresp/Front/city.html.twig', [
           'googleApi' => $googleApi,
           'city' => $city,
-          'cityLat'=> $cityLat,
-          'cityLng' => $cityLng,
-          'markers' =>$markers,
           'reportings' => $reportings
         ]);
     }
@@ -137,26 +113,9 @@ class FrontController extends Controller
     public function showReportingAction(City $city, Reporting $reporting)
     {
         $em = $this->getDoctrine()->getManager();
+
+        // Google map
         $googleApi = $this->container->getParameter('google_api');
-
-        // $user = $this->getUser();
-        $cityGps = $city->getGpsCoordinates();
-
-        // Coordonnées GPS de la ville pour google map
-        $coordinates = explode(', ', $cityGps);
-        $cityLat = $coordinates[0];
-        $cityLng = $coordinates[1];
-
-
-
-        // MARKER
-        $reportingGPS = $reporting->getGpsCoordinates();
-        $coordinates = explode(', ', $reportingGPS);
-
-        $markerLat = $coordinates[0];
-        $markerLng = $coordinates[1];
-
-
 
         // COMMENTS
         $comments =  $em
@@ -175,10 +134,6 @@ class FrontController extends Controller
         return $this->render('@Citresp/Front/showReporting.html.twig', [
           'googleApi' => $googleApi,
           'city' => $city,
-          'cityLat'=> $cityLat,
-          'cityLng' => $cityLng,
-          'markerLat' => $markerLat,
-          'markerLng' => $markerLng,
           'reporting' => $reporting,
           'comments' => $comments
         ]);

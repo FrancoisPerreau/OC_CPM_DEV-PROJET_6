@@ -53,12 +53,12 @@
     var map;
     function initMap() {
       var city = {
-        lat: {{ cityLat }},
-        lng: {{ cityLng }}
+        lat: {{ city.gpsLat }},
+        lng: {{ city.gpsLng }}
       };
       var coorMarker = {
-        lat: {{ markerLat }},
-        lng: {{ markerLng }}
+        lat: {{ reporting.gpsLat }},
+        lng: {{ reporting.gpsLng }}
       };
       map = new google.maps.Map(document.getElementById('map'), {
         zoom: 20,
