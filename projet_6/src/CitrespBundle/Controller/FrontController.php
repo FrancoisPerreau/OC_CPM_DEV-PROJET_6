@@ -55,7 +55,7 @@ class FrontController extends Controller
         if ($formSearch->isSubmitted() && $formSearch->isValid())
         {
           $data = $formSearch->getData();
-          $searchCityZipcode = $data['searchedCity'];         
+          $searchCityZipcode = $data['searchedCity'];
 
           return $this->redirectToRoute('register_city',[
               'searchCityZipcode' => $searchCityZipcode
@@ -80,6 +80,7 @@ class FrontController extends Controller
     public function cityAction(City $city)
     {
         $em = $this->getDoctrine()->getManager();
+        $googleApi = $this->container->getParameter('google_api');
 
         // $user = $this->getUser();
         $cityGps = $city->getGpsCoordinates();
@@ -117,6 +118,7 @@ class FrontController extends Controller
         // }
 
         return $this->render('@Citresp/Front/city.html.twig', [
+          'googleApi' => $googleApi,
           'city' => $city,
           'cityLat'=> $cityLat,
           'cityLng' => $cityLng,
@@ -135,6 +137,7 @@ class FrontController extends Controller
     public function showReportingAction(City $city, Reporting $reporting)
     {
         $em = $this->getDoctrine()->getManager();
+        $googleApi = $this->container->getParameter('google_api');
 
         // $user = $this->getUser();
         $cityGps = $city->getGpsCoordinates();
@@ -170,6 +173,7 @@ class FrontController extends Controller
         // }
 
         return $this->render('@Citresp/Front/showReporting.html.twig', [
+          'googleApi' => $googleApi,
           'city' => $city,
           'cityLat'=> $cityLat,
           'cityLng' => $cityLng,
