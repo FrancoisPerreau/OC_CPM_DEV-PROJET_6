@@ -1,0 +1,34 @@
+{# src/CitrespBundle/Resources/views/FormViews/createReportingForm.html.twig #}
+
+{% form_theme form 'bootstrap_4_layout.html.twig' %}
+
+{{ form_start(form,  {'attr': {'class': 'form-signin'}}) }}
+
+  <h1 class="h3 mb-3 font-weight-normal">
+    Faites un signalement
+  </h1>
+
+
+  {{ form_errors(form.address) }}
+  {{ form_label(form.address, null, {'label_attr': {'class': 'sr-only'}}) }}
+  {{ form_widget(form.address, {'attr': {'class': 'form-control',
+    'placeholder': form.address.vars.label }}) }}
+
+  {{ form_errors(form.category) }}
+  {{ form_label(form.category, null, {'label_attr': {'class': 'sr-only'}}) }}
+  {{ form_widget(form.category, {'attr': {'class': 'form-control',
+      'placeholder': form.category.vars.label }}) }}
+
+  <br>
+
+  {{ form_errors(form.description) }}
+  {{ form_label(form.description, null, {'label_attr': {'class': 'sr-only'}}) }}
+  {{ form_widget(form.description, {'attr': {'class': 'form-control',
+        'placeholder': form.description.vars.label }}) }}
+
+  <br>
+
+  <input class="btn btn-lg btn-info btn-block" type="submit" value="Validez"/>
+
+  {{ form_rest(form) }}
+{{ form_end(form) }}

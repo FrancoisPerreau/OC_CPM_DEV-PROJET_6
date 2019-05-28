@@ -4,12 +4,10 @@
 
 {% block stylesheets %}
   {{ parent() }}
-
+  <link rel="stylesheet" href="{{ asset('theme/css/sign-in.css') }}">
   <style>
-
     #map {
       min-height: 26.25rem;
-
     }
   </style>
 {% endblock %}
@@ -21,7 +19,9 @@
 {% block body %}
   <div class="container text-center">
 
-    <h2>Faire un signalement</h2>
+    <div class="contaner-sign-in text-center">
+      {% embed "@Citresp/FormViews/createReportingForm.html.twig" %}{% endembed %}
+    </div>
 
 
   </div>

@@ -18,8 +18,9 @@ use CitrespBundle\Entity\Reporting;
 use CitrespBundle\Entity\Comment;
 use CitrespBundle\Entity\Category;
 
-use CitrespBundle\Form\CitySelectType;
 use CitrespBundle\Form\BaseCitiesSearchType;
+use CitrespBundle\Form\CitySelectType;
+use CitrespBundle\Form\ReportingType;
 use CitrespBundle\Form\Security\RegistrationType;
 
 
@@ -144,7 +145,7 @@ class FrontController extends Controller
         return $this->render('@Citresp/Front/showReporting.html.twig', [
           'googleApi' => $googleApi,
           'city' => $city,
-          'reporting' => $reporting,          
+          'reporting' => $reporting,
           'comments' => $comments
         ]);
     }
@@ -154,7 +155,7 @@ class FrontController extends Controller
      * @Route("/city/{slug}/report", name="create_reporting")
      * @Security("has_role('ROLE_USER')")
      */
-    public function createReportingAction(City $city)
+    public function createReportingAction(City $city, Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -168,11 +169,31 @@ class FrontController extends Controller
 
 
 
+        // Formulaire CitySelect
+        $form = $this->createForm(ReportingType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+          $data = $form->getData();
+
+          dump($data);
+          die;
+
+          $selectCitySlug = $city->getSlug();
+
+          return $this->redirectToRoute('city',[
+              'slug' => $selectCitySlug]);
+        }
+
+
 
         return $this->render('@Citresp/Front/createReporting.html.twig', [
             'googleApi' => $googleApi,
             'city' => $city,
-            'reportings' => $reportings
+            'reportings' => $reportings,
+            'form' => $form->createView()
+
         ]);
     }
 
