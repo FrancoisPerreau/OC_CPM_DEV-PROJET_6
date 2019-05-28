@@ -22,13 +22,6 @@ class Reporting
     private $id;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="title", type="string", length=255)
-     */
-    private $title;
-
-    /**
      * @var string|null
      *
      * @ORM\Column(name="description", type="text", nullable=true)
@@ -89,6 +82,13 @@ class Reporting
      */
     private $user;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="CitrespBundle\Entity\Category"))
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $category;
+
+
 
     /**
      * Get id.
@@ -98,30 +98,6 @@ class Reporting
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set title.
-     *
-     * @param string $title
-     *
-     * @return reporting
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
-    /**
-     * Get title.
-     *
-     * @return string
-     */
-    public function getTitle()
-    {
-        return $this->title;
     }
 
     /**
@@ -340,4 +316,27 @@ class Reporting
         return $this->user;
     }
 
+    /**
+     * Set category.
+     *
+     * @param \CitrespBundle\Entity\Category $category
+     *
+     * @return Reporting
+     */
+    public function setCategory(\CitrespBundle\Entity\Category $category)
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    /**
+     * Get category.
+     *
+     * @return \CitrespBundle\Entity\Category
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
 }

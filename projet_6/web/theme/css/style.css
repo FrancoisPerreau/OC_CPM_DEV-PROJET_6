@@ -1,7 +1,7 @@
 :root {
   --primary-color: #db35ea;
   --secondary-color: green;
-  --light : #f1c99c
+  --light : #ab7542;
 }
 
 html,
@@ -33,6 +33,14 @@ main {
   padding: 2rem 0!important;
 }
 
+h1 {
+  color: var(--secondary-color);
+}
+
+.bg-light {
+  background-color: var(--light)!important;
+}
+
 .flashBag {
   /* max-width:600px; */
   margin: auto;
@@ -47,10 +55,6 @@ main {
 .navbar-nav {
   width: 100%;
   justify-content:space-between;
-}
-
-.nav-item {
-
 }
 
 .nav-item:first-child {
@@ -72,14 +76,6 @@ text-align: right;
   right: 0!important;
   left: auto!important;
 }
-
-
-
-
-h1 {
-  color: var(--secondary-color);
-}
-
 
 .header-block {
   min-height: 21.875rem;
@@ -115,13 +111,13 @@ h1 {
 
 
 /* HOME ***************** */
-.bg-light {
-  background-color: var(--light)!important;
-}
-
 .container-pading-t-b {
   padding-top: 80px;
   padding-bottom: 80px;
+}
+
+.home-create {
+  color: #fff;
 }
 
 
@@ -134,4 +130,13 @@ h1 {
 
 .title-city h1 {
   color: #fff;
+}
+
+.reporting-btn {
+  margin-top: -32px;
+  padding: 35px 0px;
+}
+
+.reportings-block {
+  margin-top: 70px;
 }

@@ -16,6 +16,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use CitrespBundle\Entity\City;
 use CitrespBundle\Entity\Reporting;
 use CitrespBundle\Entity\Comment;
+use CitrespBundle\Entity\Category;
 
 use CitrespBundle\Form\CitySelectType;
 use CitrespBundle\Form\BaseCitiesSearchType;
@@ -83,7 +84,7 @@ class FrontController extends Controller
 
         // Google map
         $googleApi = $this->container->getParameter('google_api');
-        $markers = null ;
+        // $markers = null ;
 
         // Reportings
         $reportings = $em
@@ -117,12 +118,21 @@ class FrontController extends Controller
         // Google map
         $googleApi = $this->container->getParameter('google_api');
 
+        // CATEGORY
+        // $category = $em
+        //     ->getRepository(Category::class)
+        //     ->findBy(['reporting'=> $reporting]);
+
+
         // COMMENTS
         $comments =  $em
             ->getRepository(Comment::class)
-            ->findBy(['reporting' => $reporting]);;
+            ->findBy(['reporting' => $reporting]);
 
 
+        // dump($reporting);
+        // dump($category);
+        // die;
 
 
         // // Si les slug sont différents on redirige vers la homepage
@@ -134,9 +144,37 @@ class FrontController extends Controller
         return $this->render('@Citresp/Front/showReporting.html.twig', [
           'googleApi' => $googleApi,
           'city' => $city,
-          'reporting' => $reporting,
+          'reporting' => $reporting,          
           'comments' => $comments
         ]);
     }
+
+
+    /**
+     * @Route("/city/{slug}/report", name="create_reporting")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function createReportingAction(City $city)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        // Google map
+        $googleApi = $this->container->getParameter('google_api');
+
+        // Reportings
+        $reportings = $em
+            ->getRepository(Reporting::class)
+            ->findBy(['city' => $city]);
+
+
+
+
+        return $this->render('@Citresp/Front/createReporting.html.twig', [
+            'googleApi' => $googleApi,
+            'city' => $city,
+            'reportings' => $reportings
+        ]);
+    }
+
 
 }

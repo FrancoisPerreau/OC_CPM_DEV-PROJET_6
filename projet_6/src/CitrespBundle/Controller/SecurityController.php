@@ -55,14 +55,11 @@ class SecurityController extends Controller
             $city->setGpsLat($cityLat);
             $city->setGpsLng($cityLng);
 
-
-            // $city->setGpsCoordinates($data['selectedCity']->getCoordonneesGps());
-
+            // Création session SelectedCity
             $session = $this->get('session');
             $session->start();
             $session->set('SelectedCity', $city);
 
-            $getCitySession = $session->get('SelectedCity');
 
             return $this->redirectToRoute('register_city_admin');
         }
@@ -112,6 +109,5 @@ class SecurityController extends Controller
             'cityName' => $cityName
         ]);
     }
-
 
 }
