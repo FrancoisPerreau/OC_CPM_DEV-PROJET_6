@@ -1,0 +1,20 @@
+{# src/CitrespBundle/Resources/views/FormViews/createCommentForm.html.twig #}
+
+{% form_theme form 'bootstrap_4_layout.html.twig' %}
+
+{{ form_start(form,  {'attr': {'class': 'form-comment-block'}}) }}
+
+  <div class="input-group input-group-sm">
+    {{ form_errors(form.content) }}
+    {{ form_label(form.content, null, {'label_attr': {'class': 'sr-only'}}) }}
+    {{ form_widget(form.content, {'attr': {'class': 'form-control',
+          'placeholder': form.content.vars.label }}) }}
+
+    <div class="input-group-append">
+      <input class="btn btn-info" type="submit" value="Validez"/>
+    </div>
+  </div>
+
+
+{{ form_rest(form) }}
+{{ form_end(form) }}

@@ -20,6 +20,8 @@ use CitrespBundle\Entity\Category;
 
 use CitrespBundle\Form\BaseCitiesSearchType;
 use CitrespBundle\Form\CitySelectType;
+use CitrespBundle\Form\CommentType;
+use CitrespBundle\Form\RegisterReportingType;
 use CitrespBundle\Form\ReportingType;
 use CitrespBundle\Form\Security\RegistrationType;
 
@@ -90,7 +92,7 @@ class FrontController extends Controller
         // Reportings
         $reportings = $em
             ->getRepository(Reporting::class)
-            ->findBy(['city' => $city]);
+            ->findBy(['city' => $city], ['dateCreated' => 'DESC']);
 
         // // Si les slug sont différents on redirige vers la homepage
         // if ($user->getCity()->getSlug() != $city->getSlug())
@@ -112,28 +114,72 @@ class FrontController extends Controller
      * @Entity("reporting", expr="repository.find(reporting_id)")
      * @Security("has_role('ROLE_USER')")
      */
-    public function showReportingAction(City $city, Reporting $reporting)
+    public function showReportingAction(City $city, Reporting $reporting, Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
         // Google map
         $googleApi = $this->container->getParameter('google_api');
 
-        // CATEGORY
-        // $category = $em
-        //     ->getRepository(Category::class)
-        //     ->findBy(['reporting'=> $reporting]);
-
 
         // COMMENTS
         $comments =  $em
             ->getRepository(Comment::class)
-            ->findBy(['reporting' => $reporting]);
+            ->findBy(['reporting' => $reporting], ['dateCreated' => 'DESC']);
+
+        // FORMULAIRE COMMENT
+        $form = $this->createForm(CommentType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+          $comment = $form->getData();
+          $user = $this->getUser();
+
+          $comment->setUser($user);
+          $comment->setReporting($reporting);
+          // dump($comment);
+          // die;
+
+          $em->persist($comment);
+          $em->flush();
+
+          return $this->redirectToRoute('show_reporting',[
+              'slug' => $city->getSlug(),
+              'reporting_id' => $reporting->getId(),
+              // 'searchCityZipcode' => $searchCityZipcode
+          ]);
+        }
 
 
-        // dump($reporting);
-        // dump($category);
-        // die;
+        $action = $request->query->get('action');
+
+        // ACTION REPORTNG-REPORT
+        $action = $request->query->get('action');
+        if ($action === 'reportingReport')
+        {
+            $reportedCount = $reporting->getReportedCount() + 1;
+            $reporting->setReportedCount($reportedCount);
+
+            $em->persist($reporting);
+            $em->flush();
+        }
+
+
+        // ACTION REPORTNG-REPORT
+        if ($action === 'commentReport')
+        {
+            $commentId = $request->query->get('id');
+            $comment = $em
+                ->getRepository(Comment::class)
+                ->find($commentId);
+
+            $reportedCount = $comment->getReportedCount() + 1;
+            $comment->setReportedCount($reportedCount);
+
+            $em->persist($comment);
+            $em->flush();
+        }
 
 
         // // Si les slug sont différents on redirige vers la homepage
@@ -146,7 +192,8 @@ class FrontController extends Controller
           'googleApi' => $googleApi,
           'city' => $city,
           'reporting' => $reporting,
-          'comments' => $comments
+          'comments' => $comments,
+          'form' => $form->createView()
         ]);
     }
 
@@ -167,20 +214,26 @@ class FrontController extends Controller
             ->getRepository(Reporting::class)
             ->findBy(['city' => $city]);
 
-
-
-        // Formulaire CitySelect
-        $form = $this->createForm(ReportingType::class);
+        // Formulaire
+        $form = $this->createForm(RegisterReportingType::class);
         $form->handleRequest($request);
+
 
         if ($form->isSubmitted() && $form->isValid())
         {
-          $data = $form->getData();
-
-          dump($data);
-          die;
-
+          $reporting = $form->getData();
+          $user = $this->getUser();
           $selectCitySlug = $city->getSlug();
+
+          $reporting->setUser($user);
+          $reporting->setCity($city);
+
+          // dump($reporting);
+          // die;
+
+          $em->persist($reporting);
+          $em->flush();
+
 
           return $this->redirectToRoute('city',[
               'slug' => $selectCitySlug]);

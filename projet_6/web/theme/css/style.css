@@ -1,22 +1,20 @@
 :root {
-  --primary-color: #db35ea;
+  --primary-color: #ab7542;
   --secondary-color: green;
-  --light : #ab7542;
+  --light: #F2F3F5;
 }
 
 html,
 body,
 main {
-  min-height: 100%!important;
+  min-height: 100% !important;
 }
 
 body {
   background-color: #eeeeee;
-  background-repeat:no-repeat;
+  background-repeat: no-repeat;
   background-size: cover;
-
   font-size: 16px;
-
 }
 
 main,
@@ -26,19 +24,30 @@ header {
 }
 
 header {
-  padding: 0!important;
+  padding: 0 !important;
 }
 
 main {
-  padding: 2rem 0!important;
+  padding-top: 2rem;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  padding-bottom: 0;
+}
+
+section {
+  padding: 60px 0;
 }
 
 h1 {
-  color: var(--secondary-color);
+  /* color: var(--secondary-color); */
 }
 
 .bg-light {
-  background-color: var(--light)!important;
+  background-color: var(--light) !important;
+}
+
+.bg-primary {
+  background-color: var(--primary-color) !important;
 }
 
 .flashBag {
@@ -47,34 +56,37 @@ h1 {
   text-align: center;
 }
 
-/* ========== NAVBAR =========== */
+/* *************************** */
+/*  NAVBAR  */
+/* *************************** */
 .navbar-brand {
   margin-right: 2rem;
 }
 
 .navbar-nav {
   width: 100%;
-  justify-content:space-between;
+  justify-content: space-between;
 }
 
 .nav-item:first-child {
   flex: 2;
   color: red;
 }
+
 .dropdown {
-/* flex: 2; */
-text-align: right;
+  /* flex: 2; */
+  text-align: right;
 }
 
 @media screen and (max-width: 768px) {
-   .dropdown {
-    text-align: left!important;
+  .dropdown {
+    text-align: left !important;
   }
 }
 
 .dropdown-menu {
-  right: 0!important;
-  left: auto!important;
+  right: 0 !important;
+  left: auto !important;
 }
 
 .header-block {
@@ -84,7 +96,6 @@ text-align: right;
   justify-content: center;
   padding: 0 2rem;
   /* background-color: var(--primary-color); */
-
   text-align: center;
   color: #fff;
 }
@@ -101,16 +112,17 @@ text-align: right;
   color: inherit;
 }
 
-
-/* FORM ***************** */
+/* *************************** */
+/* FORM  */
+/* *************************** */
 .invalid-feedback {
   margin: 3px 0;
-  text-align: left!important;
+  text-align: left !important;
 }
 
-
-
-/* HOME ***************** */
+/* *************************** */
+/* HOME  */
+/* *************************** */
 .container-pading-t-b {
   padding-top: 80px;
   padding-bottom: 80px;
@@ -120,9 +132,23 @@ text-align: right;
   color: #fff;
 }
 
+.home-search>.d-block {
+  padding: 5px;
+  background-color: #dc3545 !important;
+  border-radius: .25rem;
+}
 
+.home-search>.invalid-feedback {
+  color: #fff !important;
+}
 
-/* CITY ***************** */
+/* *************************** */
+/* CITY  */
+/* *************************** */
+.container-map {
+  /* margin-top: 32px; */
+}
+
 .title-city {
   padding: 5px 15px;
   background-color: #343a40;
@@ -137,6 +163,111 @@ text-align: right;
   padding: 35px 0px;
 }
 
-.reportings-block {
-  margin-top: 70px;
+.reportings-container {
+  /* margin-top: 70px; */
+}
+
+.reporting-block,
+.showReporting-block,
+.commentsReporting-block {
+  max-width: 600px;
+  margin: auto;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  padding: 15px;
+  background-color: #fff;
+  box-shadow: 2px 2px 12px #ddd;
+  text-align: left;
+}
+
+.reporting-block {
+  display: flex;
+}
+
+.img-reporting-city {
+  width: 75px;
+  height: 75px;
+  margin-right: 15px;
+  background-color: #eee;
+  border-radius: 100%;
+}
+
+.infos-reporting-city>p {
+  line-height: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.author-reporting-city {
+  font-size: 0.875rem;
+}
+
+/* *************************** */
+/* SHOW REPORTING */
+/* *************************** */
+.container-showReporting {
+  margin-top: -32px;
+  /* padding-top: 70px; */
+}
+
+.img-showReporting-city {
+  width: 100%;
+  height: 200px;
+  margin-right: 15px;
+  background-color: #eee;
+}
+
+.img-showReporting-city {
+  margin-bottom: 15px;
+}
+
+.reporting-status {
+  display: flex;
+  align-items: center;
+}
+
+.reporting-status>p {
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+.reporting-status-label {
+  /* display: inline-block; */
+  margin-right: 3px;
+  width: 15px;
+  height: 15px;
+  border-radius: 100%;
+  background-color: var(--secondary-color);
+}
+
+.block-reporting-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.btn-report-publication {
+  padding: 0.12rem 0.25rem;
+  font-size: 0.75rem;
+}
+
+.form-comment-block {
+  margin-bottom: 30px;
+}
+
+.comment-block {
+  margin-bottom: 30px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  background-color: var(--light);
+  box-shadow: 2px 2px 12px #ddd;
+}
+
+.comment-block:last-child {
+  margin-bottom: 0;
+}
+
+.comment-block>p {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.25em;
 }

@@ -6,11 +6,9 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
-class ReportingType extends AbstractType
+class CommentType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -18,31 +16,23 @@ class ReportingType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-          ->add('category', EntityType::class, [
-              'class' => 'CitrespBundle:Category',
-              'choice_label'=> 'name',
-              'label' => 'Sélectionnez une catégorie',
-              'required' => true
-          ])
-          ->add('description', TextareaType::class, [
-              'label' => 'Déscription',
-              'required' => true
-          ])
-          ->remove('gpsLat')
-          ->remove('gpsLng', TextType::class)
+          ->add('content', TextType::class, [
+             'label' => 'Faites un commentaire',
+             'required' => true
+           ])
           ->remove('dateCreated')
           ->remove('reportedCount')
           ->remove('moderate')
-          ->remove('city')
+          ->remove('reporting')
           ->remove('user')
-        ;
+          ;
     }/**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'CitrespBundle\Entity\Reporting'
+            'data_class' => 'CitrespBundle\Entity\Comment'
         ));
     }
 
@@ -51,7 +41,7 @@ class ReportingType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'citrespbundle_reporting';
+        return 'citrespbundle_comment';
     }
 
 

@@ -5,7 +5,7 @@
 
   {{ form_errors(formSearch) }}
 
-  {{ form_label(formSearch.searchedCity) }}
+  {{ form_label(formSearch.searchedCity, null, {'label_attr': {'class': 'home-search'}}) }}
   {{ form_widget(formSearch.searchedCity, {'attr': {'class': 'form-control'}}) }}
 
   <br/>

@@ -55,6 +55,21 @@ class Comment
      */
     private $reporting;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="CitrespBundle\Entity\User", cascade={"persist"}))
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $user;
+
+
+
+    public function __construct()
+    {
+      $this->dateCreated = new \Datetime('now');
+      $this->moderate = 0;
+    }
+
+
 
     /**
      * Get id.
@@ -184,5 +199,29 @@ class Comment
     public function getReporting()
     {
         return $this->reporting;
+    }
+
+    /**
+     * Set user.
+     *
+     * @param \CitrespBundle\Entity\User|null $user
+     *
+     * @return Comment
+     */
+    public function setUser(\CitrespBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user.
+     *
+     * @return \CitrespBundle\Entity\User|null
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }

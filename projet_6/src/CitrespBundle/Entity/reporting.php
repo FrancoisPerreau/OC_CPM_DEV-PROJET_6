@@ -90,6 +90,16 @@ class Reporting
 
 
 
+    public function __construct()
+    {
+      $this->dateCreated = new \Datetime('now');
+      $this->moderate = 0;
+    }
+
+
+
+
+
     /**
      * Get id.
      *

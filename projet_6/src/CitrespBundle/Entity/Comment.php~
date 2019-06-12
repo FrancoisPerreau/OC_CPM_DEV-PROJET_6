@@ -55,6 +55,12 @@ class Comment
      */
     private $reporting;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="CitrespBundle\Entity\User", cascade={"persist"}))
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $user;
+
 
     /**
      * Get id.
@@ -160,5 +166,29 @@ class Comment
     public function getModerate()
     {
         return $this->moderate;
+    }
+
+    /**
+     * Set reporting.
+     *
+     * @param \CitrespBundle\Entity\Reporting $reporting
+     *
+     * @return Comment
+     */
+    public function setReporting(\CitrespBundle\Entity\Reporting $reporting)
+    {
+        $this->reporting = $reporting;
+
+        return $this;
+    }
+
+    /**
+     * Get reporting.
+     *
+     * @return \CitrespBundle\Entity\Reporting
+     */
+    public function getReporting()
+    {
+        return $this->reporting;
     }
 }

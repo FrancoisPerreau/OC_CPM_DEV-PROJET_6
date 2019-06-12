@@ -4,31 +4,46 @@
 
 {{ form_start(form,  {'attr': {'class': 'form-signin'}}) }}
 
-  <h1 class="h3 mb-3 font-weight-normal">
-    Faites un signalement
-  </h1>
+<h1 class="h3 mb-3 font-weight-normal">
+  Faites un signalement
+</h1>
 
+{{ form_errors(form.autocompleteInput) }}
+{{ form_label(form.autocompleteInput, null, {'label_attr': {'class': 'sr-only'}}) }}
+{{ form_widget(form.autocompleteInput, {'attr': {'class': 'form-control',
+      'placeholder': form.autocompleteInput.vars.label }}) }}
 
-  {{ form_errors(form.address) }}
-  {{ form_label(form.address, null, {'label_attr': {'class': 'sr-only'}}) }}
-  {{ form_widget(form.address, {'attr': {'class': 'form-control',
-    'placeholder': form.address.vars.label }}) }}
-
-  {{ form_errors(form.category) }}
-  {{ form_label(form.category, null, {'label_attr': {'class': 'sr-only'}}) }}
-  {{ form_widget(form.category, {'attr': {'class': 'form-control',
+{{ form_errors(form.category) }}
+{{ form_label(form.category, null, {'label_attr': {'class': 'sr-only'}}) }}
+{{ form_widget(form.category, {'attr': {'class': 'form-control',
       'placeholder': form.category.vars.label }}) }}
 
-  <br>
+<br>
 
-  {{ form_errors(form.description) }}
-  {{ form_label(form.description, null, {'label_attr': {'class': 'sr-only'}}) }}
-  {{ form_widget(form.description, {'attr': {'class': 'form-control',
+{{ form_errors(form.description) }}
+{{ form_label(form.description, null, {'label_attr': {'class': 'sr-only'}}) }}
+{{ form_widget(form.description, {'attr': {'class': 'form-control',
         'placeholder': form.description.vars.label }}) }}
 
-  <br>
+<br>
 
-  <input class="btn btn-lg btn-info btn-block" type="submit" value="Validez"/>
+{{ form_errors(form.address) }}
+{{ form_label(form.address, null, {'label_attr': {'class': 'sr-only'}}) }}
+{{ form_widget(form.address, {'attr': {'class': 'form-control',
+      'placeholder': form.address.vars.label }}) }}
 
-  {{ form_rest(form) }}
+{{ form_errors(form.gpsLat) }}
+{{ form_label(form.gpsLat, null, {'label_attr': {'class': 'sr-only'}}) }}
+{{ form_widget(form.gpsLat, {'attr': {'class': 'form-control',
+            'placeholder': form.gpsLat.vars.label }}) }}
+
+{{ form_errors(form.gpsLng) }}
+{{ form_label(form.gpsLng, null, {'label_attr': {'class': 'sr-only'}}) }}
+{{ form_widget(form.gpsLng, {'attr': {'class': 'form-control',
+                  'placeholder': form.gpsLng.vars.label }}) }}
+<br>
+
+<input class="btn btn-lg btn-info btn-block" type="submit" value="Validez"/>
+
+{{ form_rest(form) }}
 {{ form_end(form) }}

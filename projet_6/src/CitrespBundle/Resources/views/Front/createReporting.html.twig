@@ -21,8 +21,16 @@
 
     <div class="contaner-sign-in text-center">
       {% embed "@Citresp/FormViews/createReportingForm.html.twig" %}{% endembed %}
-    </div>
 
+      <div class="">
+        <p id="street_number"></p>
+        <p id="route"></p>
+        <p id="locality"></p>
+        <p id="postal_code"></p>
+        <p id="latitude"></p>
+        <p id="longitude"></p>
+      </div>
+    </div>
 
   </div>
 
@@ -31,17 +39,38 @@
 {% block javascripts %}
   {{ parent() }}
   <script>
-    var map;
-    function initMap() {
-      var city = {
-        lat: {{ city.gpsLat }},
-        lng: {{ city.gpsLng }}
-      };
-      var jsMarkers = new Array();
 
+    // MAP
+    var map;
+    var city = {
+      lat: {{ city.gpsLat }},
+      lng: {{ city.gpsLng }}
+    };
+    // var marker; AUTOCOMPLETE
+    var autocomplete;
+    var autocompleteInput = (document.getElementById('register_reporting_autocompleteInput'));
+    var autocompleteOptions = {
+      types: ['geocode'],
+      componentRestrictions: {
+        'country': 'fr'
+      }
+    };
+
+    // AUTOCOMPLETE DATA
+    var componentData = {
+      street_number: 'short_name',
+      route: 'long_name',
+      locality: 'long_name',
+      postal_code: 'short_name'
+    };
+
+    function initMap() {
       map = new google.maps.Map(document.getElementById('map'), {
         zoom: 15,
-        center: city
+        center: city,
+        streetViewControl: false,
+        mapTypeControl: false,
+        panControl: false
       });
 
       {% for reporting in reportings %}
@@ -54,7 +83,78 @@
           map: map
         });
       {% endfor %}
+
+      autocomplete = new google.maps.places.Autocomplete(autocompleteInput, autocompleteOptions);
+
+      autocomplete.setFields(['address_components', 'geometry']);
+
+      places = new google.maps.places.PlacesService(map);
+
+      // Prefixer l'autocomplétion par le nom de la ville
+      $(autocompleteInput).on('input', function() {
+        var str = autocompleteInput.value;
+        var prefix = '{{ city.name }} {{ city.zipcode }} - ';
+        if (str.indexOf(prefix) == 0) {} else {
+          if (prefix.indexOf(str) >= 0) {
+            autocompleteInput.value = prefix;
+          } else {
+            autocompleteInput.value = prefix + str;
+          }
+        }
+      });
+
+      autocomplete.addListener('place_changed', fillInAddress);
+
     }
+
+    function fillInAddress() {
+      // Get the place details from the autocomplete object.
+      var place = autocomplete.getPlace();
+
+      // console.log(place.geometry.location);
+      if (!place.geometry) {
+        // User entered the name of a Place that was not suggested and pressed the Enter key, or the Place Details request failed.
+        window.alert("No details available for input: '" + place.name + "'");
+      };
+
+      if (place.geometry.viewport) {
+        map.fitBounds(place.geometry.viewport);
+      } else {
+        map.setCenter(place.geometry.location);
+        map.setZoom(30);
+      }
+      var newMarker = new google.maps.Marker({map: map, position: place.geometry.location});
+      newMarker.setPosition(place.geometry.location);
+      newMarker.setVisible(true);
+
+      for (var component in componentData) {
+        document.getElementById(component).value = '';
+        document.getElementById(component).disabled = false;
+      }
+
+
+      // Get each component of the address from the place details, and then fill-in the corresponding id
+      for (var i = 0; i < place.address_components.length; i++) {
+        var addressType = place.address_components[i].types[0];
+        // console.log(place.address_components[i]);
+        if (componentData[addressType]) {
+          var val = place.address_components[i][componentData[addressType]];
+          document.getElementById(addressType).innerHTML = val;
+        }
+      }
+
+      var address = document.getElementById("register_reporting_address");
+      var latitude = document.getElementById("register_reporting_gpsLat");
+      var longitude = document.getElementById("register_reporting_gpsLng");
+
+      // console.log(place.address_components);
+
+      address.value = place.address_components[0]['short_name'] + ', ' + place.address_components[1]['short_name'];
+      latitude.value = place.geometry.location.lat();
+      longitude.value = place.geometry.location.lng();
+    }
+
   </script>
-  <script src="https://maps.googleapis.com/maps/api/js?key={{googleApi}}&callback=initMap" async="async" defer="defer"></script>
+
+  <script src="https://maps.googleapis.com/maps/api/js?key={{googleApi}}&libraries=places&callback=initMap" async="async" defer="defer"></script>
 {% endblock %}
