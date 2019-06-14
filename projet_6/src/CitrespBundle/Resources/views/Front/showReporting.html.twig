@@ -16,6 +16,7 @@
 
 {% block header %}
   {% embed "@Citresp/cityMapHeader.html.twig" %}{% endembed %}
+  {% embed "@Citresp/Front/ariane.html.twig" %}{% endembed %}
 {% endblock %}
 
 {% block body %}
@@ -66,6 +67,14 @@
           <div class="col">
             <p>{{ reporting.description }}</p>
           </div>
+        </div>
+        {# Si l'utilisateur est l'auteur du signalement #}
+        <div class="reporting-btn-block">
+          {% if app.user.id is same as(reporting.user.id) %}
+            <a href="{{ path('edit_reporting', {'slug': app.user.city.slug, 'reporting_id': reporting.id}) }}" class="btn btn-outline-info btn-sm btn-report-publication">
+              Modifier
+            </a>
+          {% endif %}
         </div>
         <!-- /row 2 -->
       </div>

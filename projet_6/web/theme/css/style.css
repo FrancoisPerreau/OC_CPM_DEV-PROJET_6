@@ -42,6 +42,22 @@ h1 {
   /* color: var(--secondary-color); */
 }
 
+.max-width-1 {
+  max-width: 600px;
+  margin:auto;
+}
+
+.max-width-2 {
+  max-width: 300px;
+  margin:auto;
+}
+
+.arianne>p {
+  padding-top: 5px;
+  margin-bottom: 0;
+  font-size: 0.875rem;
+}
+
 .bg-light {
   background-color: var(--light) !important;
 }
@@ -245,6 +261,11 @@ h1 {
   justify-content: space-between;
 }
 
+.reporting-btn-block {
+  display: flex;
+  justify-content: flex-end;
+}
+
 .btn-report-publication {
   padding: 0.12rem 0.25rem;
   font-size: 0.75rem;
@@ -270,4 +291,9 @@ h1 {
   margin: 0;
   font-size: 0.875rem;
   line-height: 1.25em;
+}
+
+.comment-btn-block {
+  display: flex;
+  justify-content: space-between;
 }

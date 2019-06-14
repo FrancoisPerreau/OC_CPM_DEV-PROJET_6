@@ -215,7 +215,8 @@ class FrontController extends Controller
             ->findBy(['city' => $city]);
 
         // Formulaire
-        $form = $this->createForm(RegisterReportingType::class);
+        $reporting = new Reporting;
+        $form = $this->createForm(RegisterReportingType::class, $reporting, ['textArea' => '']);
         $form->handleRequest($request);
 
 
@@ -223,27 +224,66 @@ class FrontController extends Controller
         {
           $reporting = $form->getData();
           $user = $this->getUser();
-          $selectCitySlug = $city->getSlug();
 
           $reporting->setUser($user);
           $reporting->setCity($city);
 
-          // dump($reporting);
-          // die;
-
           $em->persist($reporting);
           $em->flush();
 
-
           return $this->redirectToRoute('city',[
-              'slug' => $selectCitySlug]);
+              'slug' => $city->getSlug()]);
         }
-
 
 
         return $this->render('@Citresp/Front/createReporting.html.twig', [
             'googleApi' => $googleApi,
             'city' => $city,
+            'reportings' => $reportings,
+            'form' => $form->createView()
+
+        ]);
+    }
+
+
+
+    /**
+     * @Route("/city/{slug}/edit-report/{reporting_id}", name="edit_reporting")
+     * @Entity("reporting", expr="repository.find(reporting_id)")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function editReportingAction(City $city, Reporting $reporting, Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        // Google map
+        $googleApi = $this->container->getParameter('google_api');
+
+        // Reportings
+        $reportings = $em
+            ->getRepository(Reporting::class)
+            ->findBy(['city' => $city]);
+
+        // Formulaire
+        $form = $this->createForm(RegisterReportingType::class, $reporting, ['textArea' => $reporting->getDescription()]);
+        $form->handleRequest($request);
+
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+          $em->flush();
+
+
+          return $this->redirectToRoute('city',[
+              'slug' => $city->getSlug()]);
+        }
+
+
+
+        return $this->render('@Citresp/Front/editReporting.html.twig', [
+            'googleApi' => $googleApi,
+            'city' => $city,
+            'reporting' => $reporting,
             'reportings' => $reportings,
             'form' => $form->createView()
 

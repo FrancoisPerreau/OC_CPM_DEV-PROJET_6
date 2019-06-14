@@ -23,7 +23,7 @@
   </head>
 
   <body style="background-image:url('{{ asset('theme/img/bg-default.jpg') }}')">
-    <header class="container">
+    <header class="container bg-light">
 
       {% embed "@Citresp/nav.html.twig" %}{% endembed %}
 
@@ -44,7 +44,7 @@
 
     </header>
 
-    <main class="container ">
+    <main class="container bg-light">
       {% block body %}{% endblock %}
       {% block fos_user_content %}{% endblock %}
     </main>

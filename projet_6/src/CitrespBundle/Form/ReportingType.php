@@ -17,6 +17,8 @@ class ReportingType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $textArea = $options['textArea'];
+
         $builder
           ->add('category', EntityType::class, [
               'class' => 'CitrespBundle:Category',
@@ -26,7 +28,8 @@ class ReportingType extends AbstractType
           ])
           ->add('description', TextareaType::class, [
               'label' => 'Déscription',
-              'required' => true
+              'required' => true,
+              'data' => $textArea
           ])
           ->remove('gpsLat')
           ->remove('gpsLng', TextType::class)
@@ -42,7 +45,8 @@ class ReportingType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'CitrespBundle\Entity\Reporting'
+            'data_class' => 'CitrespBundle\Entity\Reporting',
+            'textArea' => ''
         ));
     }
 

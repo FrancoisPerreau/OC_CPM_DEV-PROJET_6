@@ -1,0 +1,12 @@
+{# src/CitrespBundle/Resources/views/Front/ariane.html.twig #}
+
+<div class="arianne text-center
+  {% if app.request.attributes.get('_route') == 'show_reporting' %}
+      max-width-1
+  {% endif %}
+  {% if (app.request.attributes.get('_route') == 'create_reporting') or (app.request.attributes.get('_route') == 'edit_reporting') %}
+      max-width-2
+  {% endif %}
+">
+  <p><a href="{{ path('city',{'slug': app.user.city.slug}) }}">Retour à la liste des signalements</a></p>
+</div>
