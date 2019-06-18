@@ -18,12 +18,15 @@
 {{ form_widget(form.category, {'attr': {'class': 'form-control',
       'placeholder': form.category.vars.label }}) }}
 
-<br>
-
 {{ form_errors(form.description) }}
 {{ form_label(form.description, null, {'label_attr': {'class': 'sr-only'}}) }}
 {{ form_widget(form.description, {'attr': {'class': 'form-control',
         'placeholder': form.description.vars.label }}) }}
+
+<br>
+
+{{ form_errors(form.image) }}
+{{ form_widget(form.image, {'attr': {'class': 'form-control-file'}}) }}
 
 <br>
 

@@ -88,6 +88,13 @@ class Reporting
      */
     private $category;
 
+    /**
+     * @ORM\OneToOne(targetEntity="CitrespBundle\Entity\Image", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $image;
+
+
 
 
     public function __construct()
@@ -348,5 +355,29 @@ class Reporting
     public function getCategory()
     {
         return $this->category;
+    }
+
+    /**
+     * Set image.
+     *
+     * @param \CitrespBundle\Entity\Image|null $image
+     *
+     * @return Reporting
+     */
+    public function setImage(\CitrespBundle\Entity\Image $image = null)
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * Get image.
+     *
+     * @return \CitrespBundle\Entity\Image|null
+     */
+    public function getImage()
+    {
+        return $this->image;
     }
 }

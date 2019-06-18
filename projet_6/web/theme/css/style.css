@@ -201,11 +201,20 @@ h1 {
 }
 
 .img-reporting-city {
+  overflow: hidden;
+
   width: 75px;
   height: 75px;
   margin-right: 15px;
   background-color: #eee;
   border-radius: 100%;
+}
+
+.img-reporting-city>img {
+  object-fit: cover;
+  min-height: 75px;
+	width: 100%;
+  /* border-radius: 100%; */
 }
 
 .infos-reporting-city>p {
@@ -226,14 +235,28 @@ h1 {
 }
 
 .img-showReporting-city {
+  overflow: hidden;
+
   width: 100%;
   height: 200px;
   margin-right: 15px;
   background-color: #eee;
 }
 
+
+
 .img-showReporting-city {
+  /* display: flex; */
   margin-bottom: 15px;
+}
+
+.img-showReporting-city img {
+
+  /* height: 100%; */
+  /* object-fit: cover; */
+  min-height: 200px;
+	width: 100%;
+  /* border-radius: 100%; */
 }
 
 .reporting-status {

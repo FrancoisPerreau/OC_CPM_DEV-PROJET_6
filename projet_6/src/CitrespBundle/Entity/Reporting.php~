@@ -88,6 +88,23 @@ class Reporting
      */
     private $category;
 
+    /**
+     * @ORM\OneToOne(targetEntity="CitrespBundle\Entity\Image", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $image;
+
+
+
+
+    public function __construct()
+    {
+      $this->dateCreated = new \Datetime('now');
+      $this->moderate = 0;
+    }
+
+
+
 
 
     /**

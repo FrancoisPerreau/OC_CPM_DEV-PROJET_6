@@ -27,7 +27,10 @@
         <div class="row">
           <div class="col-md-6">
             <div class="img-showReporting-city">
-              <img class="" src="" alt="">
+              {% if reporting.image %}
+                <img class="img-responsive center-block" src="{{ asset(reporting.image.webPath) }}" alt="{{ reporting.description }}">
+              {% endif %}
+              <img class="" src="{{ asset('theme/img/report-citresp-show.jpg') }}" alt="Picto CITRESP">
             </div>
           </div>
 

@@ -32,7 +32,10 @@
           {% for reporting in reportings %}
             <div class="reporting-block">
               <div class="img-reporting-city">
-                <img class="" src="" alt="">
+                {% if reporting.image %}
+                  <img class="img-responsive center-block" src="{{ asset(reporting.image.webPath) }}" alt="{{ reporting.description }}">
+                {% endif %}
+                <img class="" src="{{ asset('theme/img/report-citresp.jpg') }}" alt="Picto CITRSP">
               </div>
 
               <div class="infos-reporting-city">

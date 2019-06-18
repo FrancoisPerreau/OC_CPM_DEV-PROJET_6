@@ -7,6 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+// use Symfony\Component\Form\Extension\Core\Type\ImageType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
@@ -22,6 +23,9 @@ class RegisterReportingType extends AbstractType
               'label' => 'N°, nom de la rue',
               'required' => true,
               'mapped' => false
+          ])
+          ->add('image', ImageType::class, [
+              'required' => false
           ])
           ->add('address', HiddenType::class)
           ->add('gpsLat', HiddenType::class)
