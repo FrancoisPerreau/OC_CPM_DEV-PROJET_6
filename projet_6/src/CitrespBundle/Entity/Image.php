@@ -1,9 +1,11 @@
 <?php
+// src/CitrespBundle/Resources/views/Front/showReporting.html.twig
 
 namespace CitrespBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Assert;
 
 
 /**
@@ -28,6 +30,7 @@ class Image
      * @var string
      *
      * @ORM\Column(name="extension", type="string", length=255, unique=false)
+     * Assert\NotBlank()
      */
     private $extension;
 
@@ -35,6 +38,7 @@ class Image
      * @var string
      *
      * @ORM\Column(name="alt", type="string", length=255)
+     * Assert\NotBlank()
      */
     private $alt;
 
@@ -49,37 +53,6 @@ class Image
 
     // METHODES *************************
     // **********************************
-    // public function upload()
-    // {
-    //     // Si il n'y a pas de fichier uploader on ne fait rien
-    //     if ($this->file === null) {
-    //         return;
-    //     }
-    //
-    //     // On récupère le nom du fichier d'origine
-    //     $name = $this->file->getClientOriginalName();
-    //
-    //     // On déplace le fichier dans notre répertoire
-    //     $this->file->move($this->getUploadRootDir(), $name);
-    //
-    //     // On sauvegarde le nom de fichier dans notre attribut $extension
-    //     $this->extension = $name;
-    //
-    //     // On crée également le futur attribut alt de notre balise <img>
-    //     $this->alt = $name;
-    // }
-    //
-    // public function getUploadDir()
-    // {
-    //     // On retourne le chemin relatif vers l'image pour un navigateur (relatif au répertoire /web donc)
-    //     return 'img/uploads';
-    // }
-    //
-    // protected function getUploadRootDir()
-    // {
-    //     // On retourne le chemin relatif vers l'image pour notre code PHP
-    //     return __DIR__.'/../../../../web/'.$this->getUploadDir();
-    // }
 
     /**
      * @ORM\PrePersist()
@@ -97,7 +70,7 @@ class Image
         $this->extension = $this->file->guessExtension();
 
         // Et on génère l'attribut alt de la balise <img>, à la valeur du nom du fichier sur le PC de l'internaute
-        $this->alt = $this->file->getClientOriginalName();
+        // $this->alt = $this->file->getClientOriginalName();
       }
 
       /**
@@ -161,7 +134,6 @@ class Image
         // On retourne le chemin relatif vers l'image pour notre code PHP
         return __DIR__ . '/../../../web/' . $this->getUploadDir();
       }
-
 
       public function getWebPath()
       {

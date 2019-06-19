@@ -28,9 +28,11 @@
           <div class="col-md-6">
             <div class="img-showReporting-city">
               {% if reporting.image %}
-                <img class="img-responsive center-block" src="{{ asset(reporting.image.webPath) }}" alt="{{ reporting.description }}">
+                <img class="img-responsive center-block" src="{{ asset(reporting.image.webPath) }}" alt="{{ reporting.image.alt }}">
+              {% else %}
+                <img class="" src="{{ asset('theme/img/report-citresp-show.jpg') }}" alt="Picto CITRESP">
               {% endif %}
-              <img class="" src="{{ asset('theme/img/report-citresp-show.jpg') }}" alt="Picto CITRESP">
+
             </div>
           </div>
 
@@ -53,8 +55,7 @@
                 <p>Transmis</p>
               </div>
 
-              <a href="{{ path('show_reporting', {'slug': app.user.city.slug, 'reporting_id': reporting.id}) }}?action=reportingReport"
-                class="btn btn-outline-secondary btn-sm btn-report-publication">Signaler la publication
+              <a href="{{ path('show_reporting', {'slug': app.user.city.slug, 'reporting_id': reporting.id}) }}?action=reportingReport" class="btn btn-outline-secondary btn-sm btn-report-publication">Signaler la publication
                 {% if reporting.reportedCount %}
                   <span class="badge badge-danger">{{ reporting.reportedCount }}</span>
                 {% endif %}
@@ -86,14 +87,8 @@
       <!-- *************************** COMMENTS *************************** -->
       <div class="commentsReporting-block">
         <!-- FORMULAIRE -->
-        <!-- <div class="form-comment-block">
-          <div class="input-group input-group-sm">
-            <input type="text" class="form-control" placeholder="Faites un commentaire" aria-label="Recipient's username" aria-describedby="basic-addon2">
-            <div class="input-group-append">
-              <button class="btn  btn-info" type="submit">Validez</button>
-            </div>
-          </div>
-        </div> -->
+        <!-- <div class="form-comment-block"> <div class="input-group input-group-sm"> <input type="text" class="form-control" placeholder="Faites un commentaire" aria-label="Recipient's username" aria-describedby="basic-addon2"> <div
+        class="input-group-append"> <button class="btn btn-info" type="submit">Validez</button> </div> </div> </div> -->
 
         {% embed "@Citresp/FormViews/createCommentForm.html.twig" %}{% endembed %}
 
@@ -107,11 +102,10 @@
             </p>
             <p>{{ comment.content }}</p>
             <hr>
-            <a href="{{ path('show_reporting', {'slug': app.user.city.slug, 'reporting_id': reporting.id}) }}?action=commentReport&id={{ comment.id }}"
-              class="btn btn-outline-secondary btn-sm btn-report-publication">Signaler ce commentaire
-                {% if comment.reportedCount %}
-                  <span class="badge badge-danger">{{ comment.reportedCount }}</span>
-                {% endif %}
+            <a href="{{ path('show_reporting', {'slug': app.user.city.slug, 'reporting_id': reporting.id}) }}?action=commentReport&id={{ comment.id }}" class="btn btn-outline-secondary btn-sm btn-report-publication">Signaler ce commentaire
+              {% if comment.reportedCount %}
+                <span class="badge badge-danger">{{ comment.reportedCount }}</span>
+              {% endif %}
             </a>
           </div>
         {% endfor %}

@@ -14,3 +14,6 @@ services:
           - { name: twig.extension }
 
        debug: true
+
+   citresp.createAtlContent:
+       class: CitrespBundle\Services\CreateAtlContent

@@ -4,6 +4,7 @@ namespace CitrespBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * City
@@ -26,6 +27,7 @@ class City
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $name;
 
@@ -33,12 +35,14 @@ class City
      * @var int
      *
      * @ORM\Column(name="zipcode", type="integer")
+     * @Assert\NotBlank()
      */
     private $zipcode;
 
     /**
      * @Gedmo\Slug(fields={"name", "zipcode"})
      * @ORM\Column(length=255, unique=true)
+     * @Assert\NotBlank()
      */
     private $slug;
 
@@ -46,6 +50,7 @@ class City
      * @var string
      *
      * @ORM\Column(name="gps_lat", type="string", length=150)
+     * @Assert\NotBlank()
      */
     private $gpsLat;
 
@@ -53,6 +58,7 @@ class City
      * @var string
      *
      * @ORM\Column(name="gps_lng", type="string", length=150)
+     * @Assert\NotBlank()
      */
     private $gpsLng;
 
@@ -116,7 +122,7 @@ class City
         return $this->zipcode;
     }
 
-    
+
     public function getSlug()
     {
         return $this->slug;

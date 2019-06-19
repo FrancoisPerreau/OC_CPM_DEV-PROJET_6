@@ -121,7 +121,6 @@ class FrontController extends Controller
         // Google map
         $googleApi = $this->container->getParameter('google_api');
 
-
         // COMMENTS
         $comments =  $em
             ->getRepository(Comment::class)
@@ -138,21 +137,15 @@ class FrontController extends Controller
 
           $comment->setUser($user);
           $comment->setReporting($reporting);
-          // dump($comment);
-          // die;
 
           $em->persist($comment);
           $em->flush();
 
           return $this->redirectToRoute('show_reporting',[
               'slug' => $city->getSlug(),
-              'reporting_id' => $reporting->getId(),
-              // 'searchCityZipcode' => $searchCityZipcode
+              'reporting_id' => $reporting->getId()
           ]);
         }
-
-
-        $action = $request->query->get('action');
 
         // ACTION REPORTNG-REPORT
         $action = $request->query->get('action');
@@ -164,7 +157,6 @@ class FrontController extends Controller
             $em->persist($reporting);
             $em->flush();
         }
-
 
         // ACTION REPORTNG-REPORT
         if ($action === 'commentReport')
@@ -181,12 +173,6 @@ class FrontController extends Controller
             $em->flush();
         }
 
-
-        // // Si les slug sont différents on redirige vers la homepage
-        // if ($user->getCity()->getSlug() != $city->getSlug())
-        // {
-        //     return $this->redirectToRoute('homepage');
-        // }
 
         return $this->render('@Citresp/Front/showReporting.html.twig', [
           'googleApi' => $googleApi,
@@ -224,9 +210,15 @@ class FrontController extends Controller
         {
           $reporting = $form->getData();
           $user = $this->getUser();
+          $image = $reporting->getImage();
+          $alt = $this->container->get('citresp.createAtlContent')->altContent($reporting, $city);
 
           $reporting->setUser($user);
           $reporting->setCity($city);
+
+          if ($image) {
+              $image->setAlt($alt);
+          }
 
           $em->persist($reporting);
           $em->flush();
@@ -268,16 +260,20 @@ class FrontController extends Controller
         $form = $this->createForm(RegisterReportingType::class, $reporting, ['textArea' => $reporting->getDescription()]);
         $form->handleRequest($request);
 
-
         if ($form->isSubmitted() && $form->isValid())
         {
-          $em->flush();
+            $image = $reporting->getImage();
 
+            if ($image) {
+                $alt = $this->container->get('citresp.createAtlContent')->altContent($reporting, $city);
+                $image->setAlt($alt);
+            }
+
+          $em->flush();
 
           return $this->redirectToRoute('city',[
               'slug' => $city->getSlug()]);
         }
-
 
 
         return $this->render('@Citresp/Front/editReporting.html.twig', [

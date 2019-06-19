@@ -3,6 +3,7 @@
 namespace CitrespBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * comment
@@ -25,6 +26,7 @@ class Comment
      * @var \DateTime
      *
      * @ORM\Column(name="dateCreated", type="datetime")
+     * @Assert\DateTime()
      */
     private $dateCreated;
 
@@ -32,6 +34,12 @@ class Comment
      * @var string
      *
      * @ORM\Column(name="content", type="text")
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 500,
+     *      minMessage = "Le commentaire doit faire au moins 3 caractères.",
+     *      maxMessage = "Le commentaire ne doit pas faire plus de 500 caractères."
+     * )
      */
     private $content;
 
@@ -52,12 +60,14 @@ class Comment
     /**
      * @ORM\ManyToOne(targetEntity="CitrespBundle\Entity\Reporting", cascade={"persist"}))
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\Valid()
      */
     private $reporting;
 
     /**
      * @ORM\ManyToOne(targetEntity="CitrespBundle\Entity\User", cascade={"persist"}))
      * @ORM\JoinColumn(nullable=true)
+     * @Assert\Valid()
      */
     private $user;
 
