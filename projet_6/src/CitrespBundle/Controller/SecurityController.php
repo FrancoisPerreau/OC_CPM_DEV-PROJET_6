@@ -44,26 +44,15 @@ class SecurityController extends Controller
             $data = $form->getData();
 
             $city = new City;
-            $city->setName($data['selectedCity']->getNomCommune());
-            $city->setZipcode($data['selectedCity']->getCodePostal());
-
-            // Coordonnées GPS de la ville pour google map
-            $coordinates = explode(', ', $data['selectedCity']->getCoordonneesGps());
-            $cityLat = $coordinates[0];
-            $cityLng = $coordinates[1];
-
-            $city->setGpsLat($cityLat);
-            $city->setGpsLng($cityLng);
+            $this->container->get('citresp.HydrateCity')->hydrate($city, $data);
 
             // Création session SelectedCity
             $session = $this->get('session');
             $session->start();
             $session->set('SelectedCity', $city);
 
-
             return $this->redirectToRoute('register_city_admin');
         }
-
 
         return $this->render('@Citresp/Security/registerCity.html.twig', [
             'searchCityZipcode' => $searchCityZipcode,

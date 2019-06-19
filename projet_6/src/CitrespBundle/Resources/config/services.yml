@@ -21,6 +21,9 @@ services:
    citresp.createAtlContent:
        class: CitrespBundle\Services\CreateAtlContent
 
+   citresp.HydrateCity:
+       class: CitrespBundle\Services\HydrateCity   
+
    citresp.HydrateReporting:
        class: CitrespBundle\Services\HydrateReporting
        arguments:
