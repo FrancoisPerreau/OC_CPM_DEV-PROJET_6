@@ -137,9 +137,6 @@ class FrontController extends Controller
 
           $this->container->get('citresp.HydrateComment')->hydrate($user, $reporting, $comment);
 
-          // $comment->setUser($user);
-          // $comment->setReporting($reporting);
-
           $em->persist($comment);
           $em->flush();
 
@@ -153,8 +150,7 @@ class FrontController extends Controller
         $action = $request->query->get('action');
         if ($action === 'reportingReport')
         {
-            $reportedCount = $reporting->getReportedCount() + 1;
-            $reporting->setReportedCount($reportedCount);
+            $this->container->get('citresp.addOneToReportedCount')->add($reporting);
 
             $em->persist($reporting);
             $em->flush();
@@ -168,8 +164,7 @@ class FrontController extends Controller
                 ->getRepository(Comment::class)
                 ->find($commentId);
 
-            $reportedCount = $comment->getReportedCount() + 1;
-            $comment->setReportedCount($reportedCount);
+            $this->container->get('citresp.addOneToReportedCount')->add($comment);
 
             $em->persist($comment);
             $em->flush();

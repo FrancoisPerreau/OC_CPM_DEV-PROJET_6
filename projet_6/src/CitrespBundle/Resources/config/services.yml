@@ -18,6 +18,14 @@ services:
 
 # Services
 # ===========================
+   citresp.addOne:
+       class: CitrespBundle\Services\AddOne
+
+   citresp.addOneToReportedCount:
+       class: CitrespBundle\Services\AddOneToReportedCount
+       arguments:
+          - "@citresp.addOne"
+
    citresp.createAtlContent:
        class: CitrespBundle\Services\CreateAtlContent
 
