@@ -22,7 +22,10 @@ services:
        class: CitrespBundle\Services\CreateAtlContent
 
    citresp.HydrateCity:
-       class: CitrespBundle\Services\HydrateCity   
+       class: CitrespBundle\Services\HydrateCity
+
+   citresp.HydrateComment:
+       class: CitrespBundle\Services\HydrateComment
 
    citresp.HydrateReporting:
        class: CitrespBundle\Services\HydrateReporting

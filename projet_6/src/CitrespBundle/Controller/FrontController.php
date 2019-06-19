@@ -135,8 +135,10 @@ class FrontController extends Controller
           $comment = $form->getData();
           $user = $this->getUser();
 
-          $comment->setUser($user);
-          $comment->setReporting($reporting);
+          $this->container->get('citresp.HydrateComment')->hydrate($user, $reporting, $comment);
+
+          // $comment->setUser($user);
+          // $comment->setReporting($reporting);
 
           $em->persist($comment);
           $em->flush();
@@ -210,7 +212,7 @@ class FrontController extends Controller
         {
           $reporting = $form->getData();
           $user = $this->getUser();
-          
+
           $this->container->get('citresp.HydrateReporting')->hydrate($user, $city, $reporting);
 
           $em->persist($reporting);
