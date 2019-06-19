@@ -13,10 +13,10 @@ use Symfony\Component\HttpFoundation\Request;
 
 use Doctrine\ORM\EntityManagerInterface;
 
-use CitrespBundle\Entity\City;
-use CitrespBundle\Entity\Reporting;
-use CitrespBundle\Entity\Comment;
 use CitrespBundle\Entity\Category;
+use CitrespBundle\Entity\City;
+use CitrespBundle\Entity\Comment;
+use CitrespBundle\Entity\Reporting;
 
 use CitrespBundle\Form\BaseCitiesSearchType;
 use CitrespBundle\Form\CitySelectType;
@@ -210,15 +210,8 @@ class FrontController extends Controller
         {
           $reporting = $form->getData();
           $user = $this->getUser();
-          $image = $reporting->getImage();
-          $alt = $this->container->get('citresp.createAtlContent')->altContent($reporting, $city);
-
-          $reporting->setUser($user);
-          $reporting->setCity($city);
-
-          if ($image) {
-              $image->setAlt($alt);
-          }
+          
+          $this->container->get('citresp.HydrateReporting')->hydrate($user, $city, $reporting);
 
           $em->persist($reporting);
           $em->flush();

@@ -15,5 +15,13 @@ services:
 
        debug: true
 
+
+# Services
+# ===========================
    citresp.createAtlContent:
        class: CitrespBundle\Services\CreateAtlContent
+
+   citresp.HydrateReporting:
+       class: CitrespBundle\Services\HydrateReporting
+       arguments:
+          - "@citresp.createAtlContent"
