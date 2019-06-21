@@ -25,7 +25,8 @@ class RegisterReportingType extends AbstractType
               'mapped' => false
           ])
           ->add('image', ImageType::class, [
-              'required' => false
+              'required' => false,
+              'label' => false
           ])
           ->add('address', HiddenType::class)
           ->add('gpsLat', HiddenType::class)

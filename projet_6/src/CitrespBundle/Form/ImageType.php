@@ -17,7 +17,8 @@ class ImageType extends AbstractType
     {
         $builder
           ->add('file', FileType::class, [
-              'label' => false
+              'label' => "Importez une photo",
+              'label_attr' => ["class" => "text-label-left"]
           ])
           ;
     }/**

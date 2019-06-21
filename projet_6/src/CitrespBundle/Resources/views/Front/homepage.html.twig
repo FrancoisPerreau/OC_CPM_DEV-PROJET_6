@@ -16,6 +16,12 @@
       </div>
     {% endfor %}
 
+    {% for msg in app.session.flashBag.get('errorCityAccess') %}
+    <div class="flashBag">
+      <p class="alert alert-danger" role="alert">{{ msg }}</p>
+    </div>      
+    {% endfor %}
+
     <div class="contaner-sign-in text-center">
       {% embed "@Citresp/FormViews/citySelectForm.html.twig" %}{% endembed %}
     </div>

@@ -34,43 +34,53 @@ class FrontController extends Controller
      */
     public function indexAction(Request $request)
     {
-
-        // Formulaire CitySelect
-        $formSelect = $this->createForm(CitySelectType::class);
-        $formSelect->handleRequest($request);
-
-        if ($formSelect->isSubmitted() && $formSelect->isValid())
-        {
-          $data = $formSelect->getData();
-
-          $selectedCityName = $data['selectedCity']->getName();
-          $selectedCityZipCode = $data['selectedCity']->getZipcode();
-          $selectCitySlug = $data['selectedCity']->getSlug();
-
-          return $this->redirectToRoute('city',[
-              'slug' => $selectCitySlug]);
-        }
+      // Si l'utilisateur est connécté on le redirige vers sa page ville
+      $user = $this->getUser();
+      if ($user)
+      {
+        $city = $user->getCity();
+        $citySlug = $city->getSlug();
+        return $this->redirectToRoute('city',[
+            'slug' => $citySlug]);
+      }
 
 
-        // Formulaire BaseCitiesSearch
-        $formSearch = $this->createForm(BaseCitiesSearchType::class);
-        $formSearch->handleRequest($request);
+      // Formulaire CitySelect
+      $formSelect = $this->createForm(CitySelectType::class);
+      $formSelect->handleRequest($request);
 
-        if ($formSearch->isSubmitted() && $formSearch->isValid())
-        {
-          $data = $formSearch->getData();
-          $searchCityZipcode = $data['searchedCity'];
+      if ($formSelect->isSubmitted() && $formSelect->isValid())
+      {
+        $data = $formSelect->getData();
 
-          return $this->redirectToRoute('register_city',[
-              'searchCityZipcode' => $searchCityZipcode
-          ]);
-        }
+        $selectedCityName = $data['selectedCity']->getName();
+        $selectedCityZipCode = $data['selectedCity']->getZipcode();
+        $selectCitySlug = $data['selectedCity']->getSlug();
+
+        return $this->redirectToRoute('city',[
+            'slug' => $selectCitySlug]);
+      }
 
 
-        return $this->render('@Citresp/Front/homepage.html.twig', [
-          'formSelect' => $formSelect->createView(),
-          'formSearch' => $formSearch->createView()
+      // Formulaire BaseCitiesSearch
+      $formSearch = $this->createForm(BaseCitiesSearchType::class);
+      $formSearch->handleRequest($request);
+
+      if ($formSearch->isSubmitted() && $formSearch->isValid())
+      {
+        $data = $formSearch->getData();
+        $searchCityZipcode = $data['searchedCity'];
+
+        return $this->redirectToRoute('register_city',[
+            'searchCityZipcode' => $searchCityZipcode
         ]);
+      }
+
+
+      return $this->render('@Citresp/Front/homepage.html.twig', [
+        'formSelect' => $formSelect->createView(),
+        'formSearch' => $formSearch->createView()
+      ]);
 
     }
 
@@ -83,6 +93,15 @@ class FrontController extends Controller
      */
     public function cityAction(City $city)
     {
+        // Si les Villes sont différents on redirige vers la homepage
+        $user = $this->getUser();
+        if ($user->getCity() != $city)
+        {
+            $this->addFlash('errorCityAccess', 'Votre compte n\'est pas pour la ville de ' . $city->getName());
+
+            return $this->redirectToRoute('homepage');
+        }
+
         $em = $this->getDoctrine()->getManager();
 
         // Google map
@@ -94,11 +113,6 @@ class FrontController extends Controller
             ->getRepository(Reporting::class)
             ->findBy(['city' => $city], ['dateCreated' => 'DESC']);
 
-        // // Si les slug sont différents on redirige vers la homepage
-        // if ($user->getCity()->getSlug() != $city->getSlug())
-        // {
-        //     return $this->redirectToRoute('homepage');
-        // }
 
         return $this->render('@Citresp/Front/city.html.twig', [
           'googleApi' => $googleApi,
@@ -116,6 +130,15 @@ class FrontController extends Controller
      */
     public function showReportingAction(City $city, Reporting $reporting, Request $request)
     {
+        // Si les Villes sont différents on redirige vers la homepage
+        $user = $this->getUser();
+        if ($user->getCity() != $city)
+        {
+            $this->addFlash('errorCityAccess', 'Votre compte n\'est pas pour la ville de ' . $city->getName());
+
+            return $this->redirectToRoute('homepage');
+        }
+
         $em = $this->getDoctrine()->getManager();
 
         // Google map
@@ -187,6 +210,15 @@ class FrontController extends Controller
      */
     public function createReportingAction(City $city, Request $request)
     {
+        // Si les Villes sont différents on redirige vers la homepage
+        $user = $this->getUser();
+        if ($user->getCity() != $city)
+        {
+            $this->addFlash('errorCityAccess', 'Votre compte n\'est pas pour la ville de ' . $city->getName());
+
+            return $this->redirectToRoute('homepage');
+        }
+
         $em = $this->getDoctrine()->getManager();
 
         // Google map
@@ -236,6 +268,15 @@ class FrontController extends Controller
      */
     public function editReportingAction(City $city, Reporting $reporting, Request $request)
     {
+        // Si les Villes sont différents on redirige vers la homepage
+        $user = $this->getUser();
+        if ($user->getCity() != $city)
+        {
+            $this->addFlash('errorCityAccess', 'Votre compte n\'est pas pour la ville de ' . $city->getName());
+
+            return $this->redirectToRoute('homepage');
+        }
+
         $em = $this->getDoctrine()->getManager();
 
         // Google map

@@ -42,7 +42,14 @@ class Image
      */
     private $alt;
 
-
+    /**
+     * @Assert\Image(
+     *     maxSize = "2M",
+     *     mimeTypes = {"image/jpeg", "image/png"},
+     *     maxSizeMessage = "Le fichier ne doit pas faire plus de 2M.",
+     *     mimeTypesMessage = "Le fichier doit être un JPG ou un PNG."
+     * )
+     */
     private $file;
 
     // On ajoute cet attribut pour y stocker le nom du fichier temporairement

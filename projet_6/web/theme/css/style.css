@@ -1,5 +1,5 @@
 :root {
-  --primary-color: #ab7542;
+  --primary-color: #c17450;
   --secondary-color: green;
   --light: #F2F3F5;
 }
@@ -53,8 +53,12 @@ h1 {
 }
 
 .arianne>p {
-  padding-top: 5px;
+  padding-top: 30px;
   margin-bottom: 0;
+  /* font-size: 0.875rem; */
+}
+
+.text-min-size {
   font-size: 0.875rem;
 }
 
@@ -157,6 +161,12 @@ h1 {
 .home-search>.invalid-feedback {
   color: #fff !important;
 }
+
+.text-label-left {
+  display: flex;
+  text-align: left!important;
+}
+
 
 /* *************************** */
 /* CITY  */

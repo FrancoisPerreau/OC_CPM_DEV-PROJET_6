@@ -26,7 +26,9 @@
 <br>
 
 {{ form_errors(form.image) }}
+{{ form_label(form.image) }}
 {{ form_widget(form.image, {'attr': {'class': 'form-control-file'}}) }}
+<p class="text-muted text-label-left text-min-size">Fichier jpeg ou png, taille maxi : 2M</p>
 
 <br>
 
