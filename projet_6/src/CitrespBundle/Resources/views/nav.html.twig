@@ -8,8 +8,7 @@
 
   <div class="collapse navbar-collapse" id="navbarsExample04">
     <ul class="navbar-nav ">
-      <li class="nav-item">        
-      </li>
+      <li class="nav-item"></li>
 
       {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
         <li class="nav-item dropdown">
@@ -18,21 +17,33 @@
             <a class="dropdown-item" href="{{ path('fos_user_profile_show') }}" lang="fr">Mon profil</a>
             <a class="dropdown-item" href="{{ path('city',{'slug': app.user.city.slug}) }}" lang="fr">Ma ville</a>
             <a class="dropdown-item" href="{{ path('fos_user_security_logout') }}" lang="fr">Déconnexion</a>
+            {% if (is_granted('ROLE_MODERATOR')) or (is_granted('ROLE_CYTI')) %}
+              <hr>
+              <a class="dropdown-item"
+              {% if is_granted('ROLE_ADMIN') %}
+               href="{{ path('security_admin',{'slug': app.user.city.slug}) }}">
+               {% elseif is_granted('ROLE_MODERATOR') %}
+                href="{{ path('security_moderator',{'slug': app.user.city.slug}) }}">
+                {% elseif is_granted('ROLE_CYTI') %}
+                 href="{{ path('security_city',{'slug': app.user.city.slug}) }}">
+              {% endif %}
+              Administration
+             </a>
+            {% endif %}
+
           </div>
         </li>
       {% else %}
-      <li class="nav-item ">
-        <a class="nav-link
-        {% if app.request.attributes.get('_route') == 'fos_user_registration_register' %}active{% endif %}"
-         href="{{ path('fos_user_registration_register') }}" lang="fr">Créer un compte
-       </a>
-      </li>
+        <li class="nav-item ">
+          <a class="nav-link
+        {% if app.request.attributes.get('_route') == 'fos_user_registration_register' %}active{% endif %}" href="{{ path('fos_user_registration_register') }}" lang="fr">Créer un compte
+          </a>
+        </li>
 
         <li class="nav-item ">
           <a class="nav-link
-          {% if app.request.attributes.get('_route') == 'fos_user_security_login' %}active{% endif %}"
-           href="{{ path('fos_user_security_login') }}" lang="fr">Connexion
-         </a>
+          {% if app.request.attributes.get('_route') == 'fos_user_security_login' %}active{% endif %}" href="{{ path('fos_user_security_login') }}" lang="fr">Connexion
+          </a>
         </li>
       {% endif %}
 

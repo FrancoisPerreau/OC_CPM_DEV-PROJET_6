@@ -113,6 +113,13 @@ class Reporting
      */
     private $image;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="CitrespBundle\Entity\Status"))
+     * @ORM\JoinColumn(nullable=false)
+     * @Assert\Valid()
+     */
+    private $status;
+
 
 
 
@@ -398,5 +405,29 @@ class Reporting
     public function getImage()
     {
         return $this->image;
+    }
+
+    /**
+     * Set status.
+     *
+     * @param \CitrespBundle\Entity\Status $status
+     *
+     * @return Reporting
+     */
+    public function setStatus(\CitrespBundle\Entity\Status $status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status.
+     *
+     * @return \CitrespBundle\Entity\Status
+     */
+    public function getStatus()
+    {
+        return $this->status;
     }
 }

@@ -29,6 +29,9 @@ services:
    citresp.createAtlContent:
        class: CitrespBundle\Services\CreateAtlContent
 
+   citresp.citiesNotCreated:
+       class: CitrespBundle\Services\CitiesNotCreated
+
    citresp.HydrateCity:
        class: CitrespBundle\Services\HydrateCity
 

@@ -26,17 +26,26 @@ class SecurityController extends Controller
     */
     public function registerCityAction(Request $request, $searchCityZipcode)
     {
+        // On récupère les Villes dans BasesCities qui ont ce code postal
         $repository = $this->getDoctrine()->getRepository(BaseCities::class);
         $selectedBaseCities= $repository->getCitiesBaseByCodePostal($searchCityZipcode);
 
-        if (count($selectedBaseCities) < 1) {
-            $this->addFlash('errorSelectedBaseCities', 'Ce code postal ne correspond à aucune ville');
+        // On récupère les Villes déjà créée qui ont ce code postal
+        $checkCities = $this->getDoctrine()->getRepository(City::class)->findByZipcode($searchCityZipcode);
+
+
+        $resultCheck = $this->container->get('citresp.citiesNotCreated')->resultCheck($selectedBaseCities, $checkCities);
+
+        if (count($resultCheck) < 1) {
+            $this->addFlash('errorSelectedBaseCities', 'Ce code postal ne correspond à aucune ville, ou un compte pour votre ville est déjà créé.');
 
             return $this->redirectToRoute('homepage');
         }
 
 
-        $form = $this->createForm(BaseCitiesChoiceType::class, null , ['allow_extra_fields' => $selectedBaseCities] );
+
+
+        $form = $this->createForm(BaseCitiesChoiceType::class, null , ['allow_extra_fields' => $resultCheck] );
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())

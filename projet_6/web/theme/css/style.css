@@ -2,6 +2,7 @@
   --primary-color: #c17450;
   --secondary-color: green;
   --light: #F2F3F5;
+  --admin: #0066B2;
 }
 
 html,
@@ -278,7 +279,7 @@ h1 {
   width: 15px;
   height: 15px;
   border-radius: 100%;
-  background-color: var(--secondary-color);
+  /* background-color: var(--secondary-color); */
 }
 
 .block-reporting-status {
@@ -322,4 +323,19 @@ h1 {
 .comment-btn-block {
   display: flex;
   justify-content: space-between;
+}
+
+
+/* *************************** */
+/* ADMIN */
+/* *************************** */
+.title-admin {
+  padding: 5px 15px;
+  background-color: var(--admin) !important;
+}
+
+.title-admin>h1 {
+  color: #fff;
+  text-transform: uppercase;
+  margin: 0;
 }

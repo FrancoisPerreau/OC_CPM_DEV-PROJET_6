@@ -51,8 +51,18 @@
 
             <div class="block-reporting-status">
               <div class="reporting-status">
-                <div class="reporting-status-label"></div>
-                <p>Transmis</p>
+                <div class="reporting-status-label
+                  {% if reporting.status.id == 1 %}
+                    bg-danger
+                  {% elseif reporting.status.id == 2 %}
+                    bg-warning
+                  {% elseif reporting.status.id == 3 %}
+                    bg-info
+                  {% elseif reporting.status.id == 4 %}
+                    bg-success                                       
+                  {% endif %}
+                "></div>
+                <p>{{reporting.status.name}}</p>
               </div>
 
               <a href="{{ path('show_reporting', {'slug': app.user.city.slug, 'reporting_id': reporting.id}) }}?action=reportingReport" class="btn btn-outline-secondary btn-sm btn-report-publication">Signaler la publication

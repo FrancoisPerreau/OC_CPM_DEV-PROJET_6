@@ -1,0 +1,29 @@
+// web/theme/js/googleMap-viewCity.js
+
+
+function initMap() {
+  var map;
+  
+  var city = {
+    lat: {{ city.gpsLat }},
+    lng: {{ city.gpsLng }}
+  };
+  var jsMarkers = new Array();
+
+  map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 15,
+    center: city
+  });
+
+  {% for reporting in reportings %}
+
+    var marker = new google.maps.Marker({
+      position: {
+        lat: {{ reporting.gpsLat }},
+        lng: {{ reporting.gpsLng }}
+      },
+      map: map
+    });
+  {% endfor %}
+
+}

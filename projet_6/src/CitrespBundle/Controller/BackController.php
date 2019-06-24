@@ -2,56 +2,128 @@
 
 namespace CitrespBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+
+use CitrespBundle\Entity\Category;
+use CitrespBundle\Entity\City;
+use CitrespBundle\Entity\Comment;
+use CitrespBundle\Entity\Reporting;
+
+// use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 
 class BackController extends Controller
 {
     /**
-     * @Route("/admin", name="security_admin")
+     * @Route("/admin/{slug}", name="security_admin")
+     * @Security("has_role('ROLE_ADMIN')")
      */
-    public function adminAction()
+    public function adminAction(City $city)
     {
-        // On vérifie que l'utilisateur dispose bien du rôle ROLE_AUTEUR
-        if (!$this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
-          // Sinon on déclenche une exception « Accès interdit »
-          throw new AccessDeniedException('Accès limité aux administrateurs.');
+        // Si les Villes sont différents on redirige vers la homepage
+        $user = $this->getUser();
+        if ($user->getCity() != $city)
+        {
+            $this->addFlash('errorCityAccess', 'Votre compte n\'est pas pour la ville de ' . $city->getName());
+
+            return $this->redirectToRoute('homepage');
         }
 
-        return $this->render('@Citresp/Back/admin.html.twig');
+        $em = $this->getDoctrine()->getManager();
+
+        // Google map
+        $googleApi = $this->container->getParameter('google_api');
+        // $markers = null ;
+
+        // Reportings
+        $reportings = $em
+            ->getRepository(Reporting::class)
+            ->findBy(['city' => $city], ['dateCreated' => 'DESC']);
+
+
+
+        return $this->render('@Citresp/Back/admin.html.twig',[
+            'googleApi' => $googleApi,
+            'city' => $city,
+            'reportings' => $reportings
+        ]);
     }
 
 
     /**
-     * @Route("/admin-moderator", name="security_moderator")
+     * @Route("/admin-moderator/{slug}", name="security_moderator")
+     * @Security("has_role('ROLE_MODERATOR')")
      */
-    public function moderatorAction()
+    public function moderatorAction(City $city)
     {
-        // On vérifie que l'utilisateur dispose bien du rôle ROLE_AUTEUR
-        if (!$this->get('security.authorization_checker')->isGranted('ROLE_MODERATOR')) {
-          // Sinon on déclenche une exception « Accès interdit »
-          throw new AccessDeniedException('Accès limité aux modérateurs.');
+        // Si les Villes sont différents on redirige vers la homepage
+        $user = $this->getUser();
+        if ($user->getCity() != $city)
+        {
+            $this->addFlash('errorCityAccess', 'Votre compte n\'est pas pour la ville de ' . $city->getName());
+
+            return $this->redirectToRoute('homepage');
         }
 
-        return $this->render('@Citresp/Back/moderator.html.twig');
+        $em = $this->getDoctrine()->getManager();
+
+        // Google map
+        $googleApi = $this->container->getParameter('google_api');
+        // $markers = null ;
+
+        // Reportings
+        $reportings = $em
+            ->getRepository(Reporting::class)
+            ->findBy(['city' => $city], ['dateCreated' => 'DESC']);
+
+
+
+        return $this->render('@Citresp/Back/adminModerator.html.twig',[
+            'googleApi' => $googleApi,
+            'city' => $city,
+            'reportings' => $reportings
+        ]);
     }
 
 
     /**
-     * @Route("/admin-city", name="security_city")
+     * @Route("/admin-city/{slug}", name="security_city")
+     * @Security("has_role('ROLE_CYTI')")
      */
-    public function cityAction()
+    public function cityAction(City $city)
     {
-        // On vérifie que l'utilisateur dispose bien du rôle ROLE_AUTEUR
-        if (!$this->get('security.authorization_checker')->isGranted('ROLE_CYTI')) {
-          // Sinon on déclenche une exception « Accès interdit »
-          throw new AccessDeniedException('Accès limité aux administrateurs de la ville.');
+        // Si les Villes sont différents on redirige vers la homepage
+        $user = $this->getUser();
+        if ($user->getCity() != $city)
+        {
+            $this->addFlash('errorCityAccess', 'Votre compte n\'est pas pour la ville de ' . $city->getName());
+
+            return $this->redirectToRoute('homepage');
         }
 
-        return $this->render('@Citresp/Back/cityadmin.html.twig');
+        $em = $this->getDoctrine()->getManager();
+
+        // Google map
+        $googleApi = $this->container->getParameter('google_api');
+        // $markers = null ;
+
+        // Reportings
+        $reportings = $em
+            ->getRepository(Reporting::class)
+            ->findBy(['city' => $city], ['dateCreated' => 'DESC']);
+
+
+
+        return $this->render('@Citresp/Back/adminCity.html.twig',[
+            'googleApi' => $googleApi,
+            'city' => $city,
+            'reportings' => $reportings
+        ]);
     }
 }

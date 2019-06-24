@@ -1,0 +1,28 @@
+{# src/CitrespBundle/Resources/views/Back/admin.html.twig #}
+
+{% extends '@Citresp/layout.html.twig' %}
+
+{% block stylesheets %}
+  {{ parent() }}
+  <style>
+    #map {
+      min-height: 26.25rem;
+    }
+  </style>
+{% endblock %}
+
+{% block header %}
+  {% embed "@Citresp/cityMapHeader.html.twig" %}{% endembed %}
+  <div class="title-admin">
+    <h1 class="h4 text-center">Section Administration</h1>
+  </div>
+{% endblock %}
+
+{% block body %}
+  
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+  {% embed "@Citresp/googleMap-viewCity.html.twig" %}{% endembed %}
+{% endblock %}
