@@ -39,19 +39,45 @@ class BackController extends Controller
 
         // Google map
         $googleApi = $this->container->getParameter('google_api');
-        // $markers = null ;
+
+
+        // $cityId = $city->getId();
 
         // Reportings
-        $reportings = $em
-            ->getRepository(Reporting::class)
+        $emReportings = $em->getRepository(Reporting::class);
+
+        $reportings = $emReportings
             ->findBy(['city' => $city], ['dateCreated' => 'DESC']);
+
+
+        $reportedReportings = $emReportings->getReportingByReported($city);
+        $reportedReportingsNb = $emReportings->getReportingByReportedNb($city);
+
+
+        // Comments
+        $emComments = $em->getRepository(Comment::class);
+
+        $reportedComments = $emComments->getCommentByReported($city);
+        $reportedCommentsNb = $emComments->getCommentByReportedNb($city);
+
+
+
+        // dump($reportedReportings);
+        // dump($reportedReportingsNb);
+        //
+        // dump($reportedComments);
+        // dump($reportedCommentsNb);
+        //
+        // die;
 
 
 
         return $this->render('@Citresp/Back/admin.html.twig',[
             'googleApi' => $googleApi,
             'city' => $city,
-            'reportings' => $reportings
+            'reportings' => $reportings,
+            'reportedReportingsNb' => $reportedReportingsNb,
+            'reportedCommentsNb' => $reportedCommentsNb
         ]);
     }
 

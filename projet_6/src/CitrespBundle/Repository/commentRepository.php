@@ -10,4 +10,51 @@ namespace CitrespBundle\Repository;
  */
 class commentRepository extends \Doctrine\ORM\EntityRepository
 {
+  public function getCommentByReported($city)
+  {
+    $qb = $this->createQueryBuilder('c');
+
+    $qb
+      ->select('c')
+      ->innerJoin('c.reporting', 'r')
+      ->addSelect('r')
+    ;
+
+    $qb
+      ->where('c.reportedCount > 0')
+      ->andWhere('r.city = :city')
+      ->setParameter('city', $city)
+      ->orderBy('c.dateCreated','DESC')
+    ;
+
+    return $qb
+      ->getQuery()
+      ->getResult()
+    ;
+  }
+
+
+  public function getCommentByReportedNb($city)
+  {
+    $qb = $this->createQueryBuilder('c');
+
+    $qb
+      ->select('c')
+      ->innerJoin('c.reporting', 'r')
+      ->addSelect('r')
+    ;
+
+    $qb
+      ->select('COUNT(c)')
+      ->where('c.reportedCount > 0')
+      ->andWhere('r.city = :city')
+      ->setParameter('city', $city)
+    ;
+
+    return $qb
+      ->getQuery()
+      ->getSingleScalarResult();
+    ;
+  }
+
 }

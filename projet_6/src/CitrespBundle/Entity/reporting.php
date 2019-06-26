@@ -127,6 +127,7 @@ class Reporting
     {
       $this->dateCreated = new \Datetime('now');
       $this->moderate = 0;
+      $this->status = new Status;
     }
 
 

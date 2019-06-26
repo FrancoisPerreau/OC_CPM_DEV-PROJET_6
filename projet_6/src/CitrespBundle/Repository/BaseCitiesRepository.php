@@ -16,11 +16,11 @@ class BaseCitiesRepository extends \Doctrine\ORM\EntityRepository
       ->where('c.codePostal = :codePostal')
       ->setParameter('codePostal', $codePostal)
       ->orderBy('c.nomCommune', 'ASC')
-      ;
+    ;
 
     return $qb
       ->getQuery()
       ->getResult()
-      ;
+    ;
   }
 }

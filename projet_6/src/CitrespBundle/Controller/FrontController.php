@@ -17,6 +17,7 @@ use CitrespBundle\Entity\Category;
 use CitrespBundle\Entity\City;
 use CitrespBundle\Entity\Comment;
 use CitrespBundle\Entity\Reporting;
+use CitrespBundle\Entity\Status;
 
 use CitrespBundle\Form\BaseCitiesSearchType;
 use CitrespBundle\Form\CitySelectType;
@@ -239,8 +240,13 @@ class FrontController extends Controller
         {
           $reporting = $form->getData();
           $user = $this->getUser();
+          $status = $em
+              ->getRepository(Status::class)
+              ->find(1);
+          // dump($status);
+          // die;
 
-          $this->container->get('citresp.HydrateReporting')->hydrate($user, $city, $reporting);
+          $this->container->get('citresp.HydrateReporting')->hydrate($user, $city, $reporting, $status);
 
           $em->persist($reporting);
           $em->flush();

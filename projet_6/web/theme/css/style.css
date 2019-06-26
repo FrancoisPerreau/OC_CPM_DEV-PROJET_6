@@ -339,3 +339,16 @@ h1 {
   text-transform: uppercase;
   margin: 0;
 }
+
+.admin-content-block {
+  display: flex;
+  margin-bottom: 1rem;
+  padding: 15px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  box-shadow: 2px 2px 12px #ddd;
+}
+
+.flex-col {
+  flex-direction: column;
+}

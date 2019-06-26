@@ -29,6 +29,13 @@ class Status
     private $name;
 
 
+
+    // public function __construct()
+    // {
+    //   $this->id = 1;
+    // }
+
+
     /**
      * Get id.
      *

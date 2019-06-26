@@ -6,7 +6,7 @@ namespace CitrespBundle\Services;
 use CitrespBundle\Entity\City;
 use CitrespBundle\Entity\Reporting;
 use CitrespBundle\Entity\User;
-
+use CitrespBundle\Entity\Status;
 
 class HydrateReporting
 {
@@ -17,13 +17,14 @@ class HydrateReporting
     $this->createAtlContent = $createAtlContent;
   }
 
-  public function hydrate(User $user, City $city, Reporting $reporting)
+  public function hydrate(User $user, City $city, Reporting $reporting, Status $status)
   {
     $image = $reporting->getImage();
     $alt = $this->createAtlContent->altContent($reporting, $city);
 
     $reporting->setUser($user);
     $reporting->setCity($city);
+    $reporting->setStatus($status);
 
     if ($image) {
        $image->setAlt($alt);
