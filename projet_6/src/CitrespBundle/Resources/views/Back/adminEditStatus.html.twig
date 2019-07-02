@@ -1,25 +1,36 @@
-{# src/CitrespBundle/Resources/views/Front/showReporting.html.twig #}
+{# src/CitrespBundle/Resources/views/Back/admin.html.twig #}
 
-{% extends '@Citresp/layout.html.twig' %}
-
-{% block stylesheets %}
-  {{ parent() }}
-
-  <style>
-
-    #map {
-      min-height: 26.25rem;
-
-    }
-  </style>
-{% endblock %}
+{% extends '@Citresp/Back/adminTemplate.html.twig' %}
 
 {% block header %}
   {% embed "@Citresp/cityMapHeader.html.twig" %}{% endembed %}
-  {% embed "@Citresp/Front/ariane.html.twig" %}{% endembed %}
+
 {% endblock %}
 
 {% block body %}
+  <div class="container container-admin bg-light-admin">
+    <h1 class=" text-center ">Admin Edit Status</h1>
+    <div class="row">
+      <div class="col-lg-3">
+
+      </div>
+
+      <div class="col-lg-9">
+        <div class="">
+
+          <div class="row">
+
+
+
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
   <div class="container text-center container-showReporting bg-light">
     <section>
       <!-- *************************** REPORTING *************************** -->
@@ -65,11 +76,13 @@
                 <p>{{reporting.status.name}}</p>
               </div>
 
-              <a href="{{ path('show_reporting', {'slug': app.user.city.slug, 'reporting_id': reporting.id}) }}?action=reportingReport" class="btn btn-outline-secondary btn-sm btn-report-publication">Signaler la publication
+              {% embed "@Citresp/FormViews/StatusReportingForm.html.twig" %}{% endembed %}
+
+              <!-- <a href="{{ path('show_reporting', {'slug': app.user.city.slug, 'reporting_id': reporting.id}) }}?action=reportingReport" class="btn btn-outline-secondary btn-sm btn-report-publication">Signaler la publication
                 {% if reporting.reportedCount %}
                   <span class="badge badge-danger">{{ reporting.reportedCount }}</span>
                 {% endif %}
-              </a>
+              </a> -->
             </div>
             <hr>
           </div>
@@ -82,48 +95,17 @@
             <p>{{ reporting.description }}</p>
           </div>
         </div>
-        {# Si l'utilisateur est l'auteur du signalement #}
-        <div class="reporting-btn-block">
-          {% if app.user.id is same as(reporting.user.id) %}
-            <a href="{{ path('edit_reporting', {'slug': app.user.city.slug, 'reporting_id': reporting.id}) }}" class="btn btn-outline-info btn-sm btn-report-publication">
-              Modifier
-            </a>
-          {% endif %}
-        </div>
+
         <!-- /row 2 -->
       </div>
       <!-- showReporting-block -->
 
-      <!-- *************************** COMMENTS *************************** -->
-      <div class="commentsReporting-block">
-        <!-- FORMULAIRE -->
-
-        {% embed "@Citresp/FormViews/createCommentForm.html.twig" %}{% endembed %}
-
-        <!-- COMMENTS -->
-        {% for comment in comments %}
-          <div class="comment-block">
-            <p class="text-muted">
-              <strong>{{ comment.user }}</strong>
-              le
-              {{ comment.dateCreated|localizeddate('none', 'none', null, null, 'EEEE d MMMM Y') }}
-            </p>
-            <p>{{ comment.content }}</p>
-            <hr>
-            <a href="{{ path('show_reporting', {'slug': app.user.city.slug, 'reporting_id': reporting.id}) }}?action=commentReport&id={{ comment.id }}" class="btn btn-outline-secondary btn-sm btn-report-publication">Signaler ce commentaire
-              {% if comment.reportedCount %}
-                <span class="badge badge-danger">{{ comment.reportedCount }}</span>
-              {% endif %}
-            </a>
-          </div>
-        {% endfor %}
-      </div>
-
     </section>
   </div>
 
-{% endblock %}
 
+
+{% endblock %}
 {% block javascripts %}
 {{ parent() }}
   {% embed "@Citresp/googleMap-viewOneReporting.html.twig" %}{% endembed %}

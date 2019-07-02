@@ -34,6 +34,59 @@ class commentRepository extends \Doctrine\ORM\EntityRepository
   }
 
 
+  public function getCommentByReportedWhereNotModerate($city)
+  {
+    $qb = $this->createQueryBuilder('c');
+
+    $qb
+      ->select('c')
+      ->innerJoin('c.reporting', 'r')
+      ->addSelect('r')
+    ;
+
+    $qb
+
+      ->Where('r.city = :city')
+      ->setParameter('city', $city)
+      ->andWhere('c.moderate = false')
+      ->andwhere('c.reportedCount > 0')
+      ->orderBy('c.dateCreated','DESC')
+    ;
+
+    return $qb
+      ->getQuery()
+      ->getResult()
+    ;
+  }
+
+
+  public function getCommentByReportedWhereModerate($city)
+  {
+    $qb = $this->createQueryBuilder('c');
+
+    $qb
+      ->select('c')
+      ->innerJoin('c.reporting', 'r')
+      ->addSelect('r')
+    ;
+
+    $qb
+
+      ->Where('r.city = :city')
+      ->setParameter('city', $city)
+      ->andWhere('c.moderate = true')
+      ->andwhere('c.reportedCount > 0')
+      ->orderBy('c.dateCreated','DESC')
+    ;
+
+    return $qb
+      ->getQuery()
+      ->getResult()
+    ;
+  }
+
+
+
   public function getCommentByReportedNb($city)
   {
     $qb = $this->createQueryBuilder('c');
@@ -49,6 +102,56 @@ class commentRepository extends \Doctrine\ORM\EntityRepository
       ->where('c.reportedCount > 0')
       ->andWhere('r.city = :city')
       ->setParameter('city', $city)
+    ;
+
+    return $qb
+      ->getQuery()
+      ->getSingleScalarResult();
+    ;
+  }
+
+
+  public function getCommentByReportedNbWhereNotModerate($city)
+  {
+    $qb = $this->createQueryBuilder('c');
+
+    $qb
+      ->select('c')
+      ->innerJoin('c.reporting', 'r')
+      ->addSelect('r')
+    ;
+
+    $qb
+      ->select('COUNT(c)')
+      ->Where('r.city = :city')
+      ->setParameter('city', $city)
+      ->andWhere('c.moderate = false')
+      ->andwhere('c.reportedCount > 0')
+
+    ;
+
+    return $qb
+      ->getQuery()
+      ->getSingleScalarResult();
+    ;
+  }
+
+  public function getCommentByReportedNbWhereModerate($city)
+  {
+    $qb = $this->createQueryBuilder('c');
+
+    $qb
+      ->select('c')
+      ->innerJoin('c.reporting', 'r')
+      ->addSelect('r')
+    ;
+
+    $qb
+      ->select('COUNT(c)')
+      ->where('c.reportedCount > 0')
+      ->andWhere('r.city = :city')
+      ->setParameter('city', $city)
+      ->andWhere('c.moderate = false')
     ;
 
     return $qb

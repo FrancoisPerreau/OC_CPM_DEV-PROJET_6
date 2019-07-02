@@ -1,0 +1,20 @@
+{# src/CitrespBundle/Resources/views/FormViews/StatusReportingForm.html.twig #}
+{% form_theme form 'bootstrap_4_layout.html.twig' %}
+
+
+{{ form_start(form,  {'attr': {'class': 'form-comment-block'}}) }}
+
+  <div class="input-group input-group-sm">
+    {{ form_errors(form.status) }}
+    {{ form_label(form.status, null, {'label_attr': {'class': 'sr-only'}}) }}
+    {{ form_widget(form.status, {'attr': {'class': 'form-control', 'value': reporting.status.name }}) }}
+
+
+    <div class="input-group-append">
+      <input class="btn btn-info" type="submit" value="Validez"/>
+    </div>
+  </div>
+
+
+{{ form_rest(form) }}
+{{ form_end(form) }}

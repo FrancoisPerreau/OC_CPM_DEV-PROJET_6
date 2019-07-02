@@ -28,6 +28,25 @@ class reportingRepository extends \Doctrine\ORM\EntityRepository
     ;
   }
 
+  public function getReportingByReportedWhereNotModerate($city)
+  {
+    $qb = $this->createQueryBuilder('r');
+
+    $qb
+      ->select('r')
+      ->where('r.city = :city')
+      ->setParameter('city', $city)
+      ->andWhere('r.reportedCount > 0')
+      ->andWhere('r.moderate = false')
+      ->orderBy('r.dateCreated','DESC')
+    ;
+
+    return $qb
+      ->getQuery()
+      ->getResult()
+    ;
+  }
+
 
   public function getReportingByReportedNb($city)
   {
@@ -44,6 +63,65 @@ class reportingRepository extends \Doctrine\ORM\EntityRepository
       ->getQuery()
       // ->getResult()
       ->getSingleScalarResult();
+    ;
+  }
+
+
+  public function getReportingByReportedNbWhereNotModerate($city)
+  {
+    $qb = $this->createQueryBuilder('r');
+
+    $qb
+      ->select('COUNT(r)')
+      ->where('r.city = :city')
+      ->setParameter('city', $city)
+      ->andWhere('r.moderate = false')
+      ->andWhere('r.reportedCount > 0')
+    ;
+
+    return $qb
+      ->getQuery()
+      // ->getResult()
+      ->getSingleScalarResult();
+    ;
+  }
+
+
+
+  public function getReportingNotModerate($city)
+  {
+    $qb = $this->createQueryBuilder('r');
+
+    $qb
+      ->select('r')
+      ->where('r.city = :city')
+      ->setParameter('city', $city)
+      ->andWhere('r.moderate = false')
+      ->orderBy('r.dateCreated','DESC')
+    ;
+
+    return $qb
+      ->getQuery()
+      ->getResult()
+    ;
+  }
+
+
+  public function getReportingModerate($city)
+  {
+    $qb = $this->createQueryBuilder('r');
+
+    $qb
+      ->select('r')
+      ->where('r.city = :city')
+      ->setParameter('city', $city)
+      ->andWhere('r.moderate = true')
+      ->orderBy('r.dateCreated','DESC')
+    ;
+
+    return $qb
+      ->getQuery()
+      ->getResult()
     ;
   }
 

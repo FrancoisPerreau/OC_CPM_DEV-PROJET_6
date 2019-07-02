@@ -1,0 +1,75 @@
+{# src/CitrespBundle/Resources/views/Back/adminShowComments.html.twig #}
+
+{% extends '@Citresp/Back/adminTemplate.html.twig' %}
+
+{% block body %}
+  <div class="container container-admin bg-light-admin">
+    <div class="row">
+      <div class="col-lg-3">
+        {% embed "@Citresp/Back/adminInfosBolck.html.twig" %}{% endembed %}
+      </div>
+      <div class="col-lg-9">
+        <div class="">
+          <div class="row">
+            {% for comment in commentsList %}
+              <div class="col-lg-6">
+                <div class="admin-reporting-block">
+                  <!-- Bandeau btn modérer -->
+                  <div class="admin-reporting-block-title block-reporting-status">
+                    {% if comment.moderate == false %}
+                        <a href="{{ path('security_admin_show_reported_comments', {'slug': app.user.city.slug}) }}?action=commentModerate&commentId={{ comment.id }}" class="btn btn-warning btn-sm">Modérer
+                        </a>
+                      {% else %}
+                        <a href="{{ path('security_admin_show_moderate_comments', {'slug': app.user.city.slug}) }}?action=commentModerate&commentId={{ comment.id }}" class="btn btn-info btn-sm">Publier
+                        </a>
+                    {% endif %}
+                    {% if comment.reportedCount %}
+                          <p>
+                            Commentaire signalé
+                            <span class="badge badge-danger">{{ comment.reportedCount }}</span>
+                            fois
+                          </p>
+                    {% endif %}
+                  </div>
+                  <!-- Content -->
+                  <div class="admin-content-block flex-col">
+                    <p class="text-muted text-min-size admin-comment-content">
+                      <strong>
+                      {{ comment.user.username }}
+                    </strong>
+                     le {{ comment.dateCreated|localizeddate('short', 'none', null) }}
+                    </p>
+                    <p class="admin-comment-content">{{ comment.content }}</p>
+                  </div>
+                  <div class="admin-comment-adress-block">
+                    <p class="text-muted admin-comment-content text-min-size">
+                      <strong>{{ comment.reporting.address }} </strong>
+                      le {{ comment.reporting.dateCreated|localizeddate('short', 'none', null) }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            {% else %}
+            <div class="col-12">
+              <h4 class="text-center">
+                Aucun commentaire
+                {% if app.request.attributes.get("_route") == 'security_admin_show_moderate_comments' %}
+                  modéré
+                {% else %}
+                    signalé
+              {% endif %}
+              </h4>
+            </div>
+
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+  {% embed "@Citresp/googleMap-viewCity.html.twig" %}{% endembed %}
+{% endblock %}

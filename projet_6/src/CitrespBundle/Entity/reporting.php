@@ -114,7 +114,7 @@ class Reporting
     private $image;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CitrespBundle\Entity\Status"))
+     * @ORM\ManyToOne(targetEntity="CitrespBundle\Entity\Status"), cascade={"persist"}))
      * @ORM\JoinColumn(nullable=false)
      * @Assert\Valid()
      */

@@ -1,0 +1,85 @@
+{# src/CitrespBundle/Resources/views/Back/adminNav.html.twig #}
+
+<div class="container-nav-admin">
+  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #0066B2;">
+    <!-- <a class="navbar-brand" href="#">ACCUEIL ADMINISTRATION</a> -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav">
+        <li class="
+          {% if app.request.attributes.get("_route") == 'security_admin' %}
+            nav-item active
+          {% endif %}">
+          <a class="nav-link" href="{{ path('security_admin', {'slug': app.user.city.slug}) }}">Accueil Admininistration
+            <span class="sr-only">(current)</span></a>
+        </li>
+
+        <li class="nav-item dropdown
+        {% if (app.request.attributes.get("_route") == 'security_admin_show_moderate') or
+              (app.request.attributes.get("_route") == 'security_admin_show_reported') %}
+              nav-item active
+        {% endif %}
+        ">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarAdminDropdownReporting" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Signalements
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarAdminDropdownReporting">
+            <a class="dropdown-item
+            {% if app.request.attributes.get("_route") == 'security_admin_show_reported' %}
+              nav-item active
+            {% endif %}
+            "
+              href="{{ path('security_admin_show_reported',{'slug': app.user.city.slug}) }}"
+              >Signalés
+            </a>
+            <a class="dropdown-item
+            {% if app.request.attributes.get("_route") == 'security_admin_show_moderate' %}
+              nav-item active
+            {% endif %}
+            "
+              href="{{ path('security_admin_show_moderate',{'slug': app.user.city.slug}) }}"
+              >Modérés
+            </a>
+          </div>
+        </li>
+
+        <li class="nav-item dropdown
+        {% if (app.request.attributes.get("_route") == 'security_admin_show_moderate_comments') or
+              (app.request.attributes.get("_route") == 'security_admin_show_reported_comments') %}
+              nav-item active
+        {% endif %}
+        ">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarAdminDropdownComment" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Commentaires
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarAdminDropdownComment">
+            <a class="dropdown-item
+            {% if app.request.attributes.get("_route") == 'security_admin_show_reported_comments' %}
+              nav-item active
+            {% endif %}
+            " href="{{ path('security_admin_show_reported_comments',{'slug': app.user.city.slug}) }}">Signalés</a>
+            <a class="dropdown-item
+            {% if app.request.attributes.get("_route") == 'security_admin_show_moderate_comments' %}
+              nav-item active
+            {% endif %}
+            " href="{{ path('security_admin_show_moderate_comments',{'slug': app.user.city.slug}) }}">Modérés</a>
+          </div>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarAdminDropdownUser" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Profils
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarAdminDropdownUser">
+            <a class="dropdown-item" href="#">Utilisateur</a>
+            <a class="dropdown-item" href="#">Administrateur</a>
+          </div>
+        </li>
+
+      </ul>
+    </div>
+  </nav>
+
+</div>
