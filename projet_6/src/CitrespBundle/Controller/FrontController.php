@@ -42,7 +42,9 @@ class FrontController extends Controller
         $city = $user->getCity();
         $citySlug = $city->getSlug();
         return $this->redirectToRoute('city',[
-            'slug' => $citySlug]);
+            'slug' => $citySlug,
+            'page' => 1
+        ]);
       }
 
 
@@ -89,10 +91,10 @@ class FrontController extends Controller
 
 
     /**
-     * @Route("/city/{slug}", name="city")
+     * @Route("/city/{slug}/{page}", requirements={"page"="\d+"}, name="city")
      * @Security("has_role('ROLE_USER')")
      */
-    public function cityAction(City $city)
+    public function cityAction(City $city, $page)
     {
         // Si les Villes sont différents on redirige vers la homepage
         $user = $this->getUser();
@@ -102,6 +104,9 @@ class FrontController extends Controller
 
             return $this->redirectToRoute('homepage');
         }
+
+        $nbReportingsPerPage = $this->container->getParameter('front_nb_reportings_per_page');
+
 
         $em = $this->getDoctrine()->getManager();
 
@@ -114,11 +119,26 @@ class FrontController extends Controller
             ->getRepository(Reporting::class)
             ->findBy(['city' => $city], ['dateCreated' => 'DESC']);
 
+        $reportingsPerPage = $em
+          ->getRepository(Reporting::class)
+          ->getAllPageIn($city, $page, $nbReportingsPerPage)
+        ;
+
+        $pagination = [
+            'page' => $page,
+            'nbPages' => ceil(count($reportingsPerPage) / $nbReportingsPerPage),
+            'routeName' => 'city',
+            'routeParams' => []
+        ];
+
+
 
         return $this->render('@Citresp/Front/city.html.twig', [
           'googleApi' => $googleApi,
           'city' => $city,
-          'reportings' => $reportings
+          'reportings' => $reportings,
+          'reportingsPerPage' => $reportingsPerPage,
+          'pagination' => $pagination
         ]);
     }
 

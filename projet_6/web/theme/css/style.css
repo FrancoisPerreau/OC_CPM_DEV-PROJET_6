@@ -78,6 +78,10 @@ h1 {
   text-align: center;
 }
 
+.pagination-block {
+  margin-top: 60px;
+}
+
 /* *************************** */
 /*  NAVBAR  */
 /* *************************** */

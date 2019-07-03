@@ -31,7 +31,7 @@
       <div class="container reportings-container">
         <div class="">
           <h2>Liste des signalements</h2>
-          {% for reporting in reportings %}
+          {% for reporting in reportingsPerPage %}
             <div class="reporting-block">
               <div class="img-reporting-city">
                 {% if reporting.image %}
@@ -68,6 +68,7 @@
           {% endfor %}
         </div>
       </div>
+      {% embed "@Citresp/pagination.html.twig" %}{% endembed %}
     </section>
   </div>
 {% endblock %}

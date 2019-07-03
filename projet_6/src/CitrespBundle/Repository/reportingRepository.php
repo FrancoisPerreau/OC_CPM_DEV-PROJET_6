@@ -2,6 +2,11 @@
 
 namespace CitrespBundle\Repository;
 
+use Doctrine\ORM\Tools\Pagination\Paginator;
+use InvalidArgumentException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
+
 /**
  * reportingRepository
  *
@@ -10,6 +15,11 @@ namespace CitrespBundle\Repository;
  */
 class reportingRepository extends \Doctrine\ORM\EntityRepository
 {
+  /**
+   * Récupère les reportings qui ont été signalés en fonction de la ville concernée
+   * @param  [object] $city
+   * @return [array]
+   */
   public function getReportingByReported($city)
   {
     $qb = $this->createQueryBuilder('r');
@@ -28,6 +38,11 @@ class reportingRepository extends \Doctrine\ORM\EntityRepository
     ;
   }
 
+  /**
+   * Récupère les reportings qui ont été signalés et non modérés en fonction de la ville concernée
+   * @param  [object] $city
+   * @return [array]
+   */
   public function getReportingByReportedWhereNotModerate($city)
   {
     $qb = $this->createQueryBuilder('r');
@@ -47,7 +62,11 @@ class reportingRepository extends \Doctrine\ORM\EntityRepository
     ;
   }
 
-
+  /**
+   * Retourne le nombre de reportings qui ont été signalés en fonction de la ville concernée
+   * @param  [object] $city
+   * @return [int]
+   */
   public function getReportingByReportedNb($city)
   {
     $qb = $this->createQueryBuilder('r');
@@ -66,7 +85,11 @@ class reportingRepository extends \Doctrine\ORM\EntityRepository
     ;
   }
 
-
+  /**
+   * Retourne le nombre de reportings qui ont été signalés et non modérés en fonction de la ville concernée
+   * @param  [object] $city
+   * @return [int]
+   */
   public function getReportingByReportedNbWhereNotModerate($city)
   {
     $qb = $this->createQueryBuilder('r');
@@ -87,7 +110,11 @@ class reportingRepository extends \Doctrine\ORM\EntityRepository
   }
 
 
-
+  /**
+   * Récupère les reportings qui n'ont pas été modérés en fonction de la ville concernée
+   * @param  [object] $city
+   * @return [array]
+   */
   public function getReportingNotModerate($city)
   {
     $qb = $this->createQueryBuilder('r');
@@ -107,6 +134,11 @@ class reportingRepository extends \Doctrine\ORM\EntityRepository
   }
 
 
+  /**
+   * Récupère les reportings qui ont été modérés en fonction de la ville concernée
+   * @param  [object] $city
+   * @return [array]
+   */
   public function getReportingModerate($city)
   {
     $qb = $this->createQueryBuilder('r');
@@ -124,5 +156,56 @@ class reportingRepository extends \Doctrine\ORM\EntityRepository
       ->getResult()
     ;
   }
+
+  /**
+   * Récupère une liste de reportings triés et paginés
+   * @param  [object] $city
+   * @param [int] $page [le numéro de la page]
+   * @param [int] $nbPerPage [nombre de reporti,g par page]
+   * @return [Paginator]
+   */
+  public function getAllPageIn($city, $page, $nbPerPage)
+  {
+    if (!is_numeric($page))
+    {
+      throw new InvalidArgumentException('La valeur de l\'argument $page est incorecte (valeur : '.$page.')');
+    }
+
+    if ($page < 1)
+    {
+      throw new NotFoundHttpException("la page demandée n\'existe pas");
+    }
+
+    if (!is_numeric($nbPerPage))
+    {
+      throw new InvalidArgumentException('La valeur de l\'argument $nbPerPage est incorecte (valeur : '.$nbPerPage.')');
+    }
+
+    $qb = $this
+      ->createQueryBuilder('r')
+      ->where('r.city = :city')
+      ->setParameter('city', $city)
+      ->orderBy('r.dateCreated', 'DESC')
+    ;
+
+    $query = $qb->getQuery();
+
+    $firstResult = ($page - 1) * $nbPerPage;
+
+    $query
+      ->setFirstResult($firstResult)
+      ->setMaxResults($nbPerPage)
+    ;
+
+    $paginator = new Paginator($query);
+
+    if (($paginator->count() <= $firstResult) && $page !=1)
+    {
+      throw new NotFoundHttpException("la page demandée n\'existe pas");
+    }
+
+    return $paginator;
+  }
+
 
 }
