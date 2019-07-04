@@ -23,10 +23,10 @@ use CitrespBundle\Form\EditReportingStatusType;
 class BackController extends Controller
 {
     /**
-     * @Route("/admin/{slug}", name="security_admin")
+     * @Route("/admin/{slug}/{page}", name="security_admin")
      * @Security("has_role('ROLE_ADMIN')")
      */
-    public function adminAction(City $city, Request $request)
+    public function adminAction(City $city, $page, Request $request)
     {
         // Si les Villes sont différents on redirige vers la homepage
         $user = $this->getUser();
@@ -38,6 +38,23 @@ class BackController extends Controller
         }
 
         $em = $this->getDoctrine()->getManager();
+
+        // Pagination
+        $nbReportingsPerPage = $this->container->getParameter('back_nb_reportings_per_page');
+
+        $reportingsPerPage = $em
+          ->getRepository(Reporting::class)
+          ->getAllPageInWhereNotModerate($city, $page, $nbReportingsPerPage)
+        ;
+
+        $pagination = [
+            'page' => $page,
+            'nbPages' => ceil(count($reportingsPerPage) / $nbReportingsPerPage),
+            'routeName' => 'security_admin',
+            'routeParams' => []
+        ];
+
+
 
         // Google map
         $googleApi = $this->container->getParameter('google_api');
@@ -96,9 +113,8 @@ class BackController extends Controller
 
             'reportedReportingsNb' => $reportedReportingsNb,
             'reportedCommentsNb' => $reportedCommentsNb,
-            'reportingsList' => $reportingsNotModerate,
-
-            // 'form' => $form->createView()
+            'reportingsList' => $reportingsPerPage,
+            'pagination' => $pagination
         ]);
     }
 
@@ -191,10 +207,10 @@ class BackController extends Controller
 
 
     /**
-     * @Route("/admin/{slug}/Reportings/moderate", name="security_admin_show_moderate")
+     * @Route("/admin/{slug}/Reportings/moderate/{page}", name="security_admin_show_moderate")
      * @Security("has_role('ROLE_ADMIN')")
      */
-    public function adminShowModerateAction(City $city, Request $request)
+    public function adminShowModerateAction(City $city, $page, Request $request)
     {
         // Si les Villes sont différents on redirige vers la homepage
         $user = $this->getUser();
@@ -207,6 +223,22 @@ class BackController extends Controller
 
         $em = $this->getDoctrine()->getManager();
 
+        // Pagination
+        $nbReportingsPerPage = $this->container->getParameter('back_nb_reportings_per_page');
+
+        $reportingsPerPage = $em
+          ->getRepository(Reporting::class)
+          ->getAllPageInWhereModerate($city, $page, $nbReportingsPerPage)
+        ;
+
+        $pagination = [
+            'page' => $page,
+            'nbPages' => ceil(count($reportingsPerPage) / $nbReportingsPerPage),
+            'routeName' => 'security_admin_show_moderate',
+            'routeParams' => []
+        ];
+
+
         // Google map
         $googleApi = $this->container->getParameter('google_api');
 
@@ -218,11 +250,7 @@ class BackController extends Controller
         $reportings = $emReportings
             ->findBy(['city' => $city], ['dateCreated' => 'DESC']);
 
-
-        // $reportedReportings = $emReportings->getReportingByReported($city);
         $reportedReportingsNb = $emReportings->getReportingByReportedNbWhereNotModerate($city);
-
-        $reportingsModerate = $emReportings->getReportingModerate($city);
 
 
         // Comments
@@ -267,7 +295,8 @@ class BackController extends Controller
 
             'reportedReportingsNb' => $reportedReportingsNb,
             'reportedCommentsNb' => $reportedCommentsNb,
-            'reportingsList' => $reportingsModerate
+            'reportingsList' => $reportingsPerPage,
+            'pagination' => $pagination
         ]);
 
     }
@@ -275,10 +304,10 @@ class BackController extends Controller
 
 
     /**
-     * @Route("/admin/{slug}/Reportings/reported", name="security_admin_show_reported")
+     * @Route("/admin/{slug}/Reportings/reported/{page}", name="security_admin_show_reported")
      * @Security("has_role('ROLE_ADMIN')")
      */
-    public function adminShowReportedAction(City $city, Request $request)
+    public function adminShowReportedAction(City $city, $page, Request $request)
     {
         // Si les Villes sont différents on redirige vers la homepage
         $user = $this->getUser();
@@ -291,10 +320,24 @@ class BackController extends Controller
 
         $em = $this->getDoctrine()->getManager();
 
+        // Pagination
+        $nbReportingsPerPage = $this->container->getParameter('back_nb_reportings_per_page');
+
+        $reportingsPerPage = $em
+          ->getRepository(Reporting::class)
+          ->getAllPageInWhereReportedAndNotModerate($city, $page, $nbReportingsPerPage)
+        ;
+
+        $pagination = [
+            'page' => $page,
+            'nbPages' => ceil(count($reportingsPerPage) / $nbReportingsPerPage),
+            'routeName' => 'security_admin_show_reported',
+            'routeParams' => []
+        ];
+
+
         // Google map
         $googleApi = $this->container->getParameter('google_api');
-
-
 
         // Reportings
         $emReportings = $em->getRepository(Reporting::class);
@@ -302,11 +345,7 @@ class BackController extends Controller
         $reportings = $emReportings
             ->findBy(['city' => $city], ['dateCreated' => 'DESC']);
 
-
-
         $reportedReportingsNb = $emReportings->getReportingByReportedNbWhereNotModerate($city);
-        $reportedReportingsNotModerate = $emReportings->getReportingByReportedWhereNotModerate($city);
-
 
 
         // Comments
@@ -351,7 +390,8 @@ class BackController extends Controller
 
             'reportedReportingsNb' => $reportedReportingsNb,
             'reportedCommentsNb' => $reportedCommentsNb,
-            'reportingsList' => $reportedReportingsNotModerate
+            'reportingsList' => $reportingsPerPage,
+            'pagination' => $pagination
         ]);
 
     }

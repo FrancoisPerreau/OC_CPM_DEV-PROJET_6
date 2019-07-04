@@ -18,10 +18,10 @@
                     <!-- Bandeau btn modérer -->
                     <div class="admin-reporting-block-title block-reporting-status">
                       {% if reporting.moderate == false %}
-                        <a href="{{ path('security_admin', {'slug': app.user.city.slug}) }}?action=reportingModerate&reportingId={{ reporting.id }}" class="btn btn-warning btn-sm">Modérer
+                        <a href="{{ path('security_admin', {'slug': app.user.city.slug, 'page': 1}) }}?action=reportingModerate&reportingId={{ reporting.id }}" class="btn btn-warning btn-sm">Modérer
                         </a>
                       {% else %}
-                        <a href="{{ path('security_admin_show_moderate', {'slug': app.user.city.slug}) }}?action=reportingModerate&reportingId={{ reporting.id }}" class="btn btn-info btn-sm">Publier
+                        <a href="{{ path('security_admin_show_moderate', {'slug': app.user.city.slug, 'page': 1}) }}?action=reportingModerate&reportingId={{ reporting.id }}" class="btn btn-info btn-sm">Publier
                         </a>
                       {% endif %}
                       {% if reporting.reportedCount %}
@@ -99,6 +99,7 @@
       </div>
 
     </div>
+    {% embed "@Citresp/pagination.html.twig" %}{% endembed %}
   </div>
 {% endblock %}
 

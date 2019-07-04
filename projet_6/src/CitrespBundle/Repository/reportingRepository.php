@@ -56,10 +56,10 @@ class reportingRepository extends \Doctrine\ORM\EntityRepository
       ->orderBy('r.dateCreated','DESC')
     ;
 
-    return $qb
-      ->getQuery()
-      ->getResult()
-    ;
+    return $qb;
+    //   ->getQuery()
+    //   ->getResult()
+    // ;
   }
 
   /**
@@ -127,10 +127,10 @@ class reportingRepository extends \Doctrine\ORM\EntityRepository
       ->orderBy('r.dateCreated','DESC')
     ;
 
-    return $qb
-      ->getQuery()
-      ->getResult()
-    ;
+    return $qb;
+    //   ->getQuery()
+    //   ->getResult()
+    // ;
   }
 
 
@@ -151,10 +151,7 @@ class reportingRepository extends \Doctrine\ORM\EntityRepository
       ->orderBy('r.dateCreated','DESC')
     ;
 
-    return $qb
-      ->getQuery()
-      ->getResult()
-    ;
+    return $qb;
   }
 
   /**
@@ -207,5 +204,143 @@ class reportingRepository extends \Doctrine\ORM\EntityRepository
     return $paginator;
   }
 
+
+
+  /**
+   * Récupère une liste de reportings non modérés triés et paginés
+   * @param  [object] $city
+   * @param [int] $page [le numéro de la page]
+   * @param [int] $nbPerPage [nombre de reporti,g par page]
+   * @return [Paginator]
+   */
+  public function getAllPageInWhereNotModerate($city, $page, $nbPerPage)
+  {
+    if (!is_numeric($page))
+    {
+      throw new InvalidArgumentException('La valeur de l\'argument $page est incorecte (valeur : '.$page.')');
+    }
+
+    if ($page < 1)
+    {
+      throw new NotFoundHttpException("la page demandée n\'existe pas");
+    }
+
+    if (!is_numeric($nbPerPage))
+    {
+      throw new InvalidArgumentException('La valeur de l\'argument $nbPerPage est incorecte (valeur : '.$nbPerPage.')');
+    }
+
+    $qb = $this->getReportingNotModerate($city);
+
+    $query = $qb->getQuery();
+
+    $firstResult = ($page - 1) * $nbPerPage;
+
+    $query
+      ->setFirstResult($firstResult)
+      ->setMaxResults($nbPerPage)
+    ;
+
+    $paginator = new Paginator($query);
+
+    if (($paginator->count() <= $firstResult) && $page !=1)
+    {
+      throw new NotFoundHttpException("la page demandée n\'existe pas");
+    }
+
+    return $paginator;
+  }
+
+
+  /**
+   * Récupère une liste de reportings signalés et non modérés triés et paginés
+   * @param  [object] $city
+   * @param [int] $page [le numéro de la page]
+   * @param [int] $nbPerPage [nombre de reporti,g par page]
+   * @return [Paginator]
+   */
+  public function getAllPageInWhereReportedAndNotModerate($city, $page, $nbPerPage)
+  {
+    if (!is_numeric($page))
+    {
+      throw new InvalidArgumentException('La valeur de l\'argument $page est incorecte (valeur : '.$page.')');
+    }
+
+    if ($page < 1)
+    {
+      throw new NotFoundHttpException("la page demandée n\'existe pas");
+    }
+
+    if (!is_numeric($nbPerPage))
+    {
+      throw new InvalidArgumentException('La valeur de l\'argument $nbPerPage est incorecte (valeur : '.$nbPerPage.')');
+    }
+
+    $qb = $this->getReportingByReportedWhereNotModerate($city);
+
+    $query = $qb->getQuery();
+
+    $firstResult = ($page - 1) * $nbPerPage;
+
+    $query
+      ->setFirstResult($firstResult)
+      ->setMaxResults($nbPerPage)
+    ;
+
+    $paginator = new Paginator($query);
+
+    if (($paginator->count() <= $firstResult) && $page !=1)
+    {
+      throw new NotFoundHttpException("la page demandée n\'existe pas");
+    }
+
+    return $paginator;
+  }
+
+
+  /**
+   * Récupère une liste de reportings modérés triés et paginés
+   * @param  [object] $city
+   * @param [int] $page [le numéro de la page]
+   * @param [int] $nbPerPage [nombre de reporti,g par page]
+   * @return [Paginator]
+   */
+  public function getAllPageInWhereModerate($city, $page, $nbPerPage)
+  {
+    if (!is_numeric($page))
+    {
+      throw new InvalidArgumentException('La valeur de l\'argument $page est incorecte (valeur : '.$page.')');
+    }
+
+    if ($page < 1)
+    {
+      throw new NotFoundHttpException("la page demandée n\'existe pas");
+    }
+
+    if (!is_numeric($nbPerPage))
+    {
+      throw new InvalidArgumentException('La valeur de l\'argument $nbPerPage est incorecte (valeur : '.$nbPerPage.')');
+    }
+
+    $qb = $this->getReportingModerate($city);
+
+    $query = $qb->getQuery();
+
+    $firstResult = ($page - 1) * $nbPerPage;
+
+    $query
+      ->setFirstResult($firstResult)
+      ->setMaxResults($nbPerPage)
+    ;
+
+    $paginator = new Paginator($query);
+
+    if (($paginator->count() <= $firstResult) && $page !=1)
+    {
+      throw new NotFoundHttpException("la page demandée n\'existe pas");
+    }
+
+    return $paginator;
+  }
 
 }
