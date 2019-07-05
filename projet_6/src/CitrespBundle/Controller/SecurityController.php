@@ -43,8 +43,6 @@ class SecurityController extends Controller
         }
 
 
-
-
         $form = $this->createForm(BaseCitiesChoiceType::class, null , ['allow_extra_fields' => $resultCheck] );
         $form->handleRequest($request);
 

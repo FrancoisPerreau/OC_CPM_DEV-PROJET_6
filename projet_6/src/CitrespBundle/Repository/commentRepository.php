@@ -2,6 +2,10 @@
 
 namespace CitrespBundle\Repository;
 
+use Doctrine\ORM\Tools\Pagination\Paginator;
+use InvalidArgumentException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
 /**
  * commentRepository
  *
@@ -10,6 +14,11 @@ namespace CitrespBundle\Repository;
  */
 class commentRepository extends \Doctrine\ORM\EntityRepository
 {
+  /**
+   * Récupère les comments qui ont été signalés en fonction de la ville concernée
+   * @param  [object] $comment
+   * @return [array]
+   */
   public function getCommentByReported($city)
   {
     $qb = $this->createQueryBuilder('c');
@@ -33,7 +42,11 @@ class commentRepository extends \Doctrine\ORM\EntityRepository
     ;
   }
 
-
+  /**
+   * Récupère les comments qui ont été signalés et non modérés en fonction de la ville concernée
+   * @param  [object] $city
+   * @return [array]
+   */
   public function getCommentByReportedWhereNotModerate($city)
   {
     $qb = $this->createQueryBuilder('c');
@@ -53,13 +66,14 @@ class commentRepository extends \Doctrine\ORM\EntityRepository
       ->orderBy('c.dateCreated','DESC')
     ;
 
-    return $qb
-      ->getQuery()
-      ->getResult()
-    ;
+    return $qb;
   }
 
-
+  /**
+   * Récupère les comments qui ont été signalés et modérés en fonction de la ville concernée
+   * @param  [object] $city
+   * @return [array]
+   */
   public function getCommentByReportedWhereModerate($city)
   {
     $qb = $this->createQueryBuilder('c');
@@ -86,7 +100,11 @@ class commentRepository extends \Doctrine\ORM\EntityRepository
   }
 
 
-
+  /**
+   * Retourne le nombre de comments qui ont été signalés en fonction de la ville concernée
+   * @param  [object] $city
+   * @return [int]
+   */
   public function getCommentByReportedNb($city)
   {
     $qb = $this->createQueryBuilder('c');
@@ -110,7 +128,11 @@ class commentRepository extends \Doctrine\ORM\EntityRepository
     ;
   }
 
-
+  /**
+   * Retourne le nombre de comments qui ont été signalés et non modérés en fonction de la ville concernée
+   * @param  [object] $city
+   * @return [int]
+   */
   public function getCommentByReportedNbWhereNotModerate($city)
   {
     $qb = $this->createQueryBuilder('c');
@@ -136,6 +158,11 @@ class commentRepository extends \Doctrine\ORM\EntityRepository
     ;
   }
 
+  /**
+   * Retourne le nombre de comments qui ont été signalés qui sont modérés en fonction de la ville concernée
+   * @param  [object] $city
+   * @return [int]
+   */
   public function getCommentByReportedNbWhereModerate($city)
   {
     $qb = $this->createQueryBuilder('c');
@@ -158,6 +185,124 @@ class commentRepository extends \Doctrine\ORM\EntityRepository
       ->getQuery()
       ->getSingleScalarResult();
     ;
+  }
+
+  /**
+   * Récupère les comments qui ont été modérés en fonction de la ville concernée
+   * @param  [object] $city
+   * @return [array]
+   */
+  public function getCommentsModerate($city)
+  {
+    $qb = $this->createQueryBuilder('c');
+
+    $qb
+      ->select('c')
+      ->innerJoin('c.reporting', 'r')
+      ->addSelect('r')
+    ;
+
+    $qb
+
+      ->Where('r.city = :city')
+      ->setParameter('city', $city)
+      ->andWhere('c.moderate = true')
+      ->orderBy('c.dateCreated','DESC')
+    ;
+
+    return $qb;
+  }
+
+
+  /**
+   * Récupère une liste de comments signalés et non modérés triés et paginés
+   * @param  [object] $city
+   * @param [int] $page [le numéro de la page]
+   * @param [int] $nbPerPage [nombre de reporti,g par page]
+   * @return [Paginator]
+   */
+  public function getAllPageInWhereReportedAndNotModerate($city, $page, $nbPerPage)
+  {
+    if (!is_numeric($page))
+    {
+      throw new InvalidArgumentException('La valeur de l\'argument $page est incorecte (valeur : '.$page.')');
+    }
+
+    if ($page < 1)
+    {
+      throw new NotFoundHttpException("la page demandée n\'existe pas");
+    }
+
+    if (!is_numeric($nbPerPage))
+    {
+      throw new InvalidArgumentException('La valeur de l\'argument $nbPerPage est incorecte (valeur : '.$nbPerPage.')');
+    }
+
+    $qb = $this->getCommentByReportedWhereNotModerate($city);
+
+    $query = $qb->getQuery();
+
+    $firstResult = ($page - 1) * $nbPerPage;
+
+    $query
+      ->setFirstResult($firstResult)
+      ->setMaxResults($nbPerPage)
+    ;
+
+    $paginator = new Paginator($query);
+
+    if (($paginator->count() <= $firstResult) && $page !=1)
+    {
+      throw new NotFoundHttpException("la page demandée n\'existe pas");
+    }
+
+    return $paginator;
+  }
+
+
+  /**
+   * Récupère une liste de comments modérés triés et paginés
+   * @param  [object] $city
+   * @param [int] $page [le numéro de la page]
+   * @param [int] $nbPerPage [nombre de reporti,g par page]
+   * @return [Paginator]
+   */
+  public function getAllPageInWhereModerate($city, $page, $nbPerPage)
+  {
+    if (!is_numeric($page))
+    {
+      throw new InvalidArgumentException('La valeur de l\'argument $page est incorecte (valeur : '.$page.')');
+    }
+
+    if ($page < 1)
+    {
+      throw new NotFoundHttpException("la page demandée n\'existe pas");
+    }
+
+    if (!is_numeric($nbPerPage))
+    {
+      throw new InvalidArgumentException('La valeur de l\'argument $nbPerPage est incorecte (valeur : '.$nbPerPage.')');
+    }
+
+    $qb = $this->getCommentsModerate($city);
+
+    $query = $qb->getQuery();
+
+    $firstResult = ($page - 1) * $nbPerPage;
+
+    $query
+      ->setFirstResult($firstResult)
+      ->setMaxResults($nbPerPage)
+    ;
+
+    $paginator = new Paginator($query);
+
+    if (($paginator->count() <= $firstResult) && $page !=1)
+    {
+      throw new NotFoundHttpException("la page demandée n\'existe pas");
+    }
+
+    return $paginator;
   }
 
 }

@@ -57,9 +57,6 @@ class reportingRepository extends \Doctrine\ORM\EntityRepository
     ;
 
     return $qb;
-    //   ->getQuery()
-    //   ->getResult()
-    // ;
   }
 
   /**

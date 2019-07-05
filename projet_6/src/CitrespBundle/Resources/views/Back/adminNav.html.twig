@@ -18,7 +18,8 @@
 
         <li class="nav-item dropdown
         {% if (app.request.attributes.get("_route") == 'security_admin_show_moderate') or
-              (app.request.attributes.get("_route") == 'security_admin_show_reported') %}
+              (app.request.attributes.get("_route") == 'security_admin_show_reported') or
+              (app.request.attributes.get("_route") == 'security_admin_edit_reporting_status') %}
               nav-item active
         {% endif %}
         ">
@@ -59,12 +60,12 @@
             {% if app.request.attributes.get("_route") == 'security_admin_show_reported_comments' %}
               nav-item active
             {% endif %}
-            " href="{{ path('security_admin_show_reported_comments',{'slug': app.user.city.slug}) }}">Signalés</a>
+            " href="{{ path('security_admin_show_reported_comments',{'slug': app.user.city.slug, 'page': 1}) }}">Signalés</a>
             <a class="dropdown-item
             {% if app.request.attributes.get("_route") == 'security_admin_show_moderate_comments' %}
               nav-item active
             {% endif %}
-            " href="{{ path('security_admin_show_moderate_comments',{'slug': app.user.city.slug}) }}">Modérés</a>
+            " href="{{ path('security_admin_show_moderate_comments',{'slug': app.user.city.slug, 'page': 1}) }}">Modérés</a>
           </div>
         </li>
 

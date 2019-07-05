@@ -17,10 +17,10 @@
                   <!-- Bandeau btn modérer -->
                   <div class="admin-reporting-block-title block-reporting-status">
                     {% if comment.moderate == false %}
-                        <a href="{{ path('security_admin_show_reported_comments', {'slug': app.user.city.slug}) }}?action=commentModerate&commentId={{ comment.id }}" class="btn btn-warning btn-sm">Modérer
+                        <a href="{{ path('security_admin_show_reported_comments', {'slug': app.user.city.slug, 'page': 1}) }}?action=commentModerate&commentId={{ comment.id }}" class="btn btn-warning btn-sm">Modérer
                         </a>
                       {% else %}
-                        <a href="{{ path('security_admin_show_moderate_comments', {'slug': app.user.city.slug}) }}?action=commentModerate&commentId={{ comment.id }}" class="btn btn-info btn-sm">Publier
+                        <a href="{{ path('security_admin_show_moderate_comments', {'slug': app.user.city.slug, 'page': 1}) }}?action=commentModerate&commentId={{ comment.id }}" class="btn btn-info btn-sm">Publier
                         </a>
                     {% endif %}
                     {% if comment.reportedCount %}
@@ -66,6 +66,7 @@
         </div>
       </div>
     </div>
+    {% embed "@Citresp/pagination.html.twig" %}{% endembed %}
   </div>
 {% endblock %}
 
