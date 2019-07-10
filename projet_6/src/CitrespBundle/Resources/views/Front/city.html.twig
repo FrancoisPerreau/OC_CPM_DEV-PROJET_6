@@ -40,10 +40,10 @@
           {% for reporting in reportingsPerPage %}
             <div class="reporting-block">
               <div class="img-reporting-city">
-                {% if reporting.image %}
-                  <img class="img-responsive center-block" src="{{ asset(reporting.image.webPath) }}" alt="{{ reporting.image.alt }}">
-                  {% else %}
+                {% if (not reporting.image) or (reporting.moderate is same as(true)) %}
                     <img class="" src="{{ asset('theme/img/report-citresp.jpg') }}" alt="Picto CITRSP">
+                {% else %}
+                    <img class="img-responsive center-block" src="{{ asset(reporting.image.webPath) }}" alt="{{ reporting.image.alt }}">
                 {% endif %}
 
               </div>

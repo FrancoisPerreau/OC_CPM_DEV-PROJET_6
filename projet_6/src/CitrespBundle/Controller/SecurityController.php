@@ -233,9 +233,6 @@ class SecurityController extends Controller
                      ]);
                  }
 
-                 dump($nbAdmin);
-                 die;
-
              }
 
              $comments = $em

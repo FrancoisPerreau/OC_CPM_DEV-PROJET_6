@@ -27,12 +27,11 @@
         <div class="row">
           <div class="col-md-6">
             <div class="img-showReporting-city">
-              {% if reporting.image %}
-                <img class="img-responsive center-block" src="{{ asset(reporting.image.webPath) }}" alt="{{ reporting.image.alt }}">
+              {% if (not reporting.image) or (reporting.moderate is same as(true)) %}
+                  <img class="" src="{{ asset('theme/img/report-citresp.jpg') }}" alt="Picto CITRSP">
               {% else %}
-                <img class="" src="{{ asset('theme/img/report-citresp-show.jpg') }}" alt="Picto CITRESP">
+                  <img class="img-responsive center-block" src="{{ asset(reporting.image.webPath) }}" alt="{{ reporting.image.alt }}">
               {% endif %}
-
             </div>
           </div>
 
@@ -79,19 +78,24 @@
 
         <div class="row">
           <div class="col">
-            <p>{{ reporting.description }}</p>
+            {% if reporting.moderate is same as(false) %}
+              <p>{{ reporting.description }}</p>
+              {# Si l'utilisateur est l'auteur du signalement #}
+              <div class="reporting-btn-block">
+                {% if reporting.user %}
+                  {% if app.user.id is same as(reporting.user.id) %}
+                    <a href="{{ path('edit_reporting', {'slug': app.user.city.slug, 'reporting_id': reporting.id}) }}" class="btn btn-outline-info btn-sm btn-report-publication">
+                      Modifier
+                    </a>
+                  {% endif %}
+                {% endif %}
+              </div>
+            {% else %}
+                <p class="text-danger">Publication modérée</p>
+            {% endif %}
           </div>
         </div>
-        {# Si l'utilisateur est l'auteur du signalement #}
-        <div class="reporting-btn-block">
-          {% if reporting.user %}
-            {% if app.user.id is same as(reporting.user.id) %}
-              <a href="{{ path('edit_reporting', {'slug': app.user.city.slug, 'reporting_id': reporting.id}) }}" class="btn btn-outline-info btn-sm btn-report-publication">
-                Modifier
-              </a>
-            {% endif %}
-          {% endif %}
-        </div>
+
         <!-- /row 2 -->
       </div>
       <!-- showReporting-block -->
@@ -110,13 +114,18 @@
               le
               {{ comment.dateCreated|localizeddate('none', 'none', null, null, 'EEEE d MMMM Y') }}
             </p>
-            <p>{{ comment.content }}</p>
-            <hr>
-            <a href="{{ path('show_reporting', {'slug': app.user.city.slug, 'reporting_id': reporting.id}) }}?action=commentReport&id={{ comment.id }}" class="btn btn-outline-secondary btn-sm btn-report-publication">Signaler ce commentaire
-              {% if comment.reportedCount %}
-                <span class="badge badge-danger">{{ comment.reportedCount }}</span>
-              {% endif %}
-            </a>
+            {% if comment.moderate is same as(false) %}
+              <p>{{ comment.content }}</p>
+              <hr>
+              <a href="{{ path('show_reporting', {'slug': app.user.city.slug, 'reporting_id': reporting.id}) }}?action=commentReport&id={{ comment.id }}" class="btn btn-outline-secondary btn-sm btn-report-publication">Signaler ce commentaire
+                {% if comment.reportedCount %}
+                  <span class="badge badge-danger">{{ comment.reportedCount }}</span>
+                {% endif %}
+              </a>
+            {% else %}
+                <p class="text-danger">Publication modérée</p>
+            {% endif %}
+
           </div>
         {% endfor %}
       </div>
