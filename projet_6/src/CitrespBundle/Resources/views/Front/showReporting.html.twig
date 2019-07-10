@@ -84,10 +84,12 @@
         </div>
         {# Si l'utilisateur est l'auteur du signalement #}
         <div class="reporting-btn-block">
-          {% if app.user.id is same as(reporting.user.id) %}
-            <a href="{{ path('edit_reporting', {'slug': app.user.city.slug, 'reporting_id': reporting.id}) }}" class="btn btn-outline-info btn-sm btn-report-publication">
-              Modifier
-            </a>
+          {% if reporting.user %}
+            {% if app.user.id is same as(reporting.user.id) %}
+              <a href="{{ path('edit_reporting', {'slug': app.user.city.slug, 'reporting_id': reporting.id}) }}" class="btn btn-outline-info btn-sm btn-report-publication">
+                Modifier
+              </a>
+            {% endif %}
           {% endif %}
         </div>
         <!-- /row 2 -->

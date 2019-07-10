@@ -17,14 +17,12 @@
             <a class="dropdown-item" href="{{ path('fos_user_profile_show') }}" lang="fr">Mon profil</a>
             <a class="dropdown-item" href="{{ path('city',{'slug': app.user.city.slug, 'page' : 1}) }}" lang="fr">Ma ville</a>
             <a class="dropdown-item" href="{{ path('fos_user_security_logout') }}" lang="fr">Déconnexion</a>
-            {% if (is_granted('ROLE_MODERATOR')) or (is_granted('ROLE_CYTI')) %}
+            {% if (is_granted('ROLE_MODERATOR')) or (is_granted('ROLE_CITY')) %}
               <hr>
               <a class="dropdown-item"
-              {% if is_granted('ROLE_ADMIN') %}
-               href="{{ path('security_admin',{'slug': app.user.city.slug, 'page': 1}) }}">
-               {% elseif is_granted('ROLE_MODERATOR') %}
-                href="{{ path('security_moderator',{'slug': app.user.city.slug, 'page': 1}) }}">
-                {% elseif is_granted('ROLE_CYTI') %}
+              {% if is_granted('ROLE_MODERATOR') %}
+                href="{{ path('security_admin',{'slug': app.user.city.slug, 'page': 1}) }}">
+                {% elseif is_granted('ROLE_CITY') %}
                  href="{{ path('security_city',{'slug': app.user.city.slug, 'page': 1}) }}">
               {% endif %}
               Administration

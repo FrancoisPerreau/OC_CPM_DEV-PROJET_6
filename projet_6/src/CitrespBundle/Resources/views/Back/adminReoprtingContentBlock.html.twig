@@ -1,0 +1,54 @@
+{# src/CitrespBundle/Resources/views/Back/adminReoprtingContentBlock.html.twig #}
+
+<div class="admin-content-block">
+  <div class="img-reporting-city">
+    {% if reporting.image %}
+      <img class="img-responsive center-block" src="{{ asset(reporting.image.webPath) }}" alt="{{ reporting.image.alt }}">
+    {% else %}
+      <img class="" src="{{ asset('theme/img/report-citresp.jpg') }}" alt="Picto CITRSP">
+    {% endif %}
+  </div>
+
+  <div class="infos-reporting-city">
+    <div class="reporting-status reporting-status-admin">
+      <div
+        class="reporting-status-label
+      {% if reporting.status.id == 1 %}
+        bg-danger
+      {% elseif reporting.status.id == 2 %}
+        bg-warning
+      {% elseif reporting.status.id == 3 %}
+        bg-info
+      {% elseif reporting.status.id == 4 %}
+        bg-success
+      {% endif %}
+    "></div>
+      <p>{{reporting.status.name}}</p>
+      <a href="
+        {{ path('security_admin_edit_reporting_status',
+        {'slug': app.user.city.slug, 'reporting_id': reporting.id}) }}" class="btn btn-sm btn-info ">Modifier</a>
+    </div>
+    <p>
+      <strong>{{ reporting.address }}</strong>
+    </p>
+    <p>{{ reporting.category.name }}</p>
+    <p class="text-muted author-reporting-city">
+      <strong>{{ reporting.user }}</strong>
+      le
+      {{ reporting.dateCreated|localizeddate('short', 'none', null) }}
+    </p>
+  </div>
+</div>
+<!-- /admin-content-block -->
+<div class="admin-description-block">
+  <p>
+    {{ reporting.description }}
+    <br/>
+    <a class="" href="{{ path('show_reporting', {
+    'slug': app.user.city.slug,
+    'reporting_id': reporting.id}
+    ) }}">
+      Voir le signalement
+    </a>
+  </p>
+</div>

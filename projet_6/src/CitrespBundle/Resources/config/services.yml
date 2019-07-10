@@ -42,3 +42,8 @@ services:
        class: CitrespBundle\Services\HydrateReporting
        arguments:
           - "@citresp.createAtlContent"
+
+   # citresp.registrationListener:
+   #     class: CitrespBundle\EventListener\RegistrationListener
+   #     tags:
+   #        - { name: kernel.event_subscriber }

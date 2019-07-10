@@ -1,0 +1,23 @@
+{# src/CitrespBundle/Resources/views/Security/removeUser.html.twig #}
+
+{% extends '@Citresp/layout.html.twig' %}
+
+{% block body %}
+  <div class="container container-profile bg-light-admin">
+    <div class="container profile-block text-danger text-center">
+      <h4 class="text-muted">
+        Suprimer le compte de
+        <br>
+        {{ user.username }}
+      </h4>
+      <hr>
+      <h5>Attention !</h5>
+      <p>Cette action est <strong>irreversible</strong></p>
+      <hr>
+      <p><a href="{{ path('remove_user', {'slug': app.user.city.slug}) }}?userId={{user.id}}&amp;action=remove"
+        class="btn btn-danger btn-sm"
+        >Supprimer</a></p>
+    </div>
+
+  </div>
+{% endblock %}

@@ -2,6 +2,10 @@
 
 namespace CitrespBundle\Repository;
 
+use Doctrine\ORM\Tools\Pagination\Paginator;
+use InvalidArgumentException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
 /**
  * UserRepository
  *
@@ -10,4 +14,198 @@ namespace CitrespBundle\Repository;
  */
 class UserRepository extends \Doctrine\ORM\EntityRepository
 {
+  /**
+   * Récupère le user en fonction de la ville
+   * @param [object] $city
+   * @return [array]
+   */
+  public function getUsersByCity($city)
+  {
+    $qb = $this->createQueryBuilder('u');
+
+    $qb
+      ->select('u')
+      ->where('u.city = :city')
+      ->setParameter('city', $city)
+      ->orderBy('u.username','ASC')
+    ;
+
+    return $qb
+      ->getQuery()
+      ->getResult()
+    ;
+  }
+
+  /**
+   * Récupère le user qui n'ont pas de rôles admin ou modérateur en fonction de la ville
+   * @param [object] $city
+   * @return [array]
+   */
+  public function getUsersNotAdminByCity($city)
+  {
+    $qb = $this->createQueryBuilder('u');
+
+    $qb
+      ->select('u')
+      ->Where('u.roles NOT LIKE :roleA')
+      ->setParameter('roleA', '%"ROLE_ADMIN"%')
+      ->andWhere('u.roles NOT LIKE :roleM')
+      ->setParameter('roleM', '%"ROLE_MODERATOR"%')
+      ->andWhere('u.roles NOT LIKE :roleC')
+      ->setParameter('roleC', '%"ROLE_CITY"%')
+      ->andwhere('u.city = :city')
+      ->setParameter('city', $city)
+
+      ->orderBy('u.username','ASC')
+    ;
+
+    return $qb;
+  }
+
+
+  /**
+   * Récupère le user qui ont les rôles admin, modérateur ou city en fonction de la ville
+   * @param [object] $city
+   * @return [array]
+   */
+  public function getUsersAreAdminByCity($city)
+  {
+    $qb = $this->createQueryBuilder('u');
+
+    $qb
+      ->select('u')
+      ->where('u.roles LIKE :roleA or u.roles LIKE :roleM or u.roles LIKE :roleC' )
+      ->setParameter('roleA', '%"ROLE_ADMIN"%')
+      ->setParameter('roleM', '%"ROLE_MODERATOR"%')
+      ->setParameter('roleC', '%"ROLE_CITY"%')
+      ->andwhere('u.city = :city')
+      ->setParameter('city', $city)
+
+      ->orderBy('u.username','ASC')
+    ;
+
+    return $qb;
+  }
+
+
+  /**
+   * Retourne le nombre de user qui ont le rôle admin en fonction de la ville
+   * @param [object] $city
+   * @return [int]
+   */
+  public function countUserOnlyAdminByCity($city)
+  {
+    $qb = $this->createQueryBuilder('u');
+
+    $qb
+      ->select('COUNT(u)')
+      -> where('u.roles LIKE :role')
+      ->setParameter('role', '%"ROLE_ADMIN"%')
+      ->andWhere('u.city = :city')
+      ->setParameter('city', $city)
+    ;
+
+    return $qb
+      ->getQuery()
+      ->getSingleScalarResult()
+    ;
+  }
+
+
+
+
+  /**
+   * Récupère une liste de user n'ont pas de rôles admin ou modérateur en fonction de la ville triés et paginés
+   * @param  [object] $city
+   * @param [int] $page [le numéro de la page]
+   * @param [int] $nbPerPage [nombre de reporti,g par page]
+   * @return [Paginator]
+   */
+  public function getAllPageInWhereUsersNotAdminByCity($city, $page, $nbPerPage)
+  {
+    if (!is_numeric($page))
+    {
+      throw new InvalidArgumentException('La valeur de l\'argument $page est incorecte (valeur : '.$page.')');
+    }
+
+    if ($page < 1)
+    {
+      throw new NotFoundHttpException("la page demandée n\'existe pas");
+    }
+
+    if (!is_numeric($nbPerPage))
+    {
+      throw new InvalidArgumentException('La valeur de l\'argument $nbPerPage est incorecte (valeur : '.$nbPerPage.')');
+    }
+
+    $qb = $this->getUsersNotAdminByCity($city);
+
+    $query = $qb->getQuery();
+
+    $firstResult = ($page - 1) * $nbPerPage;
+
+    $query
+      ->setFirstResult($firstResult)
+      ->setMaxResults($nbPerPage)
+    ;
+
+    $paginator = new Paginator($query);
+
+    if (($paginator->count() <= $firstResult) && $page !=1)
+    {
+      throw new NotFoundHttpException("la page demandée n\'existe pas");
+    }
+
+    return $paginator;
+  }
+
+
+
+
+
+  /**
+   * Récupère une liste de user n'ont pas de rôles admin ou modérateur en fonction de la ville triés et paginés
+   * @param  [object] $city
+   * @param [int] $page [le numéro de la page]
+   * @param [int] $nbPerPage [nombre de reporti,g par page]
+   * @return [Paginator]
+   */
+  public function getAllPageInWhereUsersAreAdminByCity($city, $page, $nbPerPage)
+  {
+    if (!is_numeric($page))
+    {
+      throw new InvalidArgumentException('La valeur de l\'argument $page est incorecte (valeur : '.$page.')');
+    }
+
+    if ($page < 1)
+    {
+      throw new NotFoundHttpException("la page demandée n\'existe pas");
+    }
+
+    if (!is_numeric($nbPerPage))
+    {
+      throw new InvalidArgumentException('La valeur de l\'argument $nbPerPage est incorecte (valeur : '.$nbPerPage.')');
+    }
+
+    $qb = $this->getUsersAreAdminByCity($city);
+
+    $query = $qb->getQuery();
+
+    $firstResult = ($page - 1) * $nbPerPage;
+
+    $query
+      ->setFirstResult($firstResult)
+      ->setMaxResults($nbPerPage)
+    ;
+
+    $paginator = new Paginator($query);
+
+    if (($paginator->count() <= $firstResult) && $page !=1)
+    {
+      throw new NotFoundHttpException("la page demandée n\'existe pas");
+    }
+
+    return $paginator;
+  }
+
 }

@@ -6,6 +6,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,6 +15,7 @@ use CitrespBundle\Entity\Category;
 use CitrespBundle\Entity\City;
 use CitrespBundle\Entity\Comment;
 use CitrespBundle\Entity\Reporting;
+use CitrespBundle\Entity\User;
 
 use CitrespBundle\Form\EditReportingStatusType;
 
@@ -23,8 +25,8 @@ use CitrespBundle\Form\EditReportingStatusType;
 class BackController extends Controller
 {
     /**
-     * @Route("/admin/{slug}/{page}", name="security_admin")
-     * @Security("has_role('ROLE_ADMIN')")
+     * @Route("/admin/{slug}/{page}", requirements={"page"="\d+"}, name="security_admin")
+     * @Security("has_role('ROLE_MODERATOR')")
      */
     public function adminAction(City $city, $page, Request $request)
     {
@@ -101,7 +103,8 @@ class BackController extends Controller
             $em->flush();
 
             return $this->redirectToRoute('security_admin',[
-                'slug' => $city->getSlug()
+                'slug' => $city->getSlug(),
+                'page' => $page
             ]);
         }
 
@@ -120,10 +123,10 @@ class BackController extends Controller
 
 
     /**
-     * @Route("/admin-moderator/{slug}", name="security_moderator")
-     * @Security("has_role('ROLE_MODERATOR')")
+     * @Route("/admin-city/{slug}/{page}", requirements={"page"="\d+"}, name="security_city")
+     * @Security("has_role('ROLE_CITY')")
      */
-    public function moderatorAction(City $city)
+    public function cityAction(City $city, $page, Request $request)
     {
         // Si les Villes sont différents on redirige vers la homepage
         $user = $this->getUser();
@@ -136,57 +139,29 @@ class BackController extends Controller
 
         $em = $this->getDoctrine()->getManager();
 
-        // Google map
-        $googleApi = $this->container->getParameter('google_api');
-        // $markers = null ;
+        // Pagination
+        $nbReportingsPerPage = $this->container->getParameter('back_nb_reportings_per_page');
 
-        // Reportings
-        $reportings = $em
-            ->getRepository(Reporting::class)
-            ->findBy(['city' => $city], ['dateCreated' => 'DESC']);
+        $reportingsPerPage = $em
+          ->getRepository(Reporting::class)
+          ->getAllPageInWhereNotModerate($city, $page, $nbReportingsPerPage)
+        ;
 
+        $pagination = [
+            'page' => $page,
+            'nbPages' => ceil(count($reportingsPerPage) / $nbReportingsPerPage),
+            'routeName' => 'security_city',
+            'routeParams' => []
+        ];
 
-        $reportingsList = $emReportings->getReportingModerate($city);
-
-
-
-        return $this->render('@Citresp/Back/adminModerator.html.twig',[
-            'googleApi' => $googleApi,
-            'city' => $city,
-            'reportings' => $reportings,
-
-            'reportedReportingsNb' => $reportedReportingsNb,
-            'reportedCommentsNb' => $reportedCommentsNb,
-            'reportingsList' => $reportingsNotModerate
-
-        ]);
-    }
-
-
-    /**
-     * @Route("/admin-city/{slug}", name="security_city")
-     * @Security("has_role('ROLE_CYTI')")
-     */
-    public function cityAction(City $city)
-    {
-        // Si les Villes sont différents on redirige vers la homepage
-        $user = $this->getUser();
-        if ($user->getCity() != $city)
-        {
-            $this->addFlash('errorCityAccess', 'Votre compte n\'est pas pour la ville de ' . $city->getName());
-
-            return $this->redirectToRoute('homepage');
-        }
-
-        $em = $this->getDoctrine()->getManager();
 
         // Google map
         $googleApi = $this->container->getParameter('google_api');
-        // $markers = null ;
 
         // Reportings
-        $reportings = $em
-            ->getRepository(Reporting::class)
+        $emReportings = $em->getRepository(Reporting::class);
+
+        $reportings = $emReportings
             ->findBy(['city' => $city], ['dateCreated' => 'DESC']);
 
 
@@ -197,9 +172,8 @@ class BackController extends Controller
             'city' => $city,
             'reportings' => $reportings,
 
-            'reportedReportingsNb' => $reportedReportingsNb,
-            'reportedCommentsNb' => $reportedCommentsNb,
-            'reportingsList' => $reportingsNotModerate
+            'reportingsList' => $reportingsPerPage,
+            'pagination' => $pagination
         ]);
     }
 
@@ -207,8 +181,8 @@ class BackController extends Controller
 
 
     /**
-     * @Route("/admin/{slug}/Reportings/moderate/{page}", name="security_admin_show_moderate")
-     * @Security("has_role('ROLE_ADMIN')")
+     * @Route("/admin/{slug}/Reportings/moderate/{page}", requirements={"page"="\d+"}, name="security_admin_show_moderate")
+     * @Security("has_role('ROLE_MODERATOR')")
      */
     public function adminShowModerateAction(City $city, $page, Request $request)
     {
@@ -282,7 +256,8 @@ class BackController extends Controller
             $em->flush();
 
             return $this->redirectToRoute('security_admin_show_moderate',[
-                'slug' => $city->getSlug()
+                'slug' => $city->getSlug(),
+                'page' => $page
             ]);
         }
 
@@ -304,8 +279,8 @@ class BackController extends Controller
 
 
     /**
-     * @Route("/admin/{slug}/Reportings/reported/{page}", name="security_admin_show_reported")
-     * @Security("has_role('ROLE_ADMIN')")
+     * @Route("/admin/{slug}/Reportings/reported/{page}", requirements={"page"="\d+"}, name="security_admin_show_reported")
+     * @Security("has_role('ROLE_MODERATOR')")
      */
     public function adminShowReportedAction(City $city, $page, Request $request)
     {
@@ -376,11 +351,11 @@ class BackController extends Controller
 
             $em->flush();
 
-            return $this->redirectToRoute('security_admin_show_moderate',[
-                'slug' => $city->getSlug()
+            return $this->redirectToRoute('security_admin_show_reported',[
+                'slug' => $city->getSlug(),
+                'page' => $page
             ]);
         }
-
 
 
         return $this->render('@Citresp/Back/adminHome.html.twig',[
@@ -402,7 +377,7 @@ class BackController extends Controller
     /**
      * @Route("/admin/{slug}/edit-report/{reporting_id}", name="security_admin_edit_reporting_status")
      * @Entity("reporting", expr="repository.find(reporting_id)")
-     * @Security("has_role('ROLE_ADMIN')")
+     * @IsGranted({"ROLE_MODERATOR", "ROLE_CITY"})
      */
     public function adminEditReportingStatusAction(City $city, Reporting $reporting, Request $request)
     {
@@ -429,8 +404,21 @@ class BackController extends Controller
         {
             $em->flush();
 
-            return $this->redirectToRoute('security_admin',[
-                'slug' => $city->getSlug()]);
+
+            if ($user->hasRole('ROLE_CITY'))
+            {
+                return $this->redirectToRoute('security_city',[
+                    'slug' => $city->getSlug(),
+                    'page' => 1
+                ]);
+            }
+            else
+            {
+                return $this->redirectToRoute('security_admin',[
+                    'slug' => $city->getSlug(),
+                    'page' => 1
+                ]);
+            }
         }
 
 
@@ -447,10 +435,10 @@ class BackController extends Controller
 
 
     /**
-     * @Route("/admin/{slug}/comments/moderate", name="security_admin_show_moderate_comments")
-     * @Security("has_role('ROLE_ADMIN')")
+     * @Route("/admin/{slug}/comments/moderate/{page}", requirements={"page"="\d+"}, name="security_admin_show_moderate_comments")
+     * @Security("has_role('ROLE_MODERATOR')")
      */
-    public function adminShowModerateCommentsAction(City $city, Request $request)
+    public function adminShowModerateCommentsAction(City $city, $page, Request $request)
     {
         // Si les Villes sont différents on redirige vers la homepage
         $user = $this->getUser();
@@ -463,9 +451,23 @@ class BackController extends Controller
 
         $em = $this->getDoctrine()->getManager();
 
+        // Pagination
+        $nbCommentsPerPage = $this->container->getParameter('back_nb_comments_per_page');
+
+        $commentsPerPage = $em
+          ->getRepository(Comment::class)
+          ->getAllPageInWhereModerate($city, $page, $nbCommentsPerPage)
+        ;
+
+        $pagination = [
+            'page' => $page,
+            'nbPages' => ceil(count($commentsPerPage) / $nbCommentsPerPage),
+            'routeName' => 'security_admin_show_moderate_comments',
+            'routeParams' => []
+        ];
+
         // Google map
         $googleApi = $this->container->getParameter('google_api');
-
 
 
         // Reportings
@@ -478,12 +480,10 @@ class BackController extends Controller
         $reportedReportingsNb = $emReportings->getReportingByReportedNbWhereNotModerate($city);
 
 
-
-
         // Comments
         $emComments = $em->getRepository(Comment::class);
 
-        $reportedCommentsModerate = $emComments->getCommentByReportedWhereModerate($city);
+
         $reportedCommentsNb = $emComments->getCommentByReportedNbWhereNotModerate($city);
 
 
@@ -508,10 +508,10 @@ class BackController extends Controller
             $em->flush();
 
             return $this->redirectToRoute('security_admin_show_moderate_comments',[
-                'slug' => $city->getSlug()
+                'slug' => $city->getSlug(),
+                'page' => $page
             ]);
         }
-
 
 
         return $this->render('@Citresp/Back/adminShowComments.html.twig',[
@@ -523,7 +523,8 @@ class BackController extends Controller
 
             'reportedReportingsNb' => $reportedReportingsNb,
             'reportedCommentsNb' => $reportedCommentsNb,
-            'commentsList' => $reportedCommentsModerate
+            'commentsList' => $commentsPerPage,
+            'pagination' => $pagination
         ]);
 
     }
@@ -531,10 +532,10 @@ class BackController extends Controller
 
 
     /**
-     * @Route("/admin/{slug}/comments/reported", name="security_admin_show_reported_comments")
-     * @Security("has_role('ROLE_ADMIN')")
+     * @Route("/admin/{slug}/comments/reported/{page}", requirements={"page"="\d+"}, name="security_admin_show_reported_comments")
+     * @Security("has_role('ROLE_MODERATOR')")
      */
-    public function adminShowReportedCommentsAction(City $city, Request $request)
+    public function adminShowReportedCommentsAction(City $city, $page, Request $request)
     {
         // Si les Villes sont différents on redirige vers la homepage
         $user = $this->getUser();
@@ -546,6 +547,22 @@ class BackController extends Controller
         }
 
         $em = $this->getDoctrine()->getManager();
+
+        // Pagination
+        $nbCommentsPerPage = $this->container->getParameter('back_nb_comments_per_page');
+
+        $commentsPerPage = $em
+          ->getRepository(Comment::class)
+          ->getAllPageInWhereReportedAndNotModerate($city, $page, $nbCommentsPerPage)
+        ;
+
+        $pagination = [
+            'page' => $page,
+            'nbPages' => ceil(count($commentsPerPage) / $nbCommentsPerPage),
+            'routeName' => 'security_admin_show_reported_comments',
+            'routeParams' => []
+        ];
+
 
         // Google map
         $googleApi = $this->container->getParameter('google_api');
@@ -567,7 +584,7 @@ class BackController extends Controller
         // Comments
         $emComments = $em->getRepository(Comment::class);
 
-        $reportedCommentsNotModerate = $emComments->getCommentByReportedWhereNotModerate($city);
+        // $reportedCommentsNotModerate = $emComments->getCommentByReportedWhereNotModerate($city);
         $reportedCommentsNb = $emComments->getCommentByReportedNbWhereNotModerate($city);
 
 
@@ -591,8 +608,9 @@ class BackController extends Controller
 
             $em->flush();
 
-            return $this->redirectToRoute('security_admin_show_moderate_comments',[
-                'slug' => $city->getSlug()
+            return $this->redirectToRoute('security_admin_show_reported_comments',[
+                'slug' => $city->getSlug(),
+                'page' => $page
             ]);
         }
 
@@ -607,7 +625,128 @@ class BackController extends Controller
 
             'reportedReportingsNb' => $reportedReportingsNb,
             'reportedCommentsNb' => $reportedCommentsNb,
-            'commentsList' => $reportedCommentsNotModerate
+            'commentsList' => $commentsPerPage,
+            'pagination' => $pagination
+        ]);
+
+    }
+
+
+
+    /**
+     * @Route("/admin/{slug}/users/{page}", requirements={"page"="\d+"}, name="security_admin_show_users")
+     * @Security("has_role('ROLE_ADMIN')")
+     */
+    public function adminShowUsersAction(City $city, $page, Request $request)
+    {
+        // Si les Villes sont différents on redirige vers la homepage
+        $user = $this->getUser();
+        if ($user->getCity() != $city)
+        {
+            $this->addFlash('errorCityAccess', 'Votre compte n\'est pas pour la ville de ' . $city->getName());
+
+            return $this->redirectToRoute('homepage');
+        }
+
+        $em = $this->getDoctrine()->getManager();
+
+        // Pagination
+        $nbUserPerPage = $this->container->getParameter('back_nb_users_per_page');
+
+
+        // Users
+        // $userManager = $this->get('fos_user.user_manager');
+        // $users = $userManager->findUsers($city);
+        $usersPerPage = $em
+          ->getRepository(User::class)
+          ->getAllPageInWhereUsersNotAdminByCity($city, $page, $nbUserPerPage)
+        ;
+
+
+        $pagination = [
+            'page' => $page,
+            'nbPages' => ceil(count($usersPerPage) / $nbUserPerPage),
+            'routeName' => 'security_admin_show_users',
+            'routeParams' => []
+        ];
+
+        // Google map
+        $googleApi = $this->container->getParameter('google_api');
+
+
+        // Reportings
+        $emReportings = $em->getRepository(Reporting::class);
+
+        $reportings = $emReportings
+            ->findBy(['city' => $city], ['dateCreated' => 'DESC']);
+
+
+        return $this->render('@Citresp/Back/adminSwowUsers.html.twig',[
+            'googleApi' => $googleApi,
+            'city' => $city,
+            'reportings' => $reportings,
+            'users' => $usersPerPage,
+
+            'pagination' => $pagination
+        ]);
+
+    }
+
+
+
+    /**
+     * @Route("/admin/{slug}/users-admin/{page}", requirements={"page"="\d+"}, name="security_admin_show_admin_user")
+     * @Security("has_role('ROLE_ADMIN')")
+     */
+    public function adminShowAdminUsersAction(City $city, $page, Request $request)
+    {
+        // Si les Villes sont différents on redirige vers la homepage
+        $user = $this->getUser();
+        if ($user->getCity() != $city)
+        {
+            $this->addFlash('errorCityAccess', 'Votre compte n\'est pas pour la ville de ' . $city->getName());
+
+            return $this->redirectToRoute('homepage');
+        }
+
+        $em = $this->getDoctrine()->getManager();
+
+        // Pagination
+        $nbUserPerPage = $this->container->getParameter('back_nb_users_per_page');
+
+
+        // Users
+        $usersPerPage = $em
+          ->getRepository(User::class)
+          ->getAllPageInWhereUsersAreAdminByCity($city, $page, $nbUserPerPage)
+        ;
+
+
+        $pagination = [
+            'page' => $page,
+            'nbPages' => ceil(count($usersPerPage) / $nbUserPerPage),
+            'routeName' => 'security_admin_show_users',
+            'routeParams' => []
+        ];
+
+        // Google map
+        $googleApi = $this->container->getParameter('google_api');
+
+
+        // Reportings
+        $emReportings = $em->getRepository(Reporting::class);
+
+        $reportings = $emReportings
+            ->findBy(['city' => $city], ['dateCreated' => 'DESC']);
+
+
+        return $this->render('@Citresp/Back/adminSwowUsers.html.twig',[
+            'googleApi' => $googleApi,
+            'city' => $city,
+            'reportings' => $reportings,
+            'users' => $usersPerPage,
+
+            'pagination' => $pagination
         ]);
 
     }

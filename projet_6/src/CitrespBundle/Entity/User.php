@@ -35,13 +35,13 @@ class User extends FosUser
     private $city;
 
 
-    
+
     public function __construct()
     {
         parent::__construct();
 
         // Add USER_ROLE
-        $this->addRole("ROLE_USER");
+        // $this->roles = ["ROLE_CR"];
     }
 
 

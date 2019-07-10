@@ -1,0 +1,27 @@
+{# src/CitrespBundle/Resources/views/Back/adminEditUserRole.html.twig #}
+{% extends '@Citresp/layout.html.twig' %}
+
+{% block stylesheets %}
+  {{ parent() }}
+  <link rel="stylesheet" href="{{ asset('theme/css/sign-in.css') }}">
+{% endblock %}
+
+{% block fos_user_content %}
+  <div class="contaner-sign-in text-center">
+    {{ form_start(form,  {'attr': {'class': 'form-signin'}}) }}
+
+    <h1 class="h3 mb-3 font-weight-normal">Modifier un compte</h1>
+
+    {{ form_errors(form.roles) }}
+    {{ form_label(form.roles, null, {'label_attr': {'class': 'sr-only'}}) }}
+    {{ form_widget(form.roles, {'attr': {'class': 'form-control' }}) }}
+
+
+
+    <input class="btn btn-lg btn-info btn-block" type="submit" value="Validez"/>
+
+    {{ form_rest(form) }}
+    {{ form_end(form) }}
+
+  </div>
+{% endblock %}

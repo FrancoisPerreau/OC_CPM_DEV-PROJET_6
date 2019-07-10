@@ -40,8 +40,20 @@ section {
   padding: 60px 0;
 }
 
-h1 {
-  /* color: var(--secondary-color); */
+footer {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  color: var(--gray);
+}
+
+footer>.container>p {
+  margin: 0;
+  line-height: 1.75em;
+}
+
+footer>.container>p>a {
+  color: var(--light);
+  text-decoration: underline;
 }
 
 .max-width-1 {
@@ -70,6 +82,10 @@ h1 {
 
 .bg-primary {
   background-color: var(--primary-color) !important;
+}
+
+.bg-dark {
+  background-color: var(--dark) !important;
 }
 
 .flashBag {
@@ -201,7 +217,8 @@ h1 {
 
 .reporting-block,
 .showReporting-block,
-.commentsReporting-block {
+.commentsReporting-block,
+.profile-block {
   max-width: 600px;
   margin: auto;
   margin-top: 2.5rem;
@@ -423,4 +440,50 @@ h1 {
 
 .admin-comment-adress-block {
   padding: 5px 15px;
+}
+
+
+
+/* *************************** */
+/* PAGES PROFILE */
+/* *************************** */
+.container-profile {
+  padding-bottom: 32px;
+}
+
+.profile-block {
+  max-width: 400px!important;
+}
+
+.profile-block>p,
+.profile-btn-block>p {
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+.profile-btn-block {
+  display: flex;
+  justify-content: space-between;
+}
+
+.checkbox {
+  margin-top: 15px;
+}
+
+.link_to_change {
+  margin-top: 15px;
+}
+
+
+
+
+/* *************************** */
+/* AUTRES PAGES */
+/* *************************** */
+.container-confirmation-registration {
+  padding: 5rem 0;
+}
+
+.container-mentions-legales {
+  padding: 0 2rem 3rem 2rem ;
 }

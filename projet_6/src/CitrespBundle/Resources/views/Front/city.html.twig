@@ -18,10 +18,16 @@
 {% block body %}
   <div class="text-center bg-light">
     <div class="container reporting-btn bg-primary">
-      <a href="{{ path('create_reporting', {'slug': app.user.city.slug}) }}" class="btn btn-lg btn-warning ">Faire un signalement</a>
+      <a href="{{ path('create_reporting', {'slug': app.user.city.slug }) }}" class="btn btn-lg btn-warning ">Faire un signalement</a>
     </div>
     <section>
       {% for msg in app.session.flashBag.get('errorSelectedBaseCities') %}
+        <div class="flashBag">
+          <p class="alert alert-danger" role="alert">{{ msg }}</p>
+        </div>
+      {% endfor %}
+
+      {% for msg in app.session.flashBag.get('errorSelectedUser') %}
         <div class="flashBag">
           <p class="alert alert-danger" role="alert">{{ msg }}</p>
         </div>

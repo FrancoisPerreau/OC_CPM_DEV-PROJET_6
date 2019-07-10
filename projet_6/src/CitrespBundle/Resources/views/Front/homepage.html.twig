@@ -16,10 +16,16 @@
       </div>
     {% endfor %}
 
+    {% for msg in app.session.flashBag.get('SuccessRemoveUser') %}
+      <div class="flashBag">
+        <p class="alert alert-success" role="alert">{{ msg }}</p>
+      </div>
+    {% endfor %}
+
     {% for msg in app.session.flashBag.get('errorCityAccess') %}
     <div class="flashBag">
       <p class="alert alert-danger" role="alert">{{ msg }}</p>
-    </div>      
+    </div>
     {% endfor %}
 
     <div class="contaner-sign-in text-center">

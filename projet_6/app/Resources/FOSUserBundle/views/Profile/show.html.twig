@@ -9,8 +9,23 @@
 {% endblock %}
 
 {% block fos_user_content %}
-  <div class="container container-pading-t-b text-center">
-    <p><strong>{{ 'profile.show.username'|trans }}:</strong> {{ user.username }}</p>
-    <p><strong>{{ 'profile.show.email'|trans }}:</strong> {{ user.email }}</p>
+<div class="container container-profile bg-light-admin">
+
+  <div class="container profile-block">
+    <h4 class="text-muted">Votre profile</h4>
+    <hr>
+    <p><strong>Nom :</strong> {{ user.username }}</p>
+    <p><strong>e-mail :</strong> {{ user.email }}</p>
+    <hr>
+    <div class="profile-btn-block">
+      <p><a href="{{ path('fos_user_profile_edit') }}"
+          class="btn btn-info btn-sm"
+          >Modifier</a></p>
+      <p><a href="{{ path('remove_user', {'slug': app.user.city.slug}) }}?userId={{app.user.id}}"
+        class="btn btn-danger btn-sm"
+        >Supprimer</a></p>
+    </div>
   </div>
+</div>
+
 {% endblock %}

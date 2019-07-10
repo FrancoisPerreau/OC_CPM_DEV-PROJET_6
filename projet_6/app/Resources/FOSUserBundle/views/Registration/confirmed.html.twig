@@ -3,12 +3,12 @@
 {% trans_default_domain 'FOSUserBundle' %}
 
 {% block fos_user_content %}
-  <div class="contaner-sign-in text-center">
-    <p>{{ 'registration.confirmed'|trans({'%username%': user.username}) }}</p>
-    {% if targetUrl %}
+  <div class="contaner-sign-in text-center container-confirmation-registration">
+    <h4>{{ 'registration.confirmed'|trans({'%username%': user.username}) }}</h4>
+
       <p>
-        <a href="{{ targetUrl }}">{{ 'registration.back'|trans }}</a>
+        <a href="{{ path('city',{'slug': user.city.slug, 'page' : 1}) }}">Aller à la page de {{ user.city.name }}</a>
       </p>
-    {% endif %}
+
   </div>
 {% endblock fos_user_content %}

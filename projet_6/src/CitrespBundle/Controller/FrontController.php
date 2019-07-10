@@ -88,8 +88,6 @@ class FrontController extends Controller
     }
 
 
-
-
     /**
      * @Route("/city/{slug}/{page}", requirements={"page"="\d+"}, name="city")
      * @Security("has_role('ROLE_USER')")
@@ -240,7 +238,7 @@ class FrontController extends Controller
             return $this->redirectToRoute('homepage');
         }
 
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();        
 
         // Google map
         $googleApi = $this->container->getParameter('google_api');
@@ -263,8 +261,6 @@ class FrontController extends Controller
           $status = $em
               ->getRepository(Status::class)
               ->find(1);
-          // dump($status);
-          // die;
 
           $this->container->get('citresp.HydrateReporting')->hydrate($user, $city, $reporting, $status);
 
@@ -272,7 +268,9 @@ class FrontController extends Controller
           $em->flush();
 
           return $this->redirectToRoute('city',[
-              'slug' => $city->getSlug()]);
+              'slug' => $city->getSlug(),
+              'page' => 1
+              ]);
         }
 
 
@@ -329,7 +327,9 @@ class FrontController extends Controller
           $em->flush();
 
           return $this->redirectToRoute('city',[
-              'slug' => $city->getSlug()]);
+              'slug' => $city->getSlug(),
+              'page' => 1
+              ]);
         }
 
 
@@ -341,6 +341,17 @@ class FrontController extends Controller
             'form' => $form->createView()
 
         ]);
+    }
+
+
+    /**
+     * @Route("/mentions-legales", name="mentions_legales")
+     */
+    public function mentionsLegalesAction()
+    {
+
+      return $this->render('@Citresp/Front/mentionsLegales.html.twig');
+
     }
 
 

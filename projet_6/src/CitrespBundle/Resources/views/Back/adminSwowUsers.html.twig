@@ -1,0 +1,55 @@
+{# src/CitrespBundle/Resources/views/Back/adminSwowUsers.html.twig #}
+
+{% extends '@Citresp/Back/adminTemplate.html.twig' %}
+
+{% block body %}
+  <div class="container container-admin bg-light-admin">
+    <div class="row">
+      <div class="col-12">
+        <table class="table">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">Pseudo</th>
+              <th scope="col">Rôle</th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          <tbody>
+
+            {% for user in users %}
+              <tr>
+                <td><strong>{{ user.username }}</strong></td>
+                <td class="text-uppercase">
+                  {% if 'ROLE_ADMIN' in user.roles %}
+                    Administrateur
+                  {% elseif 'ROLE_MODERATOR' in user.roles %}
+                    Modérateur
+                  {% elseif 'ROLE_CITY' in user.roles %}
+                    Ville
+                  {% else %}
+                    Utilisateur
+                  {% endif %}
+                </td>
+                <td class="text-right">
+                  <a href="{{ path('remove_user', {'slug': user.city.slug}) }}?userId={{ user.id }}" class="btn btn-sm btn-danger ">
+                    Suprimer
+                  </a>
+                  <a href="{{ path('security_admin_edit_user_role', {'slug': user.city.slug}) }}?userId={{ user.id }}" class="btn btn-sm btn-info ">
+                    Modifier
+                  </a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+    {% embed "@Citresp/pagination.html.twig" %}{% endembed %}
+  </div>
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+  {% embed "@Citresp/googleMap-viewCity.html.twig" %}{% endembed %}
+{% endblock %}

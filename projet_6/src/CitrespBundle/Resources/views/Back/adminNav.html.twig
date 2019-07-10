@@ -68,16 +68,35 @@
             " href="{{ path('security_admin_show_moderate_comments',{'slug': app.user.city.slug, 'page': 1}) }}">Modérés</a>
           </div>
         </li>
-
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarAdminDropdownUser" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        {% if is_granted('ROLE_ADMIN') %}
+        <li class="nav-item dropdown
+        {% if (app.request.attributes.get("_route") == 'security_admin_show_users') or
+              (app.request.attributes.get("_route") == 'security_admin_show_admin_user') %}
+              nav-item active
+        {% endif %}
+        ">
+          <a class="nav-link dropdown-toggle"
+            href="#"
+            id="navbarAdminDropdownUser" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Profils
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarAdminDropdownUser">
-            <a class="dropdown-item" href="#">Utilisateur</a>
-            <a class="dropdown-item" href="#">Administrateur</a>
+            <a class="dropdown-item
+            {% if app.request.attributes.get("_route") == 'security_admin_show_users' %}
+              nav-item active
+            {% endif %}
+            "
+              href="{{ path('security_admin_show_users',{'slug': app.user.city.slug, 'page': 1}) }}">Utilisateur</a>
+            <a class="dropdown-item
+            {% if app.request.attributes.get("_route") == 'security_admin_show_admin_user' %}
+              nav-item active
+            {% endif %}
+            "
+              href="{{ path('security_admin_show_admin_user',{'slug': app.user.city.slug, 'page': 1}) }}">Administrateur</a>
           </div>
+
         </li>
+        {% endif %}
 
       </ul>
     </div>
