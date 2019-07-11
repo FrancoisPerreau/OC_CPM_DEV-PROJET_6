@@ -114,11 +114,27 @@ class Reporting
     private $image;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CitrespBundle\Entity\Status"))
+     * @ORM\ManyToOne(targetEntity="CitrespBundle\Entity\Status"), cascade={"persist"}))
      * @ORM\JoinColumn(nullable=false)
      * @Assert\Valid()
      */
     private $status;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="resolved", type="boolean")
+     */
+    private $resolved;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateResolved", type="datetime", nullable=true)
+     */
+    private $dateResolved;
+
+
 
 
 
@@ -127,6 +143,7 @@ class Reporting
     {
       $this->dateCreated = new \Datetime('now');
       $this->moderate = 0;
+      $this->status = new Status;
     }
 
 
@@ -405,5 +422,53 @@ class Reporting
     public function getImage()
     {
         return $this->image;
+    }
+
+    /**
+     * Set status.
+     *
+     * @param \CitrespBundle\Entity\Status $status
+     *
+     * @return Reporting
+     */
+    public function setStatus(\CitrespBundle\Entity\Status $status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status.
+     *
+     * @return \CitrespBundle\Entity\Status
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * Set resolved.
+     *
+     * @param bool $resolved
+     *
+     * @return Reporting
+     */
+    public function setResolved($resolved)
+    {
+        $this->resolved = $resolved;
+
+        return $this;
+    }
+
+    /**
+     * Get resolved.
+     *
+     * @return bool
+     */
+    public function getResolved()
+    {
+        return $this->resolved;
     }
 }

@@ -120,6 +120,22 @@ class Reporting
      */
     private $status;
 
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="resolved", type="boolean")
+     */
+    private $resolved;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateResolved", type="datetime", nullable=true)
+     */
+    private $dateResolved;
+
+
+
 
 
 
@@ -430,5 +446,53 @@ class Reporting
     public function getStatus()
     {
         return $this->status;
+    }
+
+    /**
+     * Set resolved.
+     *
+     * @param bool $resolved
+     *
+     * @return Reporting
+     */
+    public function setResolved($resolved)
+    {
+        $this->resolved = $resolved;
+
+        return $this;
+    }
+
+    /**
+     * Get resolved.
+     *
+     * @return bool
+     */
+    public function getResolved()
+    {
+        return $this->resolved;
+    }
+
+    /**
+     * Set dateResolved.
+     *
+     * @param \DateTime|null $dateResolved
+     *
+     * @return Reporting
+     */
+    public function setDateResolved($dateResolved = null)
+    {
+        $this->dateResolved = $dateResolved;
+
+        return $this;
+    }
+
+    /**
+     * Get dateResolved.
+     *
+     * @return \DateTime|null
+     */
+    public function getDateResolved()
+    {
+        return $this->dateResolved;
     }
 }

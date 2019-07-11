@@ -28,8 +28,22 @@ class Status
      */
     private $name;
 
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateResolved", type="datetime", nullable=true)
+     */
+    private $dateResolved;
 
-    
+
+
+
+    // public function __construct()
+    // {
+    //   $this->id = 1;
+    // }
+
+
     /**
      * Get id.
      *
@@ -63,5 +77,4 @@ class Status
     {
         return $this->name;
     }
-
 }

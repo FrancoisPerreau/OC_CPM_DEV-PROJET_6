@@ -114,14 +114,14 @@ class reportingRepository extends \Doctrine\ORM\EntityRepository
    */
   public function getReportingNotModerate($city)
   {
-    $qb = $this->createQueryBuilder('r');
+    // $qb = $this->createQueryBuilder('r');
+
+    $qb = $this->getReportingWhereResolvedLessOneMonth($city);
 
     $qb
-      ->select('r')
-      ->where('r.city = :city')
-      ->setParameter('city', $city)
+      ->select('r')      
       ->andWhere('r.moderate = false')
-      ->orderBy('r.dateCreated','DESC')
+      
     ;
 
     return $qb;
@@ -138,14 +138,13 @@ class reportingRepository extends \Doctrine\ORM\EntityRepository
    */
   public function getReportingModerate($city)
   {
-    $qb = $this->createQueryBuilder('r');
+    // $qb = $this->createQueryBuilder('r');
+
+    $qb = $this->getReportingWhereResolvedLessOneMonth($city);
 
     $qb
-      ->select('r')
-      ->where('r.city = :city')
-      ->setParameter('city', $city)
+      ->select('r')      
       ->andWhere('r.moderate = true')
-      ->orderBy('r.dateCreated','DESC')
     ;
 
     return $qb;
@@ -175,11 +174,11 @@ class reportingRepository extends \Doctrine\ORM\EntityRepository
       throw new InvalidArgumentException('La valeur de l\'argument $nbPerPage est incorecte (valeur : '.$nbPerPage.')');
     }
 
-    $qb = $this
-      ->createQueryBuilder('r')
-      ->where('r.city = :city')
-      ->setParameter('city', $city)
-      ->orderBy('r.dateCreated', 'DESC')
+    $qb = $this->getReportingWhereResolvedLessOneMonth($city)
+      // ->createQueryBuilder('r')
+      // ->where('r.city = :city')
+      // ->setParameter('city', $city)
+      // ->orderBy('r.dateCreated', 'DESC')
     ;
 
     $query = $qb->getQuery();
@@ -228,6 +227,7 @@ class reportingRepository extends \Doctrine\ORM\EntityRepository
     }
 
     $qb = $this->getReportingNotModerate($city);
+    
 
     $query = $qb->getQuery();
 
@@ -339,5 +339,80 @@ class reportingRepository extends \Doctrine\ORM\EntityRepository
 
     return $paginator;
   }
+
+
+
+/**
+   * Récupère les reportings dont la dateResolved a plus d'un mois en fonction de la ville concernée
+   * @param  [object] $city
+   * @return [array]
+   */
+  public function getReportingWhereResolvedMoreOneMonth($city)
+  {
+    $qb = $this->createQueryBuilder('r');
+
+    $qb
+      ->select('r')
+      ->where('r.city = :city')
+      ->setParameter('city', $city)
+      ->andWhere('r.dateResolved < :date')
+      ->setParameter('date', new \DateTime('-1 month'))
+      
+    ;    
+  
+  }
+
+
+  /**
+   * Récupère les reportings sauf ceux dont la dateResolved a plus d'un mois en fonction de la ville concernée
+   * @param  [object] $city
+   * @return [array]
+   */
+  public function getReportingWhereResolvedLessOneMonth($city)
+  {
+    $qb = $this->createQueryBuilder('r');
+
+    $qb
+      ->select('r')
+      ->where('r.city = :city')
+      ->setParameter('city', $city)
+      ->andWhere('r.dateResolved > :date OR r.dateResolved is null')
+      ->setParameter('date', new \DateTime('-1 month'))
+      ->orderBy('r.dateCreated', 'DESC')
+    ;      
+    
+
+    return $qb
+    //   ->getQuery()
+    //   ->getResult()
+    ;
+  }
+
+
+  /**
+   * Récupère les reportings resolved en fonction de la ville concernée
+   * @param  [object] $city
+   * @return [array]
+   */
+  public function getReportingsResolved($city)
+  {
+    $qb = $this->createQueryBuilder('r');
+
+    $qb
+      ->select('r')
+      ->where('r.city = :city')
+      ->setParameter('city', $city)
+      ->andWhere('r.resolved == true')
+      ->orderBy('r.dateCreated', 'DESC')
+    ;      
+    
+
+    return $qb
+      ->getQuery()
+      ->getResult()
+    ;
+  }
+
+
 
 }

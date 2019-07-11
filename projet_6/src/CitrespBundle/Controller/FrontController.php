@@ -115,7 +115,16 @@ class FrontController extends Controller
         // Reportings
         $reportings = $em
             ->getRepository(Reporting::class)
-            ->findBy(['city' => $city], ['dateCreated' => 'DESC']);
+            ->getReportingWhereResolvedLessOneMonth($city)
+            ->getQuery()
+            ->getResult()
+        ;
+
+        
+        // $testReportings = $em
+        // ->getRepository(Reporting::class)
+        // ->getReportingWhereResolvedLessOneMonth($city);
+
 
         $reportingsPerPage = $em
           ->getRepository(Reporting::class)
@@ -129,7 +138,7 @@ class FrontController extends Controller
             'routeParams' => []
         ];
 
-
+        
 
         return $this->render('@Citresp/Front/city.html.twig', [
           'googleApi' => $googleApi,

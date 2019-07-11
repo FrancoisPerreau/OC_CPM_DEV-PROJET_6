@@ -56,7 +56,8 @@ class BackController extends Controller
             'routeParams' => []
         ];
 
-
+        // dump($reportingsPerPage);
+        // die;
 
         // Google map
         $googleApi = $this->container->getParameter('google_api');
@@ -65,7 +66,10 @@ class BackController extends Controller
         $emReportings = $em->getRepository(Reporting::class);
 
         $reportings = $emReportings
-            ->findBy(['city' => $city], ['dateCreated' => 'DESC']);
+            ->getReportingByReportedWhereNotModerate($city)
+            ->getQuery()
+            ->getResult()
+            ;
 
 
         $reportedReportingsNb = $emReportings->getReportingByReportedNbWhereNotModerate($city);
@@ -222,7 +226,10 @@ class BackController extends Controller
         $emReportings = $em->getRepository(Reporting::class);
 
         $reportings = $emReportings
-            ->findBy(['city' => $city], ['dateCreated' => 'DESC']);
+            ->getReportingModerate($city)
+            ->getQuery()
+            ->getResult()
+            ;
 
         $reportedReportingsNb = $emReportings->getReportingByReportedNbWhereNotModerate($city);
 
@@ -318,7 +325,10 @@ class BackController extends Controller
         $emReportings = $em->getRepository(Reporting::class);
 
         $reportings = $emReportings
-            ->findBy(['city' => $city], ['dateCreated' => 'DESC']);
+            ->getReportingByReportedWhereNotModerate($city)
+            ->getQuery()
+            ->getResult()
+        ;
 
         $reportedReportingsNb = $emReportings->getReportingByReportedNbWhereNotModerate($city);
 
@@ -402,6 +412,23 @@ class BackController extends Controller
 
         if ($form->isSubmitted() && $form->isValid())
         {
+            $reporting = $form->getData();
+
+            $reportingStatus = $reporting->getStatus();
+
+            
+            if ($reportingStatus->getId() === 4)
+            {
+                $reporting->setResolved(true);
+                $reporting->setDateResolved(new \Datetime('now'));
+            }
+            else
+            {
+                $reporting->setResolved(false);
+                $reporting->setDateResolved(null);
+            }
+
+            
             $em->flush();
 
 
@@ -474,7 +501,10 @@ class BackController extends Controller
         $emReportings = $em->getRepository(Reporting::class);
 
         $reportings = $emReportings
-            ->findBy(['city' => $city], ['dateCreated' => 'DESC']);
+            ->getReportingWhereResolvedLessOneMonth($city)
+            ->getQuery()
+            ->getResult()
+        ;
 
 
         $reportedReportingsNb = $emReportings->getReportingByReportedNbWhereNotModerate($city);
@@ -573,7 +603,10 @@ class BackController extends Controller
         $emReportings = $em->getRepository(Reporting::class);
 
         $reportings = $emReportings
-            ->findBy(['city' => $city], ['dateCreated' => 'DESC']);
+            ->getReportingWhereResolvedLessOneMonth($city)
+            ->getQuery()
+            ->getResult()
+        ;
 
 
         $reportedReportingsNb = $emReportings->getReportingByReportedNbWhereNotModerate($city);
@@ -678,7 +711,10 @@ class BackController extends Controller
         $emReportings = $em->getRepository(Reporting::class);
 
         $reportings = $emReportings
-            ->findBy(['city' => $city], ['dateCreated' => 'DESC']);
+            ->getReportingWhereResolvedLessOneMonth($city)
+            ->getQuery()
+            ->getResult()
+        ;
 
 
         return $this->render('@Citresp/Back/adminSwowUsers.html.twig',[
@@ -737,7 +773,10 @@ class BackController extends Controller
         $emReportings = $em->getRepository(Reporting::class);
 
         $reportings = $emReportings
-            ->findBy(['city' => $city], ['dateCreated' => 'DESC']);
+            ->getReportingWhereResolvedLessOneMonth($city)
+            ->getQuery()
+            ->getResult()
+        ;
 
 
         return $this->render('@Citresp/Back/adminSwowUsers.html.twig',[
