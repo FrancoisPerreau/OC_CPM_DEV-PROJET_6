@@ -45,15 +45,12 @@ class reportingRepository extends \Doctrine\ORM\EntityRepository
    */
   public function getReportingByReportedWhereNotModerate($city)
   {
-    $qb = $this->createQueryBuilder('r');
+    $qb = $this->getReportingWhereResolvedLessOneMonth($city);
+
 
     $qb
-      ->select('r')
-      ->where('r.city = :city')
-      ->setParameter('city', $city)
       ->andWhere('r.reportedCount > 0')
       ->andWhere('r.moderate = false')
-      ->orderBy('r.dateCreated','DESC')
     ;
 
     return $qb;
@@ -89,11 +86,11 @@ class reportingRepository extends \Doctrine\ORM\EntityRepository
    */
   public function getReportingByReportedNbWhereNotModerate($city)
   {
-    $qb = $this->createQueryBuilder('r');
+    // $qb = $this->createQueryBuilder('r');
+    $qb = $this->getReportingWhereResolvedLessOneMonth($city);
 
     $qb
       ->select('COUNT(r)')
-      ->where('r.city = :city')
       ->setParameter('city', $city)
       ->andWhere('r.moderate = false')
       ->andWhere('r.reportedCount > 0')
@@ -138,8 +135,6 @@ class reportingRepository extends \Doctrine\ORM\EntityRepository
    */
   public function getReportingModerate($city)
   {
-    // $qb = $this->createQueryBuilder('r');
-
     $qb = $this->getReportingWhereResolvedLessOneMonth($city);
 
     $qb
@@ -402,17 +397,63 @@ class reportingRepository extends \Doctrine\ORM\EntityRepository
       ->select('r')
       ->where('r.city = :city')
       ->setParameter('city', $city)
-      ->andWhere('r.resolved == true')
+      ->andWhere('r.resolved = true')
       ->orderBy('r.dateCreated', 'DESC')
     ;      
     
 
     return $qb
-      ->getQuery()
-      ->getResult()
+      // ->getQuery()
+      // ->getResult()
     ;
   }
 
+
+
+  /**
+   * Récupère une liste de reportings Résolus triés et paginés
+   * @param  [object] $city
+   * @param [int] $page [le numéro de la page]
+   * @param [int] $nbPerPage [nombre de reporti,g par page]
+   * @return [Paginator]
+   */
+  public function getAllPageInWhereResolved($city, $page, $nbPerPage)
+  {
+    if (!is_numeric($page))
+    {
+      throw new InvalidArgumentException('La valeur de l\'argument $page est incorecte (valeur : '.$page.')');
+    }
+
+    if ($page < 1)
+    {
+      throw new NotFoundHttpException("la page demandée n\'existe pas");
+    }
+
+    if (!is_numeric($nbPerPage))
+    {
+      throw new InvalidArgumentException('La valeur de l\'argument $nbPerPage est incorecte (valeur : '.$nbPerPage.')');
+    }
+
+    $qb = $this->getReportingsResolved($city);
+
+    $query = $qb->getQuery();
+
+    $firstResult = ($page - 1) * $nbPerPage;
+
+    $query
+      ->setFirstResult($firstResult)
+      ->setMaxResults($nbPerPage)
+    ;
+
+    $paginator = new Paginator($query);
+
+    if (($paginator->count() <= $firstResult) && $page !=1)
+    {
+      throw new NotFoundHttpException("la page demandée n\'existe pas");
+    }
+
+    return $paginator;
+  }
 
 
 }

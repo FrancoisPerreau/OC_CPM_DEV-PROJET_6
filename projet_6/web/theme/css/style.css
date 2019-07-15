@@ -131,6 +131,26 @@ footer>.container>p>a {
   left: auto !important;
 }
 
+.nav-city {
+  background-color: var(--dark);
+  color: #fff;
+}
+
+.nav-admin {
+  background-color: var(--admin);
+  color: #fff;
+}
+
+.dropdown-menu>hr {
+  margin: .5rem 0;
+}
+
+.dropdown-item:focus, .dropdown-item:hover {
+  color: #ffffff;
+  text-decoration: none;
+  background-color: var(--primary-color);
+}
+
 .header-block {
   min-height: 21.875rem;
   display: flex;
@@ -370,6 +390,10 @@ footer>.container>p>a {
   color: #fff;
   text-transform: uppercase;
   margin: 0;
+}
+
+.container-admin {
+  padding-bottom: 60px;
 }
 
 .admin-infos-block>p {

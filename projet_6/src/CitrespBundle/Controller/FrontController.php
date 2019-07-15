@@ -120,11 +120,6 @@ class FrontController extends Controller
             ->getResult()
         ;
 
-        
-        // $testReportings = $em
-        // ->getRepository(Reporting::class)
-        // ->getReportingWhereResolvedLessOneMonth($city);
-
 
         $reportingsPerPage = $em
           ->getRepository(Reporting::class)

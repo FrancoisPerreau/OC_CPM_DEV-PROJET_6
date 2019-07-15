@@ -2,29 +2,78 @@
 
 <script>
   var map;
+
   function initMap() {
     var city = {
       lat: {{ city.gpsLat }},
       lng: {{ city.gpsLng }}
     };
-    var jsMarkers = new Array();
+    {# var jsMarkers = new Array(); #}
+
+    var bounds = new google.maps.LatLngBounds();
+    {# var infowindow = new google.maps.InfoWindow(); #}
 
     map = new google.maps.Map(document.getElementById('map'), {
       zoom: 15,
       center: city
     });
+  
 
-    {% for reporting in reportings %}
+    var data = [];
 
-      var marker = new google.maps.Marker({
-        position: {
-          lat: {{ reporting.gpsLat }},
-          lng: {{ reporting.gpsLng }}
-        },
-        map: map
+    {% for reporting in reportings %} 
+      data.push({
+        id:'{{reporting.id}}',
+        address: '{{reporting.address}}',
+        category: '{{reporting.category.name}}',
+        date: "{{ reporting.dateCreated|localizeddate('short', 'none', null) }}",
+        lat: '{{ reporting.gpsLat }}',
+        lng: '{{ reporting.gpsLng }}',
+        link: "{{ path('show_reporting', {'slug': app.user.city.slug, 'reporting_id': reporting.id}) }}"
       });
     {% endfor %}
 
+
+    data.forEach(function(element){ 
+      var contentString = 
+          '<div id="'+element.id+'">'+
+            '<div id="siteNotice">'+
+            '</div>'+
+              '<h6 id="firstHeading" class="firstHeading">'+element.address+'</h6>'+
+            '<div id="bodyContent">'+
+              '<p><strong>'+element.category+'</strong><br>' + element.date+'</p>' +
+              {# '<p><a href="'+element.link+'">Voir</a></p>'+ #}
+            '</div>'+
+          '</div>';
+
+      var infowindow = new google.maps.InfoWindow({
+        content: contentString
+      });
+      
+      var marker = new google.maps.Marker({
+        position: {
+          lat: Number(element.lat),
+          lng: Number(element.lng)
+        },
+        map: map
+      });   
+    
+
+      marker.addListener('mouseover', function() {
+        infowindow.open(map, marker);
+      });
+
+      marker.addListener('mouseout', function() {
+        infowindow.close(map, marker);
+      });
+
+          
+      bounds.extend(marker.position); 
+    });
+
+    map.fitBounds(bounds);    
+
   }
 </script>
+
 <script src="https://maps.googleapis.com/maps/api/js?key={{googleApi}}&callback=initMap" async="async" defer="defer"></script>

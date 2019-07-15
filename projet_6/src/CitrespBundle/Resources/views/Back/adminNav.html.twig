@@ -9,72 +9,103 @@
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
       <ul class="navbar-nav">
         <li class="
-          {% if app.request.attributes.get("_route") == 'security_admin' %}
+          {% if (app.request.attributes.get("_route") == 'security_admin') or (app.request.attributes.get("_route") == 'security_city') %}
             nav-item active
           {% endif %}">
-          <a class="nav-link" href="{{ path('security_admin', {'slug': app.user.city.slug, 'page': 1}) }}">Accueil Admininistration
+          {% if is_granted('ROLE_MODERATOR') %}
+            <a class="nav-link" href="{{ path('security_admin', {'slug': app.user.city.slug, 'page': 1}) }}">Accueil Admininistration
+              <span class="sr-only">(current)</span></a>
+          {% else %}
+            <a class="nav-link" href="{{ path('security_city', {'slug': app.user.city.slug, 'page': 1}) }}">Accueil Admininistration
+            <span class="sr-only">(current)</span></a>
+          {% endif %}
+        </li>
+
+
+        {% if is_granted('ROLE_MODERATOR') %}
+          <li class="nav-item dropdown
+          {% if (app.request.attributes.get("_route") == 'security_admin_show_moderate') or
+                (app.request.attributes.get("_route") == 'security_admin_show_reported') or
+                (app.request.attributes.get("_route") == 'security_admin_show_resolved') or
+                (app.request.attributes.get("_route") == 'security_admin_edit_reporting_status') %}
+                nav-item active
+          {% endif %}
+          ">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarAdminDropdownReporting" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Signalements
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarAdminDropdownReporting">
+              <a class="dropdown-item
+              {% if app.request.attributes.get("_route") == 'security_admin_show_reported' %}
+                nav-item active
+              {% endif %}
+              "
+                href="{{ path('security_admin_show_reported',{'slug': app.user.city.slug, 'page': 1}) }}"
+                >Signalés
+              </a>
+              <a class="dropdown-item
+              {% if app.request.attributes.get("_route") == 'security_admin_show_moderate' %}
+                nav-item active
+              {% endif %}
+              "
+                href="{{ path('security_admin_show_moderate',{'slug': app.user.city.slug, 'page': 1}) }}"
+                >Modérés
+              </a>
+              <a class="dropdown-item
+              {% if app.request.attributes.get("_route") == 'security_admin_show_resolved' %}
+                nav-item active
+              {% endif %}
+              "
+                href="{{ path('security_admin_show_resolved',{'slug': app.user.city.slug, 'page': 1}) }}"
+                >Résolus
+              </a>
+            </div>
+          </li>
+
+        {% else %}
+           <li class="
+          {% if app.request.attributes.get("_route") == 'security_city_resolved' %}
+            nav-item active
+          {% endif %}">
+          <a class="nav-link" href="{{ path('security_city_resolved', {'slug': app.user.city.slug, 'page': 1}) }}">Signalements résolus
             <span class="sr-only">(current)</span></a>
         </li>
-
-        <li class="nav-item dropdown
-        {% if (app.request.attributes.get("_route") == 'security_admin_show_moderate') or
-              (app.request.attributes.get("_route") == 'security_admin_show_reported') or
-              (app.request.attributes.get("_route") == 'security_admin_edit_reporting_status') %}
-              nav-item active
         {% endif %}
-        ">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarAdminDropdownReporting" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Signalements
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarAdminDropdownReporting">
-            <a class="dropdown-item
-            {% if app.request.attributes.get("_route") == 'security_admin_show_reported' %}
-              nav-item active
-            {% endif %}
-            "
-              href="{{ path('security_admin_show_reported',{'slug': app.user.city.slug, 'page': 1}) }}"
-              >Signalés
-            </a>
-            <a class="dropdown-item
-            {% if app.request.attributes.get("_route") == 'security_admin_show_moderate' %}
-              nav-item active
-            {% endif %}
-            "
-              href="{{ path('security_admin_show_moderate',{'slug': app.user.city.slug, 'page': 1}) }}"
-              >Modérés
-            </a>
-          </div>
-        </li>
 
-        <li class="nav-item dropdown
-        {% if (app.request.attributes.get("_route") == 'security_admin_show_moderate_comments') or
-              (app.request.attributes.get("_route") == 'security_admin_show_reported_comments') %}
-              nav-item active
+
+        {% if is_granted('ROLE_MODERATOR') %}
+          <li class="nav-item dropdown
+          {% if (app.request.attributes.get("_route") == 'security_admin_show_moderate_comments') or
+                (app.request.attributes.get("_route") == 'security_admin_show_reported_comments') %}
+                nav-item active
+          {% endif %}
+          ">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarAdminDropdownComment" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Commentaires
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarAdminDropdownComment">
+              <a class="dropdown-item
+              {% if app.request.attributes.get("_route") == 'security_admin_show_reported_comments' %}
+                nav-item active
+              {% endif %}
+              " href="{{ path('security_admin_show_reported_comments',{'slug': app.user.city.slug, 'page': 1}) }}">Signalés</a>
+              <a class="dropdown-item
+              {% if app.request.attributes.get("_route") == 'security_admin_show_moderate_comments' %}
+                nav-item active
+              {% endif %}
+              " href="{{ path('security_admin_show_moderate_comments',{'slug': app.user.city.slug, 'page': 1}) }}">Modérés</a>
+            </div>
+          </li>
         {% endif %}
-        ">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarAdminDropdownComment" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Commentaires
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarAdminDropdownComment">
-            <a class="dropdown-item
-            {% if app.request.attributes.get("_route") == 'security_admin_show_reported_comments' %}
-              nav-item active
-            {% endif %}
-            " href="{{ path('security_admin_show_reported_comments',{'slug': app.user.city.slug, 'page': 1}) }}">Signalés</a>
-            <a class="dropdown-item
-            {% if app.request.attributes.get("_route") == 'security_admin_show_moderate_comments' %}
-              nav-item active
-            {% endif %}
-            " href="{{ path('security_admin_show_moderate_comments',{'slug': app.user.city.slug, 'page': 1}) }}">Modérés</a>
-          </div>
-        </li>
+
+
         {% if is_granted('ROLE_ADMIN') %}
-        <li class="nav-item dropdown
-        {% if (app.request.attributes.get("_route") == 'security_admin_show_users') or
-              (app.request.attributes.get("_route") == 'security_admin_show_admin_user') %}
-              nav-item active
-        {% endif %}
-        ">
+          <li class="nav-item dropdown
+          {% if (app.request.attributes.get("_route") == 'security_admin_show_users') or
+                (app.request.attributes.get("_route") == 'security_admin_show_admin_user') %}
+                nav-item active
+          {% endif %}
+          ">
           <a class="nav-link dropdown-toggle"
             href="#"
             id="navbarAdminDropdownUser" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
