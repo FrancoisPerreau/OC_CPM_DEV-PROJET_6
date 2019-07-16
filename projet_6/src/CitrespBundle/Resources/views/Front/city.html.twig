@@ -33,6 +33,12 @@
         </div>
       {% endfor %}
 
+      {% for msg in app.session.flashBag.get('errorCreateReporting') %}
+        <div class="flashBag">
+          <p class="alert alert-danger" role="alert">{{ msg }}</p>
+        </div>
+      {% endfor %}
+
       <!-- Liste des signalements -->
       <div class="container reportings-container">
         <div class="">

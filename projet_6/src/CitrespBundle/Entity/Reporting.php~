@@ -27,13 +27,12 @@ class Reporting
      * @var string|null
      *
      * @ORM\Column(name="description", type="text", nullable=true)
-     * * @Assert\Length(
+     * @Assert\Length(
      *      min = 5,
      *      max = 1000,
-     *      minMessage = "La description doit faire au moins {{ limit }} caractères.",
-     *      maxMessage = "La description ne doit pas faire plus de {{ limit }} caractères."
+     *      minMessage = "La description doit faire au moins 5 caractères.",
+     *      maxMessage = "La description ne doit pas faire plus de 1 000 caractères."
      * )
-     * Assert\Length(min=10, minMessage="La description doit faire au moins {{ limit }} caractères.")
      */
     private $description;
 
@@ -135,6 +134,9 @@ class Reporting
     private $dateResolved;
 
 
+    private $autocomplateInput;
+
+
 
 
 
@@ -144,6 +146,7 @@ class Reporting
       $this->dateCreated = new \Datetime('now');
       $this->moderate = 0;
       $this->status = new Status;
+      $this->resolved = false;
     }
 
 
@@ -470,5 +473,29 @@ class Reporting
     public function getResolved()
     {
         return $this->resolved;
+    }
+
+    /**
+     * Set dateResolved.
+     *
+     * @param \DateTime|null $dateResolved
+     *
+     * @return Reporting
+     */
+    public function setDateResolved($dateResolved = null)
+    {
+        $this->dateResolved = $dateResolved;
+
+        return $this;
+    }
+
+    /**
+     * Get dateResolved.
+     *
+     * @return \DateTime|null
+     */
+    public function getDateResolved()
+    {
+        return $this->dateResolved;
     }
 }

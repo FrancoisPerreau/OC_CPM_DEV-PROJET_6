@@ -260,21 +260,55 @@ class FrontController extends Controller
 
         if ($form->isSubmitted() && $form->isValid())
         {
-          $reporting = $form->getData();
-          $user = $this->getUser();
-          $status = $em
-              ->getRepository(Status::class)
-              ->find(1);
+            $reporting = $form->getData();
 
-          $this->container->get('citresp.HydrateReporting')->hydrate($user, $city, $reporting, $status);
+             $autocompleteInput = $reporting->getAutocompleteInput();
+            
+              $adressGoogle =  $this->container->get('citresp.googleMapApi')->geocodeAddress($googleApi,$autocompleteInput);
+            
+        
+            if ($adressGoogle === null)
+            {                
+                $this->addFlash('errorCreateReporting', 'Aucune adresse correspondante n\'a été trouvée dans ' . $city->getName() . ' (' . $city->getZipcode() .')');
 
-          $em->persist($reporting);
-          $em->flush();
+                return $this->redirectToRoute('city',[
+                    'slug' => $city->getSlug(),
+                    'page' => 1
+                ]); 
+            }
 
-          return $this->redirectToRoute('city',[
-              'slug' => $city->getSlug(),
-              'page' => 1
-              ]);
+            
+            if (strtoupper($adressGoogle['city']) != strtoupper($city->getName() ))
+            {
+                $this->addFlash('errorCreateReporting', 'Cette adresse ne correspond pas à la ville de ' . $city->getName() . ' (' . $city->getZipcode() .')');
+
+                return $this->redirectToRoute('city',[
+                    'slug' => $city->getSlug(),
+                    'page' => 1
+                ]); 
+            }
+            else
+            {
+                $addressReporting = ($adressGoogle['address']);
+                $gpsLat = ($adressGoogle['lat']);
+                $gpsLng = ($adressGoogle['lng']);
+
+                $user = $this->getUser();
+                $status = $em
+                    ->getRepository(Status::class)
+                    ->find(1);
+
+                 $this->container->get('citresp.HydrateReporting')->hydrate($user, $city, $reporting, $status, $addressReporting, $gpsLat, $gpsLng);                
+
+                $em->persist($reporting);
+                $em->flush();
+
+                return $this->redirectToRoute('city',[
+                    'slug' => $city->getSlug(),
+                    'page' => 1
+                    ]);
+            }            
+            
         }
 
 

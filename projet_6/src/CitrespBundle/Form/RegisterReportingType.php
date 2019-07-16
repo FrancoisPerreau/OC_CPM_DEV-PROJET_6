@@ -22,7 +22,7 @@ class RegisterReportingType extends AbstractType
           ->add('autocompleteInput', TextType::class, [
               'label' => 'N°, nom de la rue',
               'required' => true,
-              'mapped' => false
+            //   'mapped' => false
           ])
           ->add('image', ImageType::class, [
               'required' => false,

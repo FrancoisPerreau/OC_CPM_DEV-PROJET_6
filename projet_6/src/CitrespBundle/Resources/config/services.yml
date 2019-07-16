@@ -32,6 +32,9 @@ services:
    citresp.citiesNotCreated:
        class: CitrespBundle\Services\CitiesNotCreated
 
+   citresp.googleMapApi:
+       class: CitrespBundle\Services\GoogleMapApi
+
    citresp.HydrateCity:
        class: CitrespBundle\Services\HydrateCity
 
