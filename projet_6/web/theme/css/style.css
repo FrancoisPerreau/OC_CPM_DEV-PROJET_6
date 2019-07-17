@@ -217,9 +217,6 @@ footer>.container>p>a {
 /* *************************** */
 /* CITY  */
 /* *************************** */
-.container-map {
-  /* margin-top: 32px; */
-}
 
 .title-city {
   padding: 5px 15px;
@@ -235,9 +232,6 @@ footer>.container>p>a {
   padding: 35px 0px;
 }
 
-.reportings-container {
-  /* margin-top: 70px; */
-}
 
 .reporting-block,
 .showReporting-block,
@@ -514,4 +508,12 @@ footer>.container>p>a {
 
 .container-mentions-legales {
   padding: 0 2rem 3rem 2rem ;
+}
+
+
+.container-error {
+  padding-top: 30px;
+  padding-bottom: 60px;
+
+  text-align: center;
 }
