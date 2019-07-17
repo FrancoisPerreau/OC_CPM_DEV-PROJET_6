@@ -101,6 +101,10 @@ footer>.container>p>a {
 /* *************************** */
 /*  NAVBAR  */
 /* *************************** */
+.citresp-logo {
+  max-width: 130px;;
+}
+
 .nav-principal .navbar-brand {
   margin-right: 2rem;
 }

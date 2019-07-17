@@ -23,7 +23,18 @@
       panControl: false
     });
 
-    var marker = new google.maps.Marker({position: coorMarker, map: map});
+    var img;
+      if ({{ reporting.status.id }} == 4 ){
+        img = "{{asset('theme/img/markers/marker_green.png')}}"
+      } else if ({{ reporting.status.id }} == 3){
+        img = "{{asset('theme/img/markers/marker_blue.png')}}"
+      } else if ({{ reporting.status.id }} == 2){
+        img = "{{asset('theme/img/markers/marker_orange.png')}}"
+      } else {
+        img = "{{asset('theme/img/markers/marker_red.png')}}"
+      }
+
+    var marker = new google.maps.Marker({position: coorMarker, icon: img, map: map});
 
   
   }

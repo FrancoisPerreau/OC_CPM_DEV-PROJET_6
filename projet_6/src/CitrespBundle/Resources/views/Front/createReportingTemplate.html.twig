@@ -42,6 +42,8 @@
       lat: {{ city.gpsLat }},
       lng: {{ city.gpsLng }}
     };
+
+    var img;
     
 
     // var marker; AUTOCOMPLETE
@@ -67,19 +69,70 @@
       var bounds = new google.maps.LatLngBounds();
 
 
-      {% for reporting in reportings %}
+      var data = [];
 
-        var marker = new google.maps.Marker({
-          position: {
-            lat: {{ reporting.gpsLat }},
-            lng: {{ reporting.gpsLng }}
-          },
-          map: map
-        });
+    {% for reporting in reportings %} 
+      data.push({
+        id:'{{reporting.id}}',
+        address: '{{reporting.address}}',
+        category: '{{reporting.category.name}}',
+        date: "{{ reporting.dateCreated|localizeddate('short', 'none', null) }}",
+        lat: '{{ reporting.gpsLat }}',
+        lng: '{{ reporting.gpsLng }}',
+        status: '{{ reporting.status.id }}',
+        link: "{{ path('show_reporting', {'slug': app.user.city.slug, 'reporting_id': reporting.id}) }}"
+      });
+    {% endfor %}
 
-        bounds.extend(marker.position);
 
-      {% endfor %}
+    data.forEach(function(element){ 
+      var contentString = 
+          '<div id="'+element.id+'">'+
+            '<div id="siteNotice">'+
+            '</div>'+
+              '<h6 id="firstHeading" class="firstHeading">'+element.address+'</h6>'+
+            '<div id="bodyContent">'+
+              '<p><strong>'+element.category+'</strong><br>' + element.date+'</p>' +
+              {# '<p><a href="'+element.link+'">Voir</a></p>'+ #}
+            '</div>'+
+          '</div>';
+
+      var infowindow = new google.maps.InfoWindow({
+        content: contentString
+      });
+
+      
+      if (element.status == 4 ){
+        img = "{{asset('theme/img/markers/marker_green.png')}}"
+      } else if (element.status == 3){
+        img = "{{asset('theme/img/markers/marker_blue.png')}}"
+      } else if (element.status == 2){
+        img = "{{asset('theme/img/markers/marker_orange.png')}}"
+      } else {
+        img = "{{asset('theme/img/markers/marker_red.png')}}"
+      }
+      
+      var marker = new google.maps.Marker({
+        position: {
+          lat: Number(element.lat),
+          lng: Number(element.lng),          
+        },
+        icon: img,
+        map: map
+      });   
+    
+
+      marker.addListener('mouseover', function() {
+        infowindow.open(map, marker);
+      });
+
+      marker.addListener('mouseout', function() {
+        infowindow.close(map, marker);
+      });
+
+          
+      bounds.extend(marker.position); 
+    });
 
       autocomplete = new google.maps.places.Autocomplete(autocompleteInput, autocompleteOptions);
       autocomplete.bindTo('bounds', map);
@@ -111,7 +164,7 @@
         map.setCenter(place.geometry.location);
         map.setZoom(30);
       }
-      var newMarker = new google.maps.Marker({map: map, position: place.geometry.location});
+      var newMarker = new google.maps.Marker({map: map, icon: img, position: place.geometry.location});
       newMarker.setPosition(place.geometry.location);
       newMarker.setVisible(true);      
     }

@@ -32,6 +32,7 @@
         date: "{{ reporting.dateCreated|localizeddate('short', 'none', null) }}",
         lat: '{{ reporting.gpsLat }}',
         lng: '{{ reporting.gpsLng }}',
+        status: '{{ reporting.status.id }}',
         link: "{{ path('show_reporting', {'slug': app.user.city.slug, 'reporting_id': reporting.id}) }}"
       });
     {% endfor %}
@@ -52,12 +53,24 @@
       var infowindow = new google.maps.InfoWindow({
         content: contentString
       });
+
+      var img;
+      if (element.status == 4 ){
+        img = "{{asset('theme/img/markers/marker_green.png')}}"
+      } else if (element.status == 3){
+        img = "{{asset('theme/img/markers/marker_blue.png')}}"
+      } else if (element.status == 2){
+        img = "{{asset('theme/img/markers/marker_orange.png')}}"
+      } else {
+        img = "{{asset('theme/img/markers/marker_red.png')}}"
+      }
       
       var marker = new google.maps.Marker({
         position: {
           lat: Number(element.lat),
-          lng: Number(element.lng)
+          lng: Number(element.lng),          
         },
+        icon: img,
         map: map
       });   
     
