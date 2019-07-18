@@ -69,7 +69,6 @@ footer>.container>p>a {
 .arianne>p {
   padding-top: 30px;
   margin-bottom: 0;
-  /* font-size: 0.875rem; */
 }
 
 .text-min-size {
@@ -89,14 +88,11 @@ footer>.container>p>a {
 }
 
 .flashBag {
-  /* max-width:600px; */
   margin: auto;
   text-align: center;
 }
 
-.pagination-block {
-  margin-top: 60px;
-}
+
 
 /* *************************** */
 /*  NAVBAR  */
@@ -120,7 +116,6 @@ footer>.container>p>a {
 }
 
 .nav-principal .dropdown {
-  /* flex: 2; */
   text-align: right;
 }
 
@@ -161,7 +156,6 @@ footer>.container>p>a {
   flex-direction: column;
   justify-content: center;
   padding: 0 2rem;
-  /* background-color: var(--primary-color); */
   text-align: center;
   color: #fff;
 }
@@ -185,6 +179,29 @@ footer>.container>p>a {
   margin: 3px 0;
   text-align: left !important;
 }
+
+
+/* *************************** */
+/* PAGINATION  */
+/* *************************** */
+.pagination-block {
+  margin-top: 60px;
+}
+
+.page-link {
+  color: var(--info);
+}
+
+.page-item.active .page-link {
+  background-color: var(--info);
+  border-color: var(--info);
+}
+
+.pagination a {
+  transition: background-color .3s;
+}
+
+
 
 /* *************************** */
 /* HOME  */
@@ -252,7 +269,6 @@ footer>.container>p>a {
 }
 
 .img-reporting-city {
-  /* flex-shrink = 0; */
   overflow: hidden;
   display: flex;
   width: 75px;
@@ -266,7 +282,6 @@ footer>.container>p>a {
   object-fit: cover;
   min-height: 75px;
 	width: 100%;
-  /* border-radius: 100%; */
 }
 
 
@@ -288,11 +303,9 @@ footer>.container>p>a {
 /* *************************** */
 .container-showReporting {
   margin-top: -32px;
-  /* padding-top: 70px; */
 }
 
 .img-showReporting-city {
-  /* overflow: hidden; */
   display: flex;
   width: 100%;
   height: 200px;
@@ -302,11 +315,9 @@ footer>.container>p>a {
 }
 
 .img-showReporting-city img {
-  /* margin: auto; */
   object-fit: cover;
   max-height: 200px;
 	width: 100%;
-  /* border-radius: 100%; */
 }
 
 .reporting-status {
@@ -321,12 +332,10 @@ footer>.container>p>a {
 }
 
 .reporting-status-label {
-  /* display: inline-block; */
   margin-right: 3px;
   width: 15px;
   height: 15px;
   border-radius: 100%;
-  /* background-color: var(--secondary-color); */
 }
 
 .block-reporting-status {
