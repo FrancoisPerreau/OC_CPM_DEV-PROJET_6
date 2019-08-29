@@ -26,11 +26,15 @@ services:
        arguments:
           - "@citresp.addOne"
 
-   citresp.createAtlContent:
-       class: CitrespBundle\Services\CreateAtlContent
+   citresp.checkUserCity:
+       class: CitrespBundle\Services\CheckUserCity
+
 
    citresp.citiesNotCreated:
        class: CitrespBundle\Services\CitiesNotCreated
+
+   citresp.createAtlContent:
+       class: CitrespBundle\Services\CreateAtlContent
 
    citresp.googleMapApi:
        class: CitrespBundle\Services\GoogleMapApi

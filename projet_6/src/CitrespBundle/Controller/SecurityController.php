@@ -122,11 +122,14 @@ class SecurityController extends Controller
      */
     public function adminEditUserRoleAction(City $city, User $userSelected, Request $request)
     {
-        // Si les Villes sont différents on redirige vers la homepage
         $user = $this->getUser();
-        if ($user->getCity() != $city)
+        // Si les Villes sont différents on redirige vers la homepage
+        $checkUserCity = $this->container->get('citresp.checkUserCity')->checkIsCity($user, $city);
+
+        if ($checkUserCity['isCity'] === false)
         {
-            $this->addFlash('errorCityAccess', 'Votre compte n\'est pas pour la ville de ' . $city->getName());
+            $message = $checkUserCity['message'];
+            $this->addFlash('errorCityAccess', $message);
 
             return $this->redirectToRoute('homepage');
         }
@@ -185,9 +188,13 @@ class SecurityController extends Controller
 
           // Si les Villes sont différents on redirige vers la homepage
           $user = $this->getUser();
-          if ($user->getCity() != $city || $userGiven->getCity() != $city)
+          
+          $checkUserCity = $this->container->get('citresp.checkUserCity')->checkIsCity($user, $city);
+
+          if ($checkUserCity['isCity'] === false)
           {
-              $this->addFlash('errorCityAccess', 'Votre compte n\'est pas pour la ville de ' . $city->getName());
+              $message = $checkUserCity['message'];
+              $this->addFlash('errorCityAccess', $message);
 
               return $this->redirectToRoute('homepage');
           }

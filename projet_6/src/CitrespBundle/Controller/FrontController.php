@@ -61,7 +61,9 @@ class FrontController extends Controller
         $selectCitySlug = $data['selectedCity']->getSlug();
 
         return $this->redirectToRoute('city',[
-            'slug' => $selectCitySlug]);
+            'slug' => $selectCitySlug,
+            'page' => 1
+            ]);
       }
 
 
@@ -93,15 +95,19 @@ class FrontController extends Controller
      * @Security("has_role('ROLE_USER')")
      */
     public function cityAction(City $city, $page)
-    {
-        // Si les Villes sont différents on redirige vers la homepage
+    {        
         $user = $this->getUser();
-        if ($user->getCity() != $city)
+        // Si les Villes sont différents on redirige vers la homepage
+        $checkUserCity = $this->container->get('citresp.checkUserCity')->checkIsCity($user, $city);
+
+        if ($checkUserCity['isCity'] === false)
         {
-            $this->addFlash('errorCityAccess', 'Votre compte n\'est pas pour la ville de ' . $city->getName());
+            $message = $checkUserCity['message'];
+            $this->addFlash('errorCityAccess', $message);
 
             return $this->redirectToRoute('homepage');
         }
+        
 
         $nbReportingsPerPage = $this->container->getParameter('front_nb_reportings_per_page');
 
@@ -153,11 +159,14 @@ class FrontController extends Controller
      */
     public function showReportingAction(City $city, Reporting $reporting, Request $request)
     {
-        // Si les Villes sont différents on redirige vers la homepage
         $user = $this->getUser();
-        if ($user->getCity() != $city)
+        // Si les Villes sont différents on redirige vers la homepage
+        $checkUserCity = $this->container->get('citresp.checkUserCity')->checkIsCity($user, $city);
+
+        if ($checkUserCity['isCity'] === false)
         {
-            $this->addFlash('errorCityAccess', 'Votre compte n\'est pas pour la ville de ' . $city->getName());
+            $message = $checkUserCity['message'];
+            $this->addFlash('errorCityAccess', $message);
 
             return $this->redirectToRoute('homepage');
         }
@@ -233,11 +242,14 @@ class FrontController extends Controller
      */
     public function createReportingAction(City $city, Request $request)
     {
-        // Si les Villes sont différents on redirige vers la homepage
         $user = $this->getUser();
-        if ($user->getCity() != $city)
+        // Si les Villes sont différents on redirige vers la homepage
+        $checkUserCity = $this->container->get('citresp.checkUserCity')->checkIsCity($user, $city);
+
+        if ($checkUserCity['isCity'] === false)
         {
-            $this->addFlash('errorCityAccess', 'Votre compte n\'est pas pour la ville de ' . $city->getName());
+            $message = $checkUserCity['message'];
+            $this->addFlash('errorCityAccess', $message);
 
             return $this->redirectToRoute('homepage');
         }
@@ -330,11 +342,14 @@ class FrontController extends Controller
      */
     public function editReportingAction(City $city, Reporting $reporting, Request $request)
     {
-        // Si les Villes sont différents on redirige vers la homepage
         $user = $this->getUser();
-        if ($user->getCity() != $city)
+        // Si les Villes sont différents on redirige vers la homepage
+        $checkUserCity = $this->container->get('citresp.checkUserCity')->checkIsCity($user, $city);
+
+        if ($checkUserCity['isCity'] === false)
         {
-            $this->addFlash('errorCityAccess', 'Votre compte n\'est pas pour la ville de ' . $city->getName());
+            $message = $checkUserCity['message'];
+            $this->addFlash('errorCityAccess', $message);
 
             return $this->redirectToRoute('homepage');
         }
