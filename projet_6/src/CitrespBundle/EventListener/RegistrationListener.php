@@ -25,7 +25,7 @@ class RegistrationListener implements EventSubscriberInterface
 
     $user->setRoles(['ROLE_USER']);
 
-      dump($user);
-      die;
+      // dump($user);
+      // die;
   }
 }

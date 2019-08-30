@@ -221,7 +221,7 @@ class SecurityController extends Controller
           if ($action === 'remove' && !is_null($userGiven))
           {
               // Avant de suprimer l'utilisateur
-              // verifier que s'il à le rôle ADMIN
+              // verifier que s'il a le rôle ADMIN
               // il existe au moins un autre Admin pour cette ville
              if($userGiven->hasRole('ROLE_ADMIN'))
              {
