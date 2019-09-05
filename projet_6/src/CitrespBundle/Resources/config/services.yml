@@ -29,7 +29,6 @@ services:
    citresp.checkUserCity:
        class: CitrespBundle\Services\CheckUserCity
 
-
    citresp.citiesNotCreated:
        class: CitrespBundle\Services\CitiesNotCreated
 
@@ -49,6 +48,13 @@ services:
        class: CitrespBundle\Services\HydrateReporting
        arguments:
           - "@citresp.createAtlContent"
+
+   citresp.NotificationMailer:
+       class: CitrespBundle\Services\Mailer
+       arguments:
+          - "@mailer"
+          - "@templating"
+          - "%mailer_user%"
 
    # citresp.registrationListener:
    #     class: CitrespBundle\EventListener\RegistrationListener

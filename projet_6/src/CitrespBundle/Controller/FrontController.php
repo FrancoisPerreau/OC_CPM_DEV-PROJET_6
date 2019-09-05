@@ -408,4 +408,61 @@ class FrontController extends Controller
     }
 
 
+
+
+    // ***********************************
+    // ***********************************
+    // À SUPPRIMER EN PROD !!!
+    // ***********************************
+    // ***********************************
+
+    
+    // TESTS TEMPLATES MAILS
+    // ************************************
+
+    /**
+     * @Route("/mail-template", name="mail_template")
+     */
+    public function viewMailTemplateAction()
+    {
+        $reporting = $this->getDoctrine()->getRepository('CitrespBundle:Reporting')->find(6);
+        $reportingUser = $reporting->getUser();
+
+        $this->container->get('citresp.NotificationMailer')->sendNewReportingModerate($reportingUser, $reporting);
+
+        return $this->render('@Citresp/Emails/notificationNewModerateReporting.html.twig', [
+            'reporting' => $reporting,
+            'user' => $reportingUser
+        ]);
+
+    }
+
+
+
+
+    /**
+     * @Route("/mail-comment-moderate", name="mail_comment_moderate")
+     */
+    public function viewMailCommentModerateAction()
+    {
+        $comment = $this->getDoctrine()->getRepository('CitrespBundle:Comment')->find(10);
+        $commentReporting = $comment->getReporting();
+        $commentUser = $comment->getUser();
+
+        // dump($comment);
+        // dump($reporting);
+        // dump($user);
+        // die;
+
+        $this->container->get('citresp.NotificationMailer')->sendNewCommentModerate($comment, $commentUser, $commentReporting);
+
+        return $this->render('@Citresp/Emails/notificationNewModerateComment.html.twig', [
+            'comment' => $comment,
+            'reporting' => $commentReporting,
+            'user' => $commentUser
+        ]);
+
+    }
+
+
 }
