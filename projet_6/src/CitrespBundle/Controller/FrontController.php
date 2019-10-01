@@ -195,6 +195,15 @@ class FrontController extends Controller
           $em->persist($comment);
           $em->flush();
 
+          // Envoi d'un mail si le createur du signalement a valider Notification dans son profile
+          $reportingUser = $reporting->getUser();
+
+          if ($reportingUser->getNotification() === true)
+          {
+            $this->container->get('citresp.NotificationMailer')->sendNewCommentMessage($reportingUser, $reporting);
+          }
+
+          
           return $this->redirectToRoute('show_reporting',[
               'slug' => $city->getSlug(),
               'reporting_id' => $reporting->getId()
@@ -448,11 +457,6 @@ class FrontController extends Controller
         $comment = $this->getDoctrine()->getRepository('CitrespBundle:Comment')->find(10);
         $commentReporting = $comment->getReporting();
         $commentUser = $comment->getUser();
-
-        // dump($comment);
-        // dump($reporting);
-        // dump($user);
-        // die;
 
         $this->container->get('citresp.NotificationMailer')->sendNewCommentModerate($comment, $commentUser, $commentReporting);
 

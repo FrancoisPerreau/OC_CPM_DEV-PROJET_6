@@ -1,5 +1,5 @@
 <?php
-// src/CitrespBundle/Form/Security/UserEditRoleType.php
+// CitrespBundle/Form/Security/UserEditRoleType.php
 
 namespace CitrespBundle\Form\Security;
 

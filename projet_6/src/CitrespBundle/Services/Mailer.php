@@ -12,17 +12,21 @@ class Mailer
     protected $mailer;
     protected $templating;
 
-    protected $from ;
+    private $reply = "no-reply@citresp.fr";
+    private $name = "CITRESP";
+
+
+    protected $from = 'no-reply@citresp.fr';
     
 
     // protected $template = '@CitrespBundle/Emails/notifivation.html.twig';
     
 
-    public function __construct(\Swift_Mailer $mailer, EngineInterface $templating, $adminMail)
+    public function __construct(\Swift_Mailer $mailer, EngineInterface $templating)
     {
         $this->mailer = $mailer;
         $this->templating = $templating;
-        $this->from = $adminMail;
+       
     }
 
     protected function sendMessage($to, $subject, $body)
@@ -30,9 +34,10 @@ class Mailer
         $mail = new \Swift_Message();
 
         $mail
-            ->setFrom($this->from)
+            ->setFrom($this->from,$this->name)
             ->setTo($to)
             ->setSubject($subject)
+            ->setReplyTo($this->reply)
             ->setBody($body)
             ->setContentType('text/html')
         ;
@@ -85,7 +90,7 @@ class Mailer
     public function sendNewReportingModerate(User $user, Reporting $reporting)
     {
         $to = $user->getEmail();
-        $subject = 'Un de vos signalements a changé été modéré';
+        $subject = 'Un de vos signalements a été modéré';
 
         $template = '@Citresp/Emails/notificationNewModerateReporting.html.twig';
         
@@ -99,14 +104,54 @@ class Mailer
 
 
     /** 
+     * Envoie d'un e-mail quand un signalement a été rebublié
+     */
+    public function sendNewReportingPublished(User $user, Reporting $reporting)
+    {
+        $to = $user->getEmail();
+        $subject = 'Un de vos signalements a été republié';
+
+        $template = '@Citresp/Emails/notificationNewPublishedReporting.html.twig';
+        
+        $body = $this->templating->render($template, [
+            'user' => $user,
+            'reporting' => $reporting
+        ]);
+
+        $this->sendMessage($to, $subject, $body);
+    }
+
+
+
+    /** 
      * Envoie d'un e-mail quand un commentaire a été modéré
      */
     public function sendNewCommentModerate($comment, User $user, Reporting $reporting)
     {
         $to = $user->getEmail();
-        $subject = 'Un de vos signalements a changé été modéré';
+        $subject = 'Un de vos commentaires a été modéré';
 
         $template = '@Citresp/Emails/notificationNewModerateComment.html.twig';
+        
+        $body = $this->templating->render($template, [
+            'comment' => $comment,
+            'user' => $user,
+            'reporting' => $reporting
+        ]);
+
+        $this->sendMessage($to, $subject, $body);
+    }
+
+
+    /** 
+     * Envoie d'un e-mail quand un commentaire a été rebublié
+     */
+    public function sendNewCommentPublished($comment, User $user, Reporting $reporting)
+    {
+        $to = $user->getEmail();
+        $subject = 'Un de vos commentaires a été republié';
+
+        $template = '@Citresp/Emails/notificationNewPublishedComment.html.twig';
         
         $body = $this->templating->render($template, [
             'comment' => $comment,

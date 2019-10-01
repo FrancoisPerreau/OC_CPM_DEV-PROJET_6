@@ -109,6 +109,22 @@ class BackController extends Controller
 
             $em->flush();
 
+
+            // Envoi d'un mail si le createur du signalement a valider Notification dans son profile
+            $reportingUser = $reporting->getUser();            
+
+            if ($reportingUser->getNotification() === true)
+            {
+                if ($reporting->getModerate() === true) {
+                    $this->container->get('citresp.NotificationMailer')->sendNewReportingModerate($reportingUser, $reporting);
+                }
+                else {
+                    $this->container->get('citresp.NotificationMailer')->sendNewReportingPublished($reportingUser, $reporting);
+                }
+                
+            }
+
+
             return $this->redirectToRoute('security_admin',[
                 'slug' => $city->getSlug(),
                 'page' => $page
@@ -211,6 +227,21 @@ class BackController extends Controller
 
             $em->flush();
 
+            // Envoi d'un mail si le createur du signalement a valider Notification dans son profile
+            $reportingUser = $reporting->getUser();            
+
+            if ($reportingUser->getNotification() === true)
+            {
+                if ($reporting->getModerate() === true) {
+                    $this->container->get('citresp.NotificationMailer')->sendNewReportingModerate($reportingUser, $reporting);
+                }
+                else {
+                    $this->container->get('citresp.NotificationMailer')->sendNewReportingPublished($reportingUser, $reporting);
+                }
+                
+            }
+
+
             return $this->redirectToRoute('security_admin_show_moderate',[
                 'slug' => $city->getSlug(),
                 'page' => $page
@@ -312,6 +343,21 @@ class BackController extends Controller
             }
 
             $em->flush();
+
+            // Envoi d'un mail si le createur du signalement a valider Notification dans son profile
+            $reportingUser = $reporting->getUser();            
+
+            if ($reportingUser->getNotification() === true)
+            {
+                if ($reporting->getModerate() === true) {
+                    $this->container->get('citresp.NotificationMailer')->sendNewReportingModerate($reportingUser, $reporting);
+                }
+                else {
+                    $this->container->get('citresp.NotificationMailer')->sendNewReportingPublished($reportingUser, $reporting);
+                }
+                
+            }
+
 
             return $this->redirectToRoute('security_admin_show_reported',[
                 'slug' => $city->getSlug(),
@@ -418,6 +464,22 @@ class BackController extends Controller
 
             $em->flush();
 
+            // Envoi d'un mail si le createur du signalement a valider Notification dans son profile
+            $reportingUser = $reporting->getUser();            
+
+            if ($reportingUser->getNotification() === true)
+            {
+                if ($reporting->getModerate() === true) {
+                    $this->container->get('citresp.NotificationMailer')->sendNewReportingModerate($reportingUser, $reporting);
+                }
+                else {
+                    $this->container->get('citresp.NotificationMailer')->sendNewReportingPublished($reportingUser, $reporting);
+                }
+                
+            }
+
+
+
             return $this->redirectToRoute('security_admin_show_reported',[
                 'slug' => $city->getSlug(),
                 'page' => $page
@@ -490,6 +552,14 @@ class BackController extends Controller
 
             
             $em->flush();
+
+            // Envoi d'un mail si le createur du signalement a valider Notification dans son profile
+            $reportingUser = $reporting->getUser();
+
+            if ($reportingUser->getNotification() === true)
+            {
+                $this->container->get('citresp.NotificationMailer')->sendNewReportingStatus($reportingUser, $reporting);
+            }
 
 
             if ($user->hasRole('ROLE_CITY'))
@@ -600,6 +670,15 @@ class BackController extends Controller
 
             $em->flush();
 
+            // Envoi d'un mail si le createur du commentaire a valider Notification dans son profile
+            $commentReporting = $comment->getReporting();
+            $commentUser = $comment->getUser();
+
+            if ($commentUser->getNotification() === true)
+            {
+                $this->container->get('citresp.NotificationMailer')->sendNewCommentPublished($comment, $commentUser, $commentReporting);
+            }
+
             return $this->redirectToRoute('security_admin_show_moderate_comments',[
                 'slug' => $city->getSlug(),
                 'page' => $page
@@ -705,6 +784,15 @@ class BackController extends Controller
             }
 
             $em->flush();
+
+            // Envoi d'un mail si le createur du commentaire a valider Notification dans son profile
+            $commentReporting = $comment->getReporting();
+            $commentUser = $comment->getUser();
+
+            if ($commentUser->getNotification() === true)
+            {
+                $this->container->get('citresp.NotificationMailer')->sendNewCommentModerate($comment, $commentUser, $commentReporting);
+            }
 
             return $this->redirectToRoute('security_admin_show_reported_comments',[
                 'slug' => $city->getSlug(),

@@ -32,9 +32,16 @@
       'placeholder': 'form.password'|trans}}) }}
 
 
-
-
     <br>
+
+    {{ form_errors(form.notification) }}
+    <div class="text-left">
+    {{ form_widget(form.notification, {'attr': {'class': 'form-check-input'}}) }}
+    {{ form_label(form.notification, null, {'label_attr': {'class': 'form-check-label'}}) }}
+    <p class="text-min-size text-muted">(pour être informé des modifications et commentaires fait sur vos publications)</p>
+    </div>
+
+     <br>
 
     <input class="btn btn-lg btn-info btn-block" type="submit" value="{{ 'profile.edit.submit'|trans }}"/>
 
