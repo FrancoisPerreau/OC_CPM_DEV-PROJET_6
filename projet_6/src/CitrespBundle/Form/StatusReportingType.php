@@ -39,7 +39,6 @@ class StatusReportingType extends AbstractType
     public function getParent()
     {
         return ReportingType::class;
-        // return 'CitrespBundle\From\ReportingType';
     }
 
 

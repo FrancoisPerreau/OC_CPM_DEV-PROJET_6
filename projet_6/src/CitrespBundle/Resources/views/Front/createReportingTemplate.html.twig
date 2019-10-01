@@ -147,9 +147,9 @@
 
       autocomplete.addListener('place_changed', fillInAddress);
 
-       {% if reportings is not empty %}
-      map.fitBounds(bounds); 
-    {% endif %}
+      {% if reportings is not empty %}
+          map.fitBounds(bounds); 
+      {% endif %}
 
     }
 

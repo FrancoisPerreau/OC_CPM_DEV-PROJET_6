@@ -55,7 +55,6 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
       ->setParameter('roleC', '%"ROLE_CITY"%')
       ->andwhere('u.city = :city')
       ->setParameter('city', $city)
-
       ->orderBy('u.username','ASC')
     ;
 
@@ -80,7 +79,6 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
       ->setParameter('roleC', '%"ROLE_CITY"%')
       ->andwhere('u.city = :city')
       ->setParameter('city', $city)
-
       ->orderBy('u.username','ASC')
     ;
 

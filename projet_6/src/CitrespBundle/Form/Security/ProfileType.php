@@ -13,10 +13,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 class ProfileType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
-    {
-    //   dump($options);
-    //   die;
-        
+    {        
       $builder
         ->add('notification', CheckboxType::class, [
           'required' => false,

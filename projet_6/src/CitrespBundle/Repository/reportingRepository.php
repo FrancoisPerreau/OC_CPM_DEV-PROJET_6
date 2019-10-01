@@ -169,12 +169,7 @@ class reportingRepository extends \Doctrine\ORM\EntityRepository
       throw new InvalidArgumentException('La valeur de l\'argument $nbPerPage est incorecte (valeur : '.$nbPerPage.')');
     }
 
-    $qb = $this->getReportingWhereResolvedLessOneMonth($city)
-      // ->createQueryBuilder('r')
-      // ->where('r.city = :city')
-      // ->setParameter('city', $city)
-      // ->orderBy('r.dateCreated', 'DESC')
-    ;
+    $qb = $this->getReportingWhereResolvedLessOneMonth($city);
 
     $query = $qb->getQuery();
 
@@ -377,10 +372,7 @@ class reportingRepository extends \Doctrine\ORM\EntityRepository
     ;      
     
 
-    return $qb
-    //   ->getQuery()
-    //   ->getResult()
-    ;
+    return $qb;
   }
 
 
@@ -402,10 +394,7 @@ class reportingRepository extends \Doctrine\ORM\EntityRepository
     ;      
     
 
-    return $qb
-      // ->getQuery()
-      // ->getResult()
-    ;
+    return $qb;
   }
 
 

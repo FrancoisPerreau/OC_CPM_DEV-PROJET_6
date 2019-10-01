@@ -9,8 +9,8 @@
 
 {% block body %}
   <div class="container container-admin bg-light-admin">
-    <h1 class=" text-center ">Admin Edit Status</h1>
-    <div class="row">
+    <h1 class=" text-center ">Editer le status</h1>
+    {# <div class="row">
       <div class="col-lg-3">
 
       </div>
@@ -27,7 +27,7 @@
         </div>
       </div>
 
-    </div>
+    </div> #}
   </div>
 
 
@@ -78,27 +78,18 @@
 
               {% embed "@Citresp/FormViews/StatusReportingForm.html.twig" %}{% endembed %}
 
-              <!-- <a href="{{ path('show_reporting', {'slug': app.user.city.slug, 'reporting_id': reporting.id}) }}?action=reportingReport" class="btn btn-outline-secondary btn-sm btn-report-publication">Signaler la publication
-                {% if reporting.reportedCount %}
-                  <span class="badge badge-danger">{{ reporting.reportedCount }}</span>
-                {% endif %}
-              </a> -->
             </div>
             <hr>
           </div>
           <!-- </div> /infos-showReporting -->
-        </div>
-        <!-- /row 1 -->
+        </div><!-- /row 1 -->
 
         <div class="row">
           <div class="col">
             <p>{{ reporting.description }}</p>
           </div>
-        </div>
-
-        <!-- /row 2 -->
-      </div>
-      <!-- showReporting-block -->
+        </div><!-- /row 2 -->
+      </div><!-- showReporting-block -->
 
     </section>
   </div>

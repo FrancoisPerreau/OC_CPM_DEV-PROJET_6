@@ -294,8 +294,9 @@ class FrontController extends Controller
             }
 
 
-            $city_str = str_replace(['â'], 'a', $adressGoogle['city']);
+            $city_str = str_replace(['â', 'â', 'à'], 'a', $adressGoogle['city']);
             $city_str = str_replace(['é', 'è', 'ê', 'ê'], 'e', $city_str);
+            $city_str = str_replace(['î', 'ï'], 'i', $city_str);
             $city_str = str_replace(['ô', 'ö'], 'o', $city_str);
             $city_str = str_replace(['û', 'û'], 'u', $city_str);
 
@@ -303,8 +304,17 @@ class FrontController extends Controller
             
             if (strtoupper($city_str) != strtoupper($city->getName()) || 
             $adressGoogle['postal_code'] != $city->getZipcode())
-            {                
-                $this->addFlash('errorCreateReporting', 'Cette adresse ne correspond pas à la ville de ' . $city->getName() . ' (' . $city->getZipcode() .')');
+            {    
+                $message="";
+
+                if (strtoupper($city_str) != strtoupper($city->getName())) {
+                    $message = 'Le nom ne correspond pas à la ville de ' . $city->getName() . ' (' . $city->getZipcode() .')';
+                } 
+                
+                if ($adressGoogle['postal_code'] != $city->getZipcode()) {
+                    $message = 'Le code postal ne correspond pas à la ville de ' . $city->getName() . ' (' . $city->getZipcode() .')';
+                }
+                $this->addFlash('errorCreateReporting', $message);
 
                 return $this->redirectToRoute('city',[
                     'slug' => $city->getSlug(),

@@ -18,11 +18,6 @@ class UserEditRoleType extends AbstractType
               'Modérateur' =>'ROLE_MODERATOR',
               'Ville' =>'ROLE_CITY',
               'Utilisateur' =>'ROLE_USER'
-
-            // 'ROLE_ADMIN' => 'Administrateur',
-            // 'ROLE_MODERATOR' => 'Modérateur',
-            // 'ROLE_CITY' => 'Ville',
-            // 'ROLE_USER' => 'Utilisateur'
           ],
           'multiple' => true,
           'required' => true,

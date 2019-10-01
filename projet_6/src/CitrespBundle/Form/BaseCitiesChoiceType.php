@@ -22,8 +22,7 @@ class BaseCitiesChoiceType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $selectedBaseCities = $options['allow_extra_fields'];
-        // dump($selectedBaseCities);
-        // die;
+        
         $builder
           ->add('selectedCity', ChoiceType::class, [
               'choices' => $selectedBaseCities,

@@ -1,13 +1,12 @@
 {# src/CitrespBundle/Resources/views/googleMap-viewOneReporting.html.twig #}
 
 <script>
-  {# var map; #}
+  
   function initMap() {
     var city = {
       lat: {{ city.gpsLat }},
       lng: {{ city.gpsLng }}
     };
-
 
     var coorMarker = {
       lat: {{ reporting.gpsLat }},
@@ -15,7 +14,6 @@
     };
 
     
-
     map = new google.maps.Map(document.getElementById('map'), {
       zoom: 20,
       center: coorMarker,

@@ -2,8 +2,6 @@
 
 namespace CitrespBundle\Repository;
 
-// use Doctrine\ORM\EntityRepository;
-// use Doctrine\ORM\QueryBuilder;
 
 
 class BaseCitiesRepository extends \Doctrine\ORM\EntityRepository

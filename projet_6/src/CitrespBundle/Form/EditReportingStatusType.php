@@ -38,13 +38,4 @@ class EditReportingStatusType extends AbstractType
         return ReportingType::class;
     }
 
-    // /**
-    //  * {@inheritdoc}
-    //  */
-    // public function getBlockPrefix()
-    // {
-    //     return 'citrespbundle_reporting';
-    // }
-
-
 }
