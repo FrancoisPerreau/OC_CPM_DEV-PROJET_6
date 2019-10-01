@@ -1,4 +1,5 @@
 {# app/Resources/FOSUserBundle/views/Registration/register.html.twig #}
+
 {% form_theme form 'bootstrap_4_layout.html.twig' %}
 {% trans_default_domain 'FOSUserBundle' %}
 {% extends '@Citresp/layout.html.twig' %}
@@ -32,9 +33,16 @@
       'placeholder': 'form.password'|trans}}) }}
 
 
-
-
     <br>
+
+    {{ form_errors(form.notification) }}
+    <div class="text-left">
+    {{ form_widget(form.notification, {'attr': {'class': 'form-check-input'}}) }}
+    {{ form_label(form.notification, null, {'label_attr': {'class': 'form-check-label'}}) }}
+    <p class="text-min-size text-muted">(pour être informé des modifications et commentaires fait sur vos publications)</p>
+    </div>
+
+     <br>
 
     <input class="btn btn-lg btn-info btn-block" type="submit" value="{{ 'profile.edit.submit'|trans }}"/>
 

@@ -195,6 +195,15 @@ class FrontController extends Controller
           $em->persist($comment);
           $em->flush();
 
+          // Envoi d'un mail si le createur du signalement a valider Notification dans son profile
+          $reportingUser = $reporting->getUser();
+
+          if ($reportingUser->getNotification() === true)
+          {
+            $this->container->get('citresp.NotificationMailer')->sendNewCommentMessage($reportingUser, $reporting);
+          }
+
+          
           return $this->redirectToRoute('show_reporting',[
               'slug' => $city->getSlug(),
               'reporting_id' => $reporting->getId()
@@ -404,6 +413,58 @@ class FrontController extends Controller
     {
 
       return $this->render('@Citresp/Front/mentionsLegales.html.twig');
+
+    }
+
+
+
+
+    // ***********************************
+    // ***********************************
+    // À SUPPRIMER EN PROD !!!
+    // ***********************************
+    // ***********************************
+
+    
+    // TESTS TEMPLATES MAILS
+    // ************************************
+
+    /**
+     * @Route("/mail-template", name="mail_template")
+     */
+    public function viewMailTemplateAction()
+    {
+        $reporting = $this->getDoctrine()->getRepository('CitrespBundle:Reporting')->find(6);
+        $reportingUser = $reporting->getUser();
+
+        $this->container->get('citresp.NotificationMailer')->sendNewReportingModerate($reportingUser, $reporting);
+
+        return $this->render('@Citresp/Emails/notificationNewModerateReporting.html.twig', [
+            'reporting' => $reporting,
+            'user' => $reportingUser
+        ]);
+
+    }
+
+
+
+
+    /**
+     * @Route("/mail-comment-moderate", name="mail_comment_moderate")
+     */
+    public function viewMailCommentModerateAction()
+    {
+        $comment = $this->getDoctrine()->getRepository('CitrespBundle:Comment')->find(10);
+        $commentReporting = $comment->getReporting();
+        $commentUser = $comment->getUser();
+
+        $this->container->get('citresp.NotificationMailer')->sendNewCommentModerate($comment, $commentUser, $commentReporting);
+
+        return $this->render('@Citresp/Emails/notificationNewModerateComment.html.twig', [
+            'comment' => $comment,
+            'reporting' => $commentReporting,
+            'user' => $commentUser
+        ]);
 
     }
 

@@ -31,6 +31,8 @@ framework:
     assets: ~
     php_errors:
         log: true
+    templating:
+        engines: ['twig']
 
 # Twig Configuration
 twig:
@@ -65,6 +67,7 @@ swiftmailer:
     host: '%mailer_host%'
     username: '%mailer_user%'
     password: '%mailer_password%'
+    port: '%mailer_port%'
     spool: { type: memory }
 
 sensio_framework_extra:
@@ -87,9 +90,12 @@ fos_user:
    service:
       mailer: fos_user.mailer.twig_swift
    from_email:
-      address: "%mailer_user%"
-      sender_name: "%mailer_user%"
+      address: "%fos_mailer_address%"
+      sender_name: "%fos_sender_name%"
 
    registration:
       form:
         type: CitrespBundle\Form\Security\RegistrationType
+   profile:
+      form:
+        type: CitrespBundle\Form\Security\ProfileType

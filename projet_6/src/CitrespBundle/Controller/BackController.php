@@ -19,7 +19,7 @@ use CitrespBundle\Entity\User;
 
 use CitrespBundle\Form\EditReportingStatusType;
 
-// use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+
 
 
 class BackController extends Controller
@@ -59,8 +59,6 @@ class BackController extends Controller
             'routeParams' => []
         ];
 
-        // dump($reportingsPerPage);
-        // die;
 
         // Google map
         $googleApi = $this->container->getParameter('google_api');
@@ -82,15 +80,12 @@ class BackController extends Controller
 
         // Comments
         $emComments = $em->getRepository(Comment::class);
-
-        // $reportedComments = $emComments->getCommentByReported($city);
         $reportedCommentsNb = $emComments->getCommentByReportedNbWhereModerate($city);
 
 
         // ACTION REPORTNG-MODERATE
         $action = $request->query->get('action');
         $reportingId = $request->query->get('reportingId');
-
 
         if ($action === 'reportingModerate')
         {
@@ -108,6 +103,20 @@ class BackController extends Controller
             }
 
             $em->flush();
+            // Envoi d'un mail si le createur du signalement a valider Notification dans son profile
+            $reportingUser = $reporting->getUser();
+
+
+            if ($reportingUser->getNotification() === true)
+            {
+                if ($reporting->getModerate() === true) {
+                    $this->container->get('citresp.NotificationMailer')->sendNewReportingModerate($reportingUser, $reporting);
+                }
+                else {
+                    $this->container->get('citresp.NotificationMailer')->sendNewReportingPublished($reportingUser, $reporting);
+                }
+                
+            }
 
             return $this->redirectToRoute('security_admin',[
                 'slug' => $city->getSlug(),
@@ -126,6 +135,7 @@ class BackController extends Controller
             'reportingsList' => $reportingsPerPage,
             'pagination' => $pagination
         ]);
+        
     }
 
 
@@ -170,7 +180,6 @@ class BackController extends Controller
         $googleApi = $this->container->getParameter('google_api');
 
 
-
         // Reportings
         $emReportings = $em->getRepository(Reporting::class);
 
@@ -210,6 +219,20 @@ class BackController extends Controller
             }
 
             $em->flush();
+            // Envoi d'un mail si le createur du signalement a valider Notification dans son profile
+            $reportingUser = $reporting->getUser();  
+
+
+            if ($reportingUser->getNotification() === true)
+            {
+                if ($reporting->getModerate() === true) {
+                    $this->container->get('citresp.NotificationMailer')->sendNewReportingModerate($reportingUser, $reporting);
+                }
+                else {
+                    $this->container->get('citresp.NotificationMailer')->sendNewReportingPublished($reportingUser, $reporting);
+                }                
+            }
+
 
             return $this->redirectToRoute('security_admin_show_moderate',[
                 'slug' => $city->getSlug(),
@@ -217,13 +240,10 @@ class BackController extends Controller
             ]);
         }
 
-
-
         return $this->render('@Citresp/Back/adminHome.html.twig',[
             'googleApi' => $googleApi,
             'city' => $city,
             'reportings' => $reportings,
-
             'reportedReportingsNb' => $reportedReportingsNb,
             'reportedCommentsNb' => $reportedCommentsNb,
             'reportingsList' => $reportingsPerPage,
@@ -287,7 +307,6 @@ class BackController extends Controller
 
         // Comments
         $emComments = $em->getRepository(Comment::class);
-
         $reportedComments = $emComments->getCommentByReported($city);
         $reportedCommentsNb = $emComments->getCommentByReportedNbWhereModerate($city);
 
@@ -312,6 +331,20 @@ class BackController extends Controller
             }
 
             $em->flush();
+            // Envoi d'un mail si le createur du signalement a valider Notification dans son profile
+            $reportingUser = $reporting->getUser();       
+
+
+            if ($reportingUser->getNotification() === true)
+            {
+                if ($reporting->getModerate() === true) {
+                    $this->container->get('citresp.NotificationMailer')->sendNewReportingModerate($reportingUser, $reporting);
+                }
+                else {
+                    $this->container->get('citresp.NotificationMailer')->sendNewReportingPublished($reportingUser, $reporting);
+                }
+                
+            }
 
             return $this->redirectToRoute('security_admin_show_reported',[
                 'slug' => $city->getSlug(),
@@ -324,7 +357,6 @@ class BackController extends Controller
             'googleApi' => $googleApi,
             'city' => $city,
             'reportings' => $reportings,
-
             'reportedReportingsNb' => $reportedReportingsNb,
             'reportedCommentsNb' => $reportedCommentsNb,
             'reportingsList' => $reportingsPerPage,
@@ -356,16 +388,13 @@ class BackController extends Controller
 
         $em = $this->getDoctrine()->getManager();
 
-
         // Pagination
         $nbReportingsPerPage = $this->container->getParameter('back_nb_reportings_per_page');
 
         $reportingsPerPage = $em
           ->getRepository(Reporting::class)
           ->getAllPageInWhereResolved($city, $page, $nbReportingsPerPage)
-        ;
-
-        
+        ;        
 
         $pagination = [
             'page' => $page,
@@ -380,7 +409,6 @@ class BackController extends Controller
 
         // Reportings
         $emReportings = $em->getRepository(Reporting::class);
-
         $reportings = $emReportings
             ->getReportingsResolved($city)
             ->getQuery()
@@ -392,7 +420,6 @@ class BackController extends Controller
 
         // Comments
         $emComments = $em->getRepository(Comment::class);
-
         $reportedComments = $emComments->getCommentByReported($city);
         $reportedCommentsNb = $emComments->getCommentByReportedNbWhereModerate($city);
 
@@ -417,6 +444,18 @@ class BackController extends Controller
             }
 
             $em->flush();
+            // Envoi d'un mail si le createur du signalement a valider Notification dans son profile
+            $reportingUser = $reporting->getUser();            
+
+            if ($reportingUser->getNotification() === true)
+            {
+                if ($reporting->getModerate() === true) {
+                    $this->container->get('citresp.NotificationMailer')->sendNewReportingModerate($reportingUser, $reporting);
+                }
+                else {
+                    $this->container->get('citresp.NotificationMailer')->sendNewReportingPublished($reportingUser, $reporting);
+                }                
+            }
 
             return $this->redirectToRoute('security_admin_show_reported',[
                 'slug' => $city->getSlug(),
@@ -429,7 +468,6 @@ class BackController extends Controller
             'googleApi' => $googleApi,
             'city' => $city,
             'reportings' => $reportings,
-
             'reportedReportingsNb' => $reportedReportingsNb,
             'reportedCommentsNb' => $reportedCommentsNb,
             'reportingsList' => $reportingsPerPage,
@@ -437,7 +475,6 @@ class BackController extends Controller
         ]);
 
     }
-
 
 
 
@@ -473,9 +510,7 @@ class BackController extends Controller
         if ($form->isSubmitted() && $form->isValid())
         {
             $reporting = $form->getData();
-
             $reportingStatus = $reporting->getStatus();
-
             
             if ($reportingStatus->getId() === 4)
             {
@@ -487,10 +522,15 @@ class BackController extends Controller
                 $reporting->setResolved(false);
                 $reporting->setDateResolved(null);
             }
-
             
             $em->flush();
+            // Envoi d'un mail si le createur du signalement a valider Notification dans son profile
+            $reportingUser = $reporting->getUser();
 
+            if ($reportingUser->getNotification() === true)
+            {
+                $this->container->get('citresp.NotificationMailer')->sendNewReportingStatus($reportingUser, $reporting);
+            }
 
             if ($user->hasRole('ROLE_CITY'))
             {
@@ -513,7 +553,6 @@ class BackController extends Controller
             'googleApi' => $googleApi,
             'city' => $city,
             'reporting' => $reporting,
-
             'form' => $form->createView()
         ]);
 
@@ -543,7 +582,6 @@ class BackController extends Controller
 
         // Pagination
         $nbCommentsPerPage = $this->container->getParameter('back_nb_comments_per_page');
-
         $commentsPerPage = $em
           ->getRepository(Comment::class)
           ->getAllPageInWhereModerate($city, $page, $nbCommentsPerPage)
@@ -562,21 +600,17 @@ class BackController extends Controller
 
         // Reportings
         $emReportings = $em->getRepository(Reporting::class);
-
         $reportings = $emReportings
             ->getReportingWhereResolvedLessOneMonth($city)
             ->getQuery()
             ->getResult()
         ;
 
-
         $reportedReportingsNb = $emReportings->getReportingByReportedNbWhereNotModerate($city);
 
 
         // Comments
         $emComments = $em->getRepository(Comment::class);
-
-
         $reportedCommentsNb = $emComments->getCommentByReportedNbWhereNotModerate($city);
 
 
@@ -589,7 +623,6 @@ class BackController extends Controller
             $comment = $emComments->find($commentId);
             $commentModerate = $comment->getModerate();
 
-
             if ($commentModerate === false)
             {
                 $comment->setModerate(true);
@@ -599,6 +632,14 @@ class BackController extends Controller
             }
 
             $em->flush();
+            // Envoi d'un mail si le createur du commentaire a valider Notification dans son profile
+            $commentReporting = $comment->getReporting();
+            $commentUser = $comment->getUser();
+
+            if ($commentUser->getNotification() === true)
+            {
+                $this->container->get('citresp.NotificationMailer')->sendNewCommentPublished($comment, $commentUser, $commentReporting);
+            }
 
             return $this->redirectToRoute('security_admin_show_moderate_comments',[
                 'slug' => $city->getSlug(),
@@ -606,20 +647,16 @@ class BackController extends Controller
             ]);
         }
 
-
         return $this->render('@Citresp/Back/adminShowComments.html.twig',[
             'googleApi' => $googleApi,
             'city' => $city,
             'reportings' => $reportings,
-
             'reportingsList' => $reportings,
-
             'reportedReportingsNb' => $reportedReportingsNb,
             'reportedCommentsNb' => $reportedCommentsNb,
             'commentsList' => $commentsPerPage,
             'pagination' => $pagination
         ]);
-
     }
 
 
@@ -663,17 +700,13 @@ class BackController extends Controller
         // Google map
         $googleApi = $this->container->getParameter('google_api');
 
-
-
         // Reportings
         $emReportings = $em->getRepository(Reporting::class);
-
         $reportings = $emReportings
             ->getReportingWhereResolvedLessOneMonth($city)
             ->getQuery()
             ->getResult()
         ;
-
 
         $reportedReportingsNb = $emReportings->getReportingByReportedNbWhereNotModerate($city);
 
@@ -681,8 +714,6 @@ class BackController extends Controller
 
         // Comments
         $emComments = $em->getRepository(Comment::class);
-
-        // $reportedCommentsNotModerate = $emComments->getCommentByReportedWhereNotModerate($city);
         $reportedCommentsNb = $emComments->getCommentByReportedNbWhereNotModerate($city);
 
 
@@ -695,7 +726,6 @@ class BackController extends Controller
             $comment = $emComments->find($commentId);
             $commentModerate = $comment->getModerate();
 
-
             if ($commentModerate === false)
             {
                 $comment->setModerate(true);
@@ -705,6 +735,14 @@ class BackController extends Controller
             }
 
             $em->flush();
+            // Envoi d'un mail si le createur du commentaire a valider Notification dans son profile
+            $commentReporting = $comment->getReporting();
+            $commentUser = $comment->getUser();
+
+            if ($commentUser->getNotification() === true)
+            {
+                $this->container->get('citresp.NotificationMailer')->sendNewCommentModerate($comment, $commentUser, $commentReporting);
+            }
 
             return $this->redirectToRoute('security_admin_show_reported_comments',[
                 'slug' => $city->getSlug(),
@@ -718,9 +756,7 @@ class BackController extends Controller
             'googleApi' => $googleApi,
             'city' => $city,
             'reportings' => $reportings,
-
             'reportingsList' => $reportings,
-
             'reportedReportingsNb' => $reportedReportingsNb,
             'reportedCommentsNb' => $reportedCommentsNb,
             'commentsList' => $commentsPerPage,
@@ -754,15 +790,11 @@ class BackController extends Controller
         // Pagination
         $nbUserPerPage = $this->container->getParameter('back_nb_users_per_page');
 
-
         // Users
-        // $userManager = $this->get('fos_user.user_manager');
-        // $users = $userManager->findUsers($city);
         $usersPerPage = $em
           ->getRepository(User::class)
           ->getAllPageInWhereUsersNotAdminByCity($city, $page, $nbUserPerPage)
         ;
-
 
         $pagination = [
             'page' => $page,
@@ -774,23 +806,19 @@ class BackController extends Controller
         // Google map
         $googleApi = $this->container->getParameter('google_api');
 
-
         // Reportings
         $emReportings = $em->getRepository(Reporting::class);
-
         $reportings = $emReportings
             ->getReportingWhereResolvedLessOneMonth($city)
             ->getQuery()
             ->getResult()
         ;
 
-
         return $this->render('@Citresp/Back/adminSwowUsers.html.twig',[
             'googleApi' => $googleApi,
             'city' => $city,
             'reportings' => $reportings,
             'users' => $usersPerPage,
-
             'pagination' => $pagination
         ]);
 
@@ -821,13 +849,11 @@ class BackController extends Controller
         // Pagination
         $nbUserPerPage = $this->container->getParameter('back_nb_users_per_page');
 
-
         // Users
         $usersPerPage = $em
           ->getRepository(User::class)
           ->getAllPageInWhereUsersAreAdminByCity($city, $page, $nbUserPerPage)
         ;
-
 
         $pagination = [
             'page' => $page,
@@ -839,7 +865,6 @@ class BackController extends Controller
         // Google map
         $googleApi = $this->container->getParameter('google_api');
 
-
         // Reportings
         $emReportings = $em->getRepository(Reporting::class);
 
@@ -849,20 +874,15 @@ class BackController extends Controller
             ->getResult()
         ;
 
-
         return $this->render('@Citresp/Back/adminSwowUsers.html.twig',[
             'googleApi' => $googleApi,
             'city' => $city,
             'reportings' => $reportings,
             'users' => $usersPerPage,
-
             'pagination' => $pagination
         ]);
 
     }
-
-
-
 
 
 
@@ -901,7 +921,6 @@ class BackController extends Controller
             'routeParams' => []
         ];
 
-
         // Google map
         $googleApi = $this->container->getParameter('google_api');
 
@@ -912,13 +931,10 @@ class BackController extends Controller
             ->findBy(['city' => $city], ['dateCreated' => 'DESC']);
 
 
-
-
         return $this->render('@Citresp/Back/adminCity.html.twig',[
             'googleApi' => $googleApi,
             'city' => $city,
             'reportings' => $reportings,
-
             'reportingsList' => $reportingsPerPage,
             'pagination' => $pagination
         ]);
@@ -968,21 +984,16 @@ class BackController extends Controller
 
         // Reportings
         $emReportings = $em->getRepository(Reporting::class);
-
         $reportings = $emReportings
             ->getReportingsResolved($city)
             ->getQuery()
             ->getResult()
         ;
 
-
-
-
         return $this->render('@Citresp/Back/adminCity.html.twig',[
             'googleApi' => $googleApi,
             'city' => $city,
             'reportings' => $reportings,
-
             'reportingsList' => $reportingsPerPage,
             'pagination' => $pagination
         ]);

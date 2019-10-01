@@ -15,18 +15,6 @@ security:
         fos_userbundle:
             id: fos_user.user_provider.username
 
-        # in_memory:
-        #     memory:
-        #         users:
-        #             user: { password: userpass, roles: ['ROLE_USER'] }
-        #             moderator: { password: moderatorpass, roles: ['ROLE_MODERATOR'] }
-        #             city: { password: citypass, roles: ['ROLE_CYTI'] }
-        #             admin: { password: adminpass, roles: ['ROLE_ADMIN'] }
-
-
-    # provider: in_memory
-
-
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -37,9 +25,7 @@ security:
             form_login:
                 provider: fos_userbundle
                 csrf_token_generator: security.csrf.token_manager
-            # form_login:
-            #     login_path: login
-            #     check_path: login_check
+
             logout: true
                 # path: logout
                 target: /

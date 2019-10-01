@@ -33,6 +33,11 @@ class User extends FosUser
      * @ORM\JoinColumn(nullable=false)
      */
     private $city;
+    
+    /**
+     * @ORM\Column(name="notification", type="boolean")
+    */
+    private $notification = false;
 
 
 
@@ -69,5 +74,29 @@ class User extends FosUser
     public function getCity()
     {
         return $this->city;
+    }
+
+    /**
+     * Set notification.
+     *
+     * @param bool $notification
+     *
+     * @return User
+     */
+    public function setNotification($notification)
+    {
+        $this->notification = $notification;
+
+        return $this;
+    }
+
+    /**
+     * Get notification.
+     *
+     * @return bool
+     */
+    public function getNotification()
+    {
+        return $this->notification;
     }
 }

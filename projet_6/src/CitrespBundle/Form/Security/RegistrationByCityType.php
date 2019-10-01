@@ -1,5 +1,5 @@
 <?php
-// src/CitrespBundle/Form/Security/RegistrationByCityType.php
+// CitrespBundle/Form/Security/RegistrationByCityType.php
 
 namespace CitrespBundle\Form\Security;
 
