@@ -90,6 +90,7 @@ class FrontController extends Controller
     }
 
 
+
     /**
      * @Route("/city/{slug}/{page}", requirements={"page"="\d+"}, name="city")
      * @Security("has_role('ROLE_USER')")
@@ -126,7 +127,6 @@ class FrontController extends Controller
             ->getResult()
         ;
 
-
         $reportingsPerPage = $em
           ->getRepository(Reporting::class)
           ->getAllPageIn($city, $page, $nbReportingsPerPage)
@@ -137,9 +137,7 @@ class FrontController extends Controller
             'nbPages' => ceil(count($reportingsPerPage) / $nbReportingsPerPage),
             'routeName' => 'city',
             'routeParams' => []
-        ];
-
-        
+        ];        
 
         return $this->render('@Citresp/Front/city.html.twig', [
           'googleApi' => $googleApi,
@@ -194,7 +192,6 @@ class FrontController extends Controller
 
           $em->persist($comment);
           $em->flush();
-
           // Envoi d'un mail si le createur du signalement a valider Notification dans son profile
           $reportingUser = $reporting->getUser();
 
@@ -233,7 +230,6 @@ class FrontController extends Controller
             $em->persist($comment);
             $em->flush();
         }
-
 
         return $this->render('@Citresp/Front/showReporting.html.twig', [
           'googleApi' => $googleApi,
@@ -282,10 +278,8 @@ class FrontController extends Controller
         if ($form->isSubmitted() && $form->isValid())
         {
             $reporting = $form->getData();
-
-             $autocompleteInput = $reporting->getAutocompleteInput();
-            
-              $adressGoogle =  $this->container->get('citresp.googleMapApi')->geocodeAddress($googleApi,$autocompleteInput);
+            $autocompleteInput = $reporting->getAutocompleteInput();            
+            $adressGoogle =  $this->container->get('citresp.googleMapApi')->geocodeAddress($googleApi,$autocompleteInput);
             
         
             if ($adressGoogle === null)
@@ -332,13 +326,11 @@ class FrontController extends Controller
             
         }
 
-
         return $this->render('@Citresp/Front/createReporting.html.twig', [
             'googleApi' => $googleApi,
             'city' => $city,
             'reportings' => $reportings,
             'form' => $form->createView()
-
         ]);
     }
 
@@ -394,17 +386,17 @@ class FrontController extends Controller
               ]);
         }
 
-
         return $this->render('@Citresp/Front/editReporting.html.twig', [
             'googleApi' => $googleApi,
             'city' => $city,
             'reporting' => $reporting,
             'reportings' => $reportings,
             'form' => $form->createView()
-
         ]);
     }
 
+
+    
 
     /**
      * @Route("/mentions-legales", name="mentions_legales")
@@ -415,58 +407,3 @@ class FrontController extends Controller
       return $this->render('@Citresp/Front/mentionsLegales.html.twig');
 
     }
-
-
-
-
-    // ***********************************
-    // ***********************************
-    // À SUPPRIMER EN PROD !!!
-    // ***********************************
-    // ***********************************
-
-    
-    // TESTS TEMPLATES MAILS
-    // ************************************
-
-    /**
-     * @Route("/mail-template", name="mail_template")
-     */
-    public function viewMailTemplateAction()
-    {
-        $reporting = $this->getDoctrine()->getRepository('CitrespBundle:Reporting')->find(6);
-        $reportingUser = $reporting->getUser();
-
-        $this->container->get('citresp.NotificationMailer')->sendNewReportingModerate($reportingUser, $reporting);
-
-        return $this->render('@Citresp/Emails/notificationNewModerateReporting.html.twig', [
-            'reporting' => $reporting,
-            'user' => $reportingUser
-        ]);
-
-    }
-
-
-
-
-    /**
-     * @Route("/mail-comment-moderate", name="mail_comment_moderate")
-     */
-    public function viewMailCommentModerateAction()
-    {
-        $comment = $this->getDoctrine()->getRepository('CitrespBundle:Comment')->find(10);
-        $commentReporting = $comment->getReporting();
-        $commentUser = $comment->getUser();
-
-        $this->container->get('citresp.NotificationMailer')->sendNewCommentModerate($comment, $commentUser, $commentReporting);
-
-        return $this->render('@Citresp/Emails/notificationNewModerateComment.html.twig', [
-            'comment' => $comment,
-            'reporting' => $commentReporting,
-            'user' => $commentUser
-        ]);
-
-    }
-
-
-}
