@@ -44,6 +44,9 @@
     };
 
     var img;
+
+    var zipcode = {{ city.zipcode }};
+    console.log(zipcode);
     
 
     // var marker; AUTOCOMPLETE
@@ -53,7 +56,7 @@
       types: ['geocode'],
       componentRestrictions: {
         'country': 'fr',
-        
+               
       }
     };
 
@@ -130,8 +133,8 @@
         infowindow.close(map, marker);
       });
 
-          
-      bounds.extend(marker.position); 
+       bounds.extend(marker.position); 
+     
     });
 
       autocomplete = new google.maps.places.Autocomplete(autocompleteInput, autocompleteOptions);
@@ -144,7 +147,9 @@
 
       autocomplete.addListener('place_changed', fillInAddress);
 
-       map.fitBounds(bounds); 
+       {% if reportings is not empty %}
+      map.fitBounds(bounds); 
+    {% endif %}
 
     }
 

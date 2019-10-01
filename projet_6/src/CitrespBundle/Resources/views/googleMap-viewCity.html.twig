@@ -8,6 +8,10 @@
       lat: {{ city.gpsLat }},
       lng: {{ city.gpsLng }}
     };
+
+    console.log({{city.gpsLng}});
+    console.log({{city.gpsLng}});
+
     {# var jsMarkers = new Array(); #}
 
     var bounds = new google.maps.LatLngBounds();
@@ -20,9 +24,12 @@
       mapTypeControl: false,
       panControl: false
     });
-  
+   
+   
 
     var data = [];
+    
+    
 
     {% for reporting in reportings %} 
       data.push({
@@ -87,7 +94,13 @@
       bounds.extend(marker.position); 
     });
 
-    map.fitBounds(bounds);    
+    {% if reportings is not empty %}
+      map.fitBounds(bounds); 
+    {% endif %}
+    
+    
+      
+      
 
   }
 </script>

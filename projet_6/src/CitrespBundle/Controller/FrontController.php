@@ -279,7 +279,9 @@ class FrontController extends Controller
         {
             $reporting = $form->getData();
             $autocompleteInput = $reporting->getAutocompleteInput();            
-            $adressGoogle =  $this->container->get('citresp.googleMapApi')->geocodeAddress($googleApi,$autocompleteInput);            
+            $adressGoogle =  $this->container->get('citresp.googleMapApi')->geocodeAddress($googleApi,$autocompleteInput);  
+            
+            
         
             if ($adressGoogle === null)
             {                
@@ -290,9 +292,18 @@ class FrontController extends Controller
                     'page' => 1
                 ]); 
             }
+
+
+            $city_str = str_replace(['â'], 'a', $adressGoogle['city']);
+            $city_str = str_replace(['é', 'è', 'ê', 'ê'], 'e', $city_str);
+            $city_str = str_replace(['ô', 'ö'], 'o', $city_str);
+            $city_str = str_replace(['û', 'û'], 'u', $city_str);
+
+           
             
-            if (strtoupper($adressGoogle['city']) != strtoupper($city->getName() ))
-            {
+            if (strtoupper($city_str) != strtoupper($city->getName()) || 
+            $adressGoogle['postal_code'] != $city->getZipcode())
+            {                
                 $this->addFlash('errorCreateReporting', 'Cette adresse ne correspond pas à la ville de ' . $city->getName() . ' (' . $city->getZipcode() .')');
 
                 return $this->redirectToRoute('city',[
@@ -301,7 +312,7 @@ class FrontController extends Controller
                 ]); 
             }
             else
-            {
+            {                
                 $addressReporting = ($adressGoogle['address']);
                 $gpsLat = ($adressGoogle['lat']);
                 $gpsLng = ($adressGoogle['lng']);

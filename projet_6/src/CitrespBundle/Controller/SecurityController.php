@@ -18,17 +18,16 @@ use CitrespBundle\Entity\Comment;
 use CitrespBundle\Entity\Reporting;
 use CitrespBundle\Entity\User;
 
-
 use CitrespBundle\Form\BaseCitiesChoiceType;
 use CitrespBundle\Form\Security\RegistrationByCityType;
 use CitrespBundle\Form\Security\UserEditRoleType;
 
-
 use CitrespBundle\Repository;
+
+
 
 class SecurityController extends Controller
 {
-
     /**
     * @Route("/registercity/{searchCityZipcode}", name="register_city")
     */
@@ -41,7 +40,6 @@ class SecurityController extends Controller
         // On récupère les Villes déjà créée qui ont ce code postal
         $checkCities = $this->getDoctrine()->getRepository(City::class)->findByZipcode($searchCityZipcode);
 
-
         $resultCheck = $this->container->get('citresp.citiesNotCreated')->resultCheck($selectedBaseCities, $checkCities);
 
         if (count($resultCheck) < 1) {
@@ -49,7 +47,6 @@ class SecurityController extends Controller
 
             return $this->redirectToRoute('homepage');
         }
-
 
         $form = $this->createForm(BaseCitiesChoiceType::class, null , ['allow_extra_fields' => $resultCheck] );
         $form->handleRequest($request);
@@ -144,16 +141,11 @@ class SecurityController extends Controller
 
 
         $form = $this->createForm(UserEditRoleType::class, $selectedUser);
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
         {
             $user = $form->getData();
-
-            // dump($user);
-            // die;
-
             $em->flush();
 
             return $this->redirectToRoute('security_admin_show_admin_user', [
@@ -161,8 +153,6 @@ class SecurityController extends Controller
                 'page' => 1
             ]);
         }
-
-
 
         return $this->render('@Citresp/Back/adminEditUserRole.html.twig',[
             'user' => $user,
@@ -221,7 +211,7 @@ class SecurityController extends Controller
           if ($action === 'remove' && !is_null($userGiven))
           {
               // Avant de suprimer l'utilisateur
-              // verifier que s'il a le rôle ADMIN
+              // verifier que si il a le rôle ADMIN
               // il existe au moins un autre Admin pour cette ville
              if($userGiven->hasRole('ROLE_ADMIN'))
              {
@@ -239,7 +229,6 @@ class SecurityController extends Controller
                          'page' => 1
                      ]);
                  }
-
              }
 
              $comments = $em
@@ -262,11 +251,8 @@ class SecurityController extends Controller
                  $reporting->setUser(null);
              }
 
-
-
              $userManager = $this->get('fos_user.user_manager');
              $userManager->deleteUser($userGiven);
-
 
              $this->addFlash('SuccessRemoveUser', 'Le compte à bien été supprimé.');
 
@@ -283,7 +269,6 @@ class SecurityController extends Controller
              }
 
           }
-
 
           return $this->render('@Citresp/Security/removeUser.html.twig', [
             'user' => $userGiven
