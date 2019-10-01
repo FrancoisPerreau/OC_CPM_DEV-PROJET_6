@@ -81,7 +81,6 @@ class FrontController extends Controller
         ]);
       }
 
-
       return $this->render('@Citresp/Front/homepage.html.twig', [
         'formSelect' => $formSelect->createView(),
         'formSearch' => $formSearch->createView()
@@ -107,11 +106,9 @@ class FrontController extends Controller
             $this->addFlash('errorCityAccess', $message);
 
             return $this->redirectToRoute('homepage');
-        }
-        
+        }        
 
         $nbReportingsPerPage = $this->container->getParameter('front_nb_reportings_per_page');
-
 
         $em = $this->getDoctrine()->getManager();
 
@@ -137,7 +134,9 @@ class FrontController extends Controller
             'nbPages' => ceil(count($reportingsPerPage) / $nbReportingsPerPage),
             'routeName' => 'city',
             'routeParams' => []
-        ];        
+        ];
+
+        
 
         return $this->render('@Citresp/Front/city.html.twig', [
           'googleApi' => $googleApi,
@@ -192,6 +191,7 @@ class FrontController extends Controller
 
           $em->persist($comment);
           $em->flush();
+
           // Envoi d'un mail si le createur du signalement a valider Notification dans son profile
           $reportingUser = $reporting->getUser();
 
@@ -199,7 +199,6 @@ class FrontController extends Controller
           {
             $this->container->get('citresp.NotificationMailer')->sendNewCommentMessage($reportingUser, $reporting);
           }
-
           
           return $this->redirectToRoute('show_reporting',[
               'slug' => $city->getSlug(),
@@ -241,6 +240,7 @@ class FrontController extends Controller
     }
 
 
+
     /**
      * @Route("/city/{slug}/report", name="create_reporting")
      * @Security("has_role('ROLE_USER')")
@@ -279,8 +279,7 @@ class FrontController extends Controller
         {
             $reporting = $form->getData();
             $autocompleteInput = $reporting->getAutocompleteInput();            
-            $adressGoogle =  $this->container->get('citresp.googleMapApi')->geocodeAddress($googleApi,$autocompleteInput);
-            
+            $adressGoogle =  $this->container->get('citresp.googleMapApi')->geocodeAddress($googleApi,$autocompleteInput);            
         
             if ($adressGoogle === null)
             {                
@@ -291,7 +290,6 @@ class FrontController extends Controller
                     'page' => 1
                 ]); 
             }
-
             
             if (strtoupper($adressGoogle['city']) != strtoupper($city->getName() ))
             {
@@ -386,6 +384,7 @@ class FrontController extends Controller
               ]);
         }
 
+
         return $this->render('@Citresp/Front/editReporting.html.twig', [
             'googleApi' => $googleApi,
             'city' => $city,
@@ -396,14 +395,13 @@ class FrontController extends Controller
     }
 
 
-    
 
     /**
      * @Route("/mentions-legales", name="mentions_legales")
      */
     public function mentionsLegalesAction()
     {
-
       return $this->render('@Citresp/Front/mentionsLegales.html.twig');
-
     }
+
+}
