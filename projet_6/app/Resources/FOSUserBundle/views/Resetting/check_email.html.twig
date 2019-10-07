@@ -4,9 +4,14 @@
 
 {% trans_default_domain 'FOSUserBundle' %}
 
+{% block stylesheets %}
+  {{ parent() }}
+  <link rel="stylesheet" href="{{ asset('theme/css/sign-in.css') }}">
+{% endblock %}
+
 {% block fos_user_content %}
   <div class="contaner-sign-in text-center">
-    <p>
+    <p class="check_email">
       {{ 'resetting.check_email'|trans({'%tokenLifetime%': tokenLifetime})|nl2br }}
     </p>
   </div>
