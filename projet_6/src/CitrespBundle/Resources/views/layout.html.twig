@@ -34,20 +34,19 @@
         {% block header %}
           <div class="container header-block" style="background-image:url('{{ asset('theme/img/romantic-bokeh-colors-over-the-city-1140x550.jpg') }}">
           <h1>
-            Améliorons ensemble la qualité de vie de notre ville
+            Ensemble, améliorons notre qualité de vie
           </h1>
-          <p>
-            <strong>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut ero labore et dolore magna aliqua. Duis aute irure. dolor in reprehenderit in uienply voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur
-              sint occaecat cupidatat norin proident.
-            </strong>
-          </p>
+          <h4>
+            {# <strong> #}
+              En signalant les dysfonctionnements éventuels dans nos quartiers et nos villes, nous aidons les municipalités à améliorer notre cadre de vie en leur permettant de réagir rapidement. 
+            {# </strong> #}
+          </h4>
             </div>
         {% endblock %}
 
     </header>
 
-    <main class="container bg-light">
+    <main class="container bg-light">      
       {% block body %}{% endblock %}
       {% block fos_user_content %}{% endblock %}
     </main>

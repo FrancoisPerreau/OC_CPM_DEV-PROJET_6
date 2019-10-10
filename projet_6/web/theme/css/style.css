@@ -206,6 +206,10 @@ footer>.container>p>a {
 /* *************************** */
 /* HOME  */
 /* *************************** */
+.container-intro {
+  padding-top: 30px;
+}
+
 .container-pading-t-b {
   padding-top: 80px;
   padding-bottom: 80px;

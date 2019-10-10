@@ -8,7 +8,19 @@
 {% endblock %}
 
 {% block body %}
-  <div class="container">
+  <div class="container container-intro">
+    <div class="row justify-content-md-center">
+      <div class="co col-md-10 col-md-8container-intro text-center">
+        <h5>
+          {# <strong> #}
+            En créant un compte vous pourrez signaler un problème de voirie, d’éclairage public, de déchets… Et en suivre l’évolution.
+            Vous aurez aussi une visibilité sur l’ensembles des signalements de votre ville que vous pourrez commenter si nécessaire.
+          {# </strong> #}
+        </h5>
+      </div>
+    </div>
+      
+      
 
     {% for msg in app.session.flashBag.get('errorSelectedBaseCities') %}
       <div class="flashBag">
