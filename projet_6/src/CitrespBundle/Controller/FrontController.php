@@ -18,6 +18,7 @@ use CitrespBundle\Entity\City;
 use CitrespBundle\Entity\Comment;
 use CitrespBundle\Entity\Reporting;
 use CitrespBundle\Entity\Status;
+use CitrespBundle\Entity\User;
 
 use CitrespBundle\Form\BaseCitiesSearchType;
 use CitrespBundle\Form\CitySelectType;
@@ -294,13 +295,9 @@ class FrontController extends Controller
             }
 
 
-            $city_str = str_replace(['â', 'â', 'à'], 'a', $adressGoogle['city']);
-            $city_str = str_replace(['é', 'è', 'ê', 'ê'], 'e', $city_str);
-            $city_str = str_replace(['î', 'ï'], 'i', $city_str);
-            $city_str = str_replace(['ô', 'ö'], 'o', $city_str);
-            $city_str = str_replace(['û', 'û'], 'u', $city_str);
+            $city_name = $adressGoogle['city'];
+            $city_str = $this->container->get('citresp.cityStrReplace')->replace($city_name);
 
-           
             
             if (strtoupper($city_str) != strtoupper($city->getName()) || 
             $adressGoogle['postal_code'] != $city->getZipcode())
@@ -332,10 +329,20 @@ class FrontController extends Controller
                     ->getRepository(Status::class)
                     ->find(1);
 
-                 $this->container->get('citresp.HydrateReporting')->hydrate($user, $city, $reporting, $status, $addressReporting, $gpsLat, $gpsLng);                
+                 $this->container->get('citresp.HydrateReporting')->hydrate($user, $city, $reporting, $status, $addressReporting, $gpsLat, $gpsLng); 
 
                 $em->persist($reporting);
-                $em->flush();
+                $em->flush();                
+
+                // Envoie d'un e-mail aux utilisateurs ayant un rôle Admin, Morérateur, Ville
+                $users = $em
+                    ->getRepository(User::class)
+                    ->getUsersAreAdminByCity($city)
+                    ->getQuery()
+                    ->getResult()
+                ;  
+                
+                $this->container->get('citresp.NotificationMailer')->sendNewReportingMessage($users, $city, $reporting);
 
                 return $this->redirectToRoute('city',[
                     'slug' => $city->getSlug(),
@@ -382,7 +389,10 @@ class FrontController extends Controller
         // Reportings
         $reportings = $em
             ->getRepository(Reporting::class)
-            ->findBy(['city' => $city]);
+            ->getReportingWhereResolvedLessOneMonth($city)
+            ->getQuery()
+            ->getResult()
+        ;
 
         // Formulaire
         $form = $this->createForm(RegisterReportingType::class, $reporting, ['textArea' => $reporting->getDescription()]);
@@ -391,11 +401,63 @@ class FrontController extends Controller
         if ($form->isSubmitted() && $form->isValid())
         {
             $image = $reporting->getImage();
+            $autocompleteInput = $reporting->getAutocompleteInput();            
+            $adressGoogle =  $this->container->get('citresp.googleMapApi')->geocodeAddress($googleApi,$autocompleteInput);  
+
 
             if ($image) {
                 $alt = $this->container->get('citresp.createAtlContent')->altContent($reporting, $city);
                 $image->setAlt($alt);
             }
+
+
+            if ($adressGoogle === null)
+            {                
+                $this->addFlash('errorCreateReporting', 'Aucune adresse correspondante n\'a été trouvée dans ' . $city->getName() . ' (' . $city->getZipcode() .')');
+
+                return $this->redirectToRoute('city',[
+                    'slug' => $city->getSlug(),
+                    'page' => 1
+                ]); 
+            }
+
+
+            $city_name = $adressGoogle['city'];
+            $city_str = $this->container->get('citresp.cityStrReplace')->replace($city_name);
+
+            
+            if (strtoupper($city_str) != strtoupper($city->getName()) || 
+            $adressGoogle['postal_code'] != $city->getZipcode())
+            {    
+                $message="";
+
+                if (strtoupper($city_str) != strtoupper($city->getName())) {
+                    $message = 'Le nom ne correspond pas à la ville de ' . $city->getName() . ' (' . $city->getZipcode() .')';
+                } 
+                
+                if ($adressGoogle['postal_code'] != $city->getZipcode()) {
+                    $message = 'Le code postal ne correspond pas à la ville de ' . $city->getName() . ' (' . $city->getZipcode() .')';
+                }
+                $this->addFlash('errorCreateReporting', $message);
+
+                return $this->redirectToRoute('city',[
+                    'slug' => $city->getSlug(),
+                    'page' => 1
+                ]); 
+            }
+            else
+            {                
+                $addressReporting = ($adressGoogle['address']);
+                $gpsLat = ($adressGoogle['lat']);
+                $gpsLng = ($adressGoogle['lng']);
+            }
+
+            $user = $this->getUser();
+            $status = $reporting->getStatus();
+
+            $this->container->get('citresp.HydrateReporting')->hydrate($user, $city, $reporting, $status, $addressReporting, $gpsLat, $gpsLng);
+
+
 
           $em->flush();
 

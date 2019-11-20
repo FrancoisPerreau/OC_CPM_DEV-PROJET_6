@@ -163,5 +163,25 @@ class Mailer
     }
 
 
+    /** 
+     * Envoie d'un e-mail quand un signalement a été créé
+     */
+    public function sendNewReportingMessage($users, $city, Reporting $reporting)
+    {        
+        $subject = 'Un nouveau signalement a été fait pour la ville de ' . $city->getName();
+        $template = '@Citresp/Emails/notificationNewReporting.html.twig';
+
+        foreach ($users as $user) {
+            $to = $user->getEmail();
+
+            $body = $this->templating->render($template, [
+                'user' => $user,
+                'reporting' => $reporting
+            ]);
+
+            $this->sendMessage($to, $subject, $body);
+        }        
+    }
+
 
 }

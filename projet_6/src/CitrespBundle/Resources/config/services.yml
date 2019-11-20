@@ -33,6 +33,9 @@ services:
    citresp.citiesNotCreated:
        class: CitrespBundle\Services\CitiesNotCreated
 
+   citresp.cityStrReplace:
+       class: CitrespBundle\Services\CityStrReplace
+
    citresp.createAtlContent:
        class: CitrespBundle\Services\CreateAtlContent
 

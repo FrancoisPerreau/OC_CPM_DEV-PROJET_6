@@ -1,0 +1,10 @@
+{# CitrespBundle/Resources/views/Emails/notificationNewReporting.html.twig #}
+
+{% extends "@Citresp/Emails/notifivationTemplate.html.twig" %}
+
+{% block content %}
+<p>
+    Un nouveau signalement a été fait pour la ville de {{ reporting.city.name }}, à l'adresse suivante : {{ reporting.address}}.
+</p>    
+{% endblock %}
+

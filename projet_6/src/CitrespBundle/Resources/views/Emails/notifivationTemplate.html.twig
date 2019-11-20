@@ -328,7 +328,14 @@
                   <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                     <tr>
                       <td>                            
-                        <p><strong>Bonjour {{ user.username }},</strong></p>
+                        <p>
+                          <strong>
+                            Bonjour 
+                            {% if user is defined %}
+                            {{ user.username }},
+                            {% endif %}
+                          </strong>
+                        </p>
 
                         {% block content %}{% endblock %}
                         
