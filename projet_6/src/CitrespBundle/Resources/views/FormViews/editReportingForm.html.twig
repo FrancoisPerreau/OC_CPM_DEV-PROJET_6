@@ -11,7 +11,7 @@
 {{ form_errors(form.autocompleteInput) }}
 {{ form_label(form.autocompleteInput, null, {'label_attr': {'class': 'sr-only'}}) }}
 {{ form_widget(form.autocompleteInput, {'attr': {'class': 'form-control',
-      'value': reporting.address }}) }}
+      'value': reporting.address ~ ', ' ~ reporting.city.zipcode ~ ' ' ~ reporting.city.name}}) }}
 
 {{ form_errors(form.category) }}
 {{ form_label(form.category, null, {'label_attr': {'class': 'sr-only'}}) }}
