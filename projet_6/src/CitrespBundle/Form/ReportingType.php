@@ -24,6 +24,7 @@ class ReportingType extends AbstractType
               'class' => 'CitrespBundle:Category',
               'choice_label'=> 'name',
               'label' => 'Sélectionnez une catégorie',
+              'placeholder' => 'Sélectionnez une catégorie',
               'required' => true
           ])
           ->add('description', TextareaType::class, [
