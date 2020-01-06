@@ -280,8 +280,7 @@ class FrontController extends Controller
         {
             $reporting = $form->getData();
             $autocompleteInput = $reporting->getAutocompleteInput();            
-            $adressGoogle =  $this->container->get('citresp.googleMapApi')->geocodeAddress($googleApi,$autocompleteInput);  
-            
+            $adressGoogle =  $this->container->get('citresp.googleMapApi')->geocodeAddress($googleApi,$autocompleteInput);              
             
         
             if ($adressGoogle === null)
@@ -297,7 +296,6 @@ class FrontController extends Controller
 
             $city_name = $adressGoogle['city'];
             $city_str = $this->container->get('citresp.cityStrReplace')->replace($city_name);
-
             
             if (strtoupper($city_str) != strtoupper($city->getName()) || 
             $adressGoogle['postal_code'] != $city->getZipcode())
